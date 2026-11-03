@@ -1146,16 +1146,9 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     const m = location.pathname.match(/\/page\/(\d+)\/?$/);
     if (!m) return;
     const n = +m[1];
-    for (const d of [-2, -1, 1, 2, 3]) {
+    for (const d of [-1, 1, 2]) {
       const k = n + d;
-      if (k < 1 || k > 604) continue;
-      preloadQcf(k);
-    }
-    for (const d of [-1, 1]) {
-      const k = n + d;
-      if (k < 1 || k > 604) continue;
-      const leaf = location.pathname.replace(/\/page\/\d+\/?$/, "/page/" + k + "/");
-      prefetchDoc(leaf);
+      if (k >= 1 && k <= 604) preloadQcf(k);
     }
   }
   window.QM_TURN = function (n) {
