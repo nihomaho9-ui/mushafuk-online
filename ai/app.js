@@ -695,17 +695,18 @@
     const seen = new Set(direct.map((h) => (h.src || 0) + ":" + (h.i != null ? h.i : indexOf(h.s, h.a))));
     const rest = [];
     const ay = ayahQuery(q);
-    if (ay && scope === "fast") {
+    if (ay) {
       const i = indexOf(ay.s, ay.a);
-      for (let s = 0; s < sources.length; s++) if (SHORT.has(sources[s].n)) rest.push({ src: s, i });
-    }
-    if (ay && scope === "deep") {
-      const i = indexOf(ay.s, ay.a);
-      for (let s = 1; s < sources.length; s++) rest.push({ src: s, i });
+      for (let s = 0; s < sources.length; s++) {
+        if (sources[s].k !== "tf") continue;
+        if (scope === "fast" && !SHORT.has(sources[s].n)) continue;
+        rest.push({ src: s, i });
+      }
     }
     for (const x of found) {
       const src = Math.floor(x / 10000), i = x % 10000;
       if (scope === "fast" && !fastOk(src, q)) continue;
+      if ((arabicQ || isAr(raw)) && sources[src].k === "tr") continue;
       const k = src + ":" + i;
       if (seen.has(k)) continue;
       seen.add(k);
