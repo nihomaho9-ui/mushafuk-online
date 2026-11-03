@@ -1,0 +1,21 @@
+# Generates premium home pages for ar (root) + az/tr/en/ru
+L={
+'ar':('ar','rtl','','اقرأ القرآن','مصحف المدينة صفحةً صفحة مع التفاسير والترجمات بلغات عديدة — مجاناً وبلا إعلانات.','افتح المصحف',['الرئيسية','التفسير','الترجمات','من نحن','القرآن'],[('القرآن','مصحف المدينة ٦٠٤ صفحات مع التلاوة.'),('التفسير','السعدي، ابن كثير، الطبري وغيرها من التفاسير.'),('الترجمات','معاني القرآن بأكثر من عشرين لغة.')],'الخصوصية','الشروط','←'),
+'az':('az','ltr','../','Quran oxu','Mədinə mushafı səhifə-səhifə, təfsirlər və onlarla dildə tərcümələrlə — pulsuz və reklamsız.','Quranı aç',['Ana səhifə','Təfsir','Tərcümələr','Haqqında','Quran'],[('Quran','604 səhifəlik Mədinə mushafı, səs ilə dinləmə.'),('Təfsir','Səədi, İbn Kəsir, Təbəri və digər təfsirlər.'),('Tərcümələr','20+ dildə məna tərcümələri.')],'Məxfilik','Şərtlər','→'),
+'tr':('tr','ltr','../',"Kur'an Oku","Medine mushafı sayfa sayfa, tefsirler ve birçok dilde meallerle — ücretsiz ve reklamsız.","Mushafı Aç",['Ana Sayfa','Tefsir','Mealler','Hakkında',"Kur'an"],[("Kur'an",'604 sayfalık Medine mushafı, tilavetle.'),('Tefsir','Sa\'dî, İbn Kesîr, Taberî ve diğer tefsirler.'),('Mealler','20+ dilde meal.')],'Gizlilik','Şartlar','→'),
+'en':('en','ltr','../','Read the Quran','The Madinah Mushaf page by page, with tafsir and translations in many languages — free and ad-free.','Open the Mushaf',['Home','Tafsir','Translations','About','Quran'],[('Quran','The 604-page Madinah Mushaf with recitation.'),('Tafsir','Al-Sa\'di, Ibn Kathir, al-Tabari and more.'),('Translations','Meanings of the Quran in 20+ languages.')],'Privacy','Terms','→'),
+'ru':('ru','ltr','../','Читать Коран','Мединский мусхаф страница за страницей, с тафсирами и переводами на многих языках — бесплатно и без рекламы.','Открыть мусхаф',['Главная','Тафсир','Переводы','О нас','Коран'],[('Коран','Мединский мусхаф, 604 страницы, с чтением.'),('Тафсир','Ас-Саади, Ибн Касир, ат-Табари и другие.'),('Переводы','Смыслы Корана на 20+ языках.')],'Конфиденциальность','Условия','→'),
+}
+ICONS=['📖','📚','文A']
+MOSQ='<svg viewBox="0 0 400 90" preserveAspectRatio="none"><path fill="#04170f" d="M0 90V70h20V40l4-8 4 8v30h20V60q15-25 30 0v10h10V50q20-35 40 0v20h20V30l4-10 4 10v40h30V55q25-40 50 0v15h30V30l4-10 4 10v40h20V60q15-25 30 0v10h20V40l4-8 4 8v30h20v20z"/></svg>'
+for k,(lang,d,r,h1,p,cta,nav,cards,priv,terms,arr) in L.items():
+    out=('' if k=='ar' else k+'/')+'index.html'
+    langs=''.join(f'<a href="{r}{"" if x=="ar" else x+"/"}"{" class=on" if x==k else ""}>{x.upper()}</a>' for x in L)
+    hrefs=['./','tafsir.html','translations.html','about.html','quran/']
+    ico=['🏠','📖','文A','ⓘ','📗']
+    order=range(5) if d=='rtl' else [0,4,1,2,3]
+    nv=''.join(f'<a href="{hrefs[i]}"{" class=on" if i==0 else ""}>{ico[i]} {nav[i]}</a>' for i in order)
+    ch=['quran/','tafsir.html','translations.html']
+    cs=''.join(f'<a class="card" href="{ch[i]}"><div class="ic">{["📗","📖","文A"][i]}</div><h3>{t}</h3><p>{dd}</p><span class="go">{arr}</span></a>' for i,(t,dd) in enumerate(cards))
+    html=f'''<!doctype html><html lang="{lang}" dir="{d}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{h1} — Mushafuk.online</title><meta name="description" content="{p}"><link rel="icon" href="{r}icon.png"><link rel="stylesheet" href="{r}home.css?v=2"></head><body class="h"><header class="top"><div class="bar"><div class="row"><a class="logo" href="./" dir="ltr"><img src="{r}icon.png" alt="">Mushafuk<span>.online</span></a><span class="langs"><button type="button" class="lbtn" aria-haspopup="true" aria-expanded="false">🌐 {k.upper()} ▾</button><span class="lmenu">{langs}</span></span></div><nav>{nv}</nav></div></header><section class="hero"><div class="lamp">🏮</div><div class="bism" aria-label="بسم الله الرحمن الرحيم">&#xFC41;&#xFC42;&#xFC43;&#xFC44;</div><h1>{h1}</h1><p>{p}</p><a class="cta" href="quran/">📖 {cta}</a><img class="rehal" src="{r}home-rehal.jpg" alt="Quran"></section><main class="cards">{cs}</main><footer><img src="{r}icon.png" alt=""><div class="c" dir="ltr">© 2026 Mushafuk.online</div><div class="l"><a href="{r}terms.html">{terms}</a> · <a href="{r}privacy.html">{priv}</a></div>{MOSQ}</footer><script src="{r}site.js?v=7"></script></body></html>'''
+    open(out,'w').write(html)
