@@ -1123,35 +1123,27 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     return prefix + "/page/" + n + "/";
   }
   let turnLock = false;
-  function turnSheet() {
-    const full = document.querySelector(".qm-full");
-    if (full && !full.hidden) return full;
-    return document.body;
+  function prefetchDoc(href) {
+    if (!href) return;
+    const l = document.createElement("link");
+    l.rel = "prefetch";
+    l.as = "document";
+    l.href = href;
+    document.head.appendChild(l);
   }
-  function flipSheet(dir, incoming) {
-    const sheet = turnSheet();
-    const edge = dir > 0 ? "right center" : "left center";
-    const angle = dir > 0 ? 72 : -72;
-    sheet.style.transformOrigin = edge;
-    sheet.style.backfaceVisibility = "hidden";
-    if (incoming) {
-      sheet.style.transition = "none";
-      sheet.style.transform = "perspective(1800px) rotateY(" + (-angle) + "deg)";
-      document.documentElement.classList.remove("qm-turning");
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        sheet.style.transition = "transform .46s cubic-bezier(.16,1,.3,1)";
-        sheet.style.transform = "perspective(1800px) rotateY(0deg)";
-      }));
-      return;
+  function warmMushaf() {
+    const m = location.pathname.match(/^(.*\/page\/)(\d+)\/?$/);
+    if (!m) return;
+    const n = +m[2];
+    const lang = location.pathname.match(/^\/(az|tr|en|ru)(?=\/)/);
+    for (const d of [-3, -2, -1, 1, 2, 3]) {
+      const k = n + d;
+      if (k < 1 || k > 604) continue;
+      const leaf = m[1] + k + "/";
+      prefetchDoc(leaf);
+      const shell = (lang ? "/" + lang[1] : "") + "/page/" + k + "/";
+      if (shell !== leaf) prefetchDoc(shell);
     }
-    if (!document.getElementById("qm-under")) {
-      const under = document.createElement("div");
-      under.id = "qm-under";
-      under.style.cssText = "position:fixed;inset:0;background:#efe6d4;z-index:1";
-      document.body.appendChild(under);
-    }
-    sheet.style.transition = "transform .4s cubic-bezier(.22,.75,.2,1)";
-    sheet.style.transform = "perspective(1800px) rotateY(" + angle + "deg)";
   }
   window.QM_TURN = function (n) {
     n = n | 0; if (n < 1) n = 1; if (n > 604) n = 604;
@@ -1164,19 +1156,16 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     if (path === href) return false;
     if (turnLock) return true;
     turnLock = true;
-    const dir = window.__qmTurnDir || 1;
-    try { sessionStorage.setItem("qm.turn", String(dir)); } catch (e) {}
-    flipSheet(dir, false);
-    setTimeout(() => location.assign(href + location.search), 400);
+    try { sessionStorage.removeItem("qm.turn"); } catch (e) {}
+    location.assign(href + location.search);
     return true;
   };
   function settleTurn() {
-    let dir = 0;
-    try { dir = +sessionStorage.getItem("qm.turn") || 0; } catch (e) {}
-    if (!dir) { document.documentElement.classList.remove("qm-turning"); return; }
     try { sessionStorage.removeItem("qm.turn"); } catch (e) {}
-    flipSheet(dir, true);
+    document.documentElement.classList.remove("qm-turning");
   }
+  settleTurn();
+  warmMushaf();
   // A horizontal finger swipe on any real mushaf page opens the next page's address.
   let finger = null;
   const fingerStart = (x, y, target) => {
@@ -1260,28 +1249,22 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     }
     // page change by finger swipe only (same direction as the mushaf: swipe right = next page); the page follows the finger
     let d = null;
-    const W = () => body.clientWidth || 360;
-    const slideTo = (x, ms) => { body.style.transition = ms ? "transform " + ms + "ms cubic-bezier(.22,1,.36,1)" : "none"; body.style.transform = x ? "translate3d(" + x + "px,0,0)" : ""; };
-    body.onpointerdown = (ev) => { if (ev.target.closest("button")) return; d = { x: ev.clientX, y: ev.clientY, t: performance.now(), mode: null, dx: 0 }; };
+    body.onpointerdown = (ev) => { if (ev.target.closest("button")) return; d = { x: ev.clientX, y: ev.clientY, mode: null, dx: 0 }; };
     body.onpointermove = (ev) => {
       if (!d) return; const dx = ev.clientX - d.x, dy = ev.clientY - d.y;
-      if (!d.mode) { if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return; d.mode = Math.abs(dx) > Math.abs(dy) * 1.2 ? "x" : "y"; if (d.mode === "x") try { body.setPointerCapture(ev.pointerId); } catch (e) {} }
+      if (!d.mode) { if (Math.abs(dx) < 10 && Math.abs(dy) < 10) return; d.mode = Math.abs(dx) > Math.abs(dy) * 1.2 ? "x" : "y"; }
       if (d.mode !== "x") return;
-      const n = pg.n + (dx > 0 ? 1 : -1); d.dx = n < 1 || n > 604 ? dx * 0.25 : dx; slideTo(d.dx, 0);
+      d.dx = dx;
     };
     const end = () => {
       const g = d; d = null; if (!g || g.mode !== "x") return;
-      const v = g.dx / Math.max(1, performance.now() - g.t), n = pg.n + (g.dx > 0 ? 1 : -1);
-      if ((Math.abs(g.dx) > W() * 0.18 || Math.abs(v) > 0.45) && n >= 1 && n <= 604) {
-        const dir = g.dx > 0 ? 1 : -1;
-        slideTo(0, 0);
+      const n = pg.n + (g.dx > 0 ? 1 : -1);
+      if (Math.abs(g.dx) > 32 && n >= 1 && n <= 604) {
         if (mushafTurnHref(n) && kind !== "tf") { try { sessionStorage.setItem("qm.reopen", kind); } catch (e) {} }
-        window.__qmTurnDir = dir;
-        if (!(window.QM_TURN && QM_TURN(n))) openFull(kind, null, n, -dir);
-      } else slideTo(0, 220);
+        if (!(window.QM_TURN && QM_TURN(n))) openFull(kind, null, n);
+      }
     };
-    body.onpointerup = end; body.onpointercancel = () => { if (d && d.mode === "x") slideTo(0, 220); d = null; };
-    if (enterFrom) { slideTo(enterFrom * W(), 0); requestAnimationFrame(() => requestAnimationFrame(() => slideTo(0, 260))); }
+    body.onpointerup = end; body.onpointercancel = () => { d = null; };
     fsEl.hidden = false;
     const target = focusKey && body.querySelector('[data-k="' + focusKey + '"]');
     if (target) { target.classList.add("cur"); target.scrollIntoView({ block: "start" }); } else body.scrollTop = 0;
