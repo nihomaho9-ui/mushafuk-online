@@ -41,3 +41,10 @@ footer{border-top:1px solid #e8dfc9;text-align:center;padding:2rem;color:var(--m
 .langs .lmenu a{display:block;text-align:center}
 .nav nav{flex-wrap:nowrap!important}.langs .lmenu{display:none!important}.langs.open .lmenu{display:flex!important}
 @media(max-width:700px){.nav .in{flex-direction:row!important;flex-wrap:wrap;gap:.4rem .8rem}.nav nav{flex:1 1 auto;justify-content:flex-end;overflow:visible}.nav nav a{margin-left:.7rem;font-size:.85rem}[dir=rtl] .nav nav a{margin-left:0;margin-right:.7rem}.langs{margin-inline-start:.6rem!important}}
+/* v6: lang dropdown inline in top nav, closed by default */
+.nav .in{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;align-items:center!important;justify-content:space-between}
+.nav nav{display:flex!important;align-items:center!important;flex-wrap:nowrap!important}
+.nav nav .langs{position:relative!important;display:inline-flex!important;align-items:center;flex:0 0 auto;margin-inline-start:1rem!important}
+.langs .lmenu{display:none!important}.langs.open .lmenu{display:flex!important}
+.hero:before,.hero::before{content:none!important;display:none!important;background:none!important}
+@media(max-width:700px){.nav nav{overflow-x:auto;overflow-y:visible}.nav nav a{white-space:nowrap}.nav .logo{flex:0 0 auto}}
