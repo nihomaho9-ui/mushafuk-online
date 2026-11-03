@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://mushafuk.online/sitemap.xml
