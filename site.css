@@ -47,4 +47,4 @@ footer{border-top:1px solid #e8dfc9;text-align:center;padding:2rem;color:var(--m
 .nav nav .langs{position:relative!important;display:inline-flex!important;align-items:center;flex:0 0 auto;margin-inline-start:1rem!important}
 .langs .lmenu{display:none!important}.langs.open .lmenu{display:flex!important}
 .hero:before,.hero::before{content:none!important;display:none!important;background:none!important}
-@media(max-width:700px){.nav nav{overflow-x:auto;overflow-y:visible}.nav nav a{white-space:nowrap}.nav .logo{flex:0 0 auto}}
+@media(max-width:700px){.nav nav a{white-space:nowrap}.nav .logo{flex:0 0 auto}}
