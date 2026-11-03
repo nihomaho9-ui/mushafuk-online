@@ -157,8 +157,8 @@
     const u = t();
     document.documentElement.lang = lang;
     document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
-    document.title = u.title + " — Mushafuk";
-    title.textContent = u.title;
+    document.title = "Mushafuk AI";
+    if (title) title.textContent = u.title;
     lead.textContent = u.lead;
     input.placeholder = u.ph;
     go.textContent = u.go;
