@@ -170,7 +170,7 @@
         padding: calc(0.65rem + env(safe-area-inset-top)) 0.85rem 0.55rem;
         color: #1a3330;
       }
-      .brand-row { display: flex; align-items: center; justify-content: center; gap: 0.7rem; }
+      .brand-row { display: flex; align-items: center; justify-content: center; gap: 0.7rem; text-decoration: none; color: inherit; cursor: pointer; }
       .app-icon {
         width: 3.35rem; height: 3.35rem; border-radius: 22%;
         box-shadow: 0 3px 12px rgba(8, 28, 22, 0.28);
@@ -673,10 +673,10 @@
   <body>
     <div id="gate">
       <div class="idx-head">
-        <div class="brand-row">
+        <a class="brand-row" href="/en/">
           <img class="app-icon" src="./icon.png" alt="" width="56" height="56" />
           <div class="brand-tx"><strong>Mushafuk</strong></div>
-        </div>
+        </a>
         <div class="home-bar">
           <button type="button" class="home-ico" id="notes-btn" aria-label="Qeydlər və əlfəcinlər" onclick="QM.openNotes()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></button>
           <button type="button" class="home-ico" id="recent-btn" aria-label="Son oxunan" onclick="QM_RECENT()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
