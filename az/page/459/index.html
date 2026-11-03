@@ -38,6 +38,8 @@
         font-size: 1rem;
         line-height: 1;
       }
+      a.home-brand { display: flex; align-items: center; gap: 0.22rem; flex: none; color: #12352c; font-weight: 700; font-size: 0.68rem; line-height: 1; height: 1rem; }
+      a.home-brand img { width: 1rem; height: 1rem; border-radius: 22%; display: block; }
       header h1 { margin: 0; font-size: 0.9rem; font-weight: 500; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .num {
         text-align: center;
@@ -695,7 +697,7 @@
       <div id="ahits" hidden></div>
     </div>
     <header>
-      <a href="az/" id="back" aria-label="Geri">‹</a>
+      <a href="az/" id="back" aria-label="Geri">‹</a><a class="home-brand" href="az/" aria-label="Mushafuk"><img src="/icon.png" alt="" width="16" height="16"><span>Mushafuk</span></a>
       <h1 id="sure">سورة الفاتحة</h1>
       <div class="hdr-acts">
         <button type="button" class="gear" id="hifz-btn" title="Hifz" aria-label="Hifz" onclick="QM.openHifz()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C6.5 4.5 9.5 4.5 12 6c2.5-1.5 5.5-1.5 8-.5v13c-2.5-1-5.5-1-8 .5-2.5-1.5-5.5-1.5-8-.5zM12 6v13.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
@@ -875,6 +877,7 @@
 
       let job = 0;
       async function show(n) {
+        window.QM_SHOW = show; window.__qmPainting = n;
         if (window.QM_TURN && QM_TURN(n)) return;
         window.QM && QM.closeWordPop && QM.closeWordPop();
         const id = ++job;
@@ -1453,7 +1456,7 @@
       Promise.all([fetch("./yazi-pages.json").then((r) => r.json()), fetch("./yazi-words.json").then((r) => r.json()).catch(() => null)]).then(([json, wb]) => { words = wb; pages = json; loadNames().then(function(){ glyphInk.clear(); try { fit(); } catch (e) {} }); const qp = +(window.__PAGE||new URLSearchParams(location.search).get("page")); if (qp >= 1 && qp <= 604) openAt(qp); });
     </script>
     <script>try{localStorage.setItem("qm.lang","az");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");if(!p.tr)p.tr="az.musayev";localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}</script>
-    <script src="./lib.js?v=26"></script>
+    <script src="./lib.js?v=27"></script>
     <script src="./audio.js?v=5"></script>
   <noscript><div lang="ar" dir="rtl"><p>خَلَقَكُم مِّن نَّفْسٍ وَٰحِدَةٍ ثُمَّ جَعَلَ مِنْهَا زَوْجَهَا وَأَنزَلَ لَكُم مِّنَ ٱلْأَنْعَـٰمِ ثَمَـٰنِيَةَ أَزْوَٰجٍ ۚ يَخْلُقُكُمْ فِى بُطُونِ أُمَّهَـٰتِكُمْ خَلْقًا مِّنۢ بَعْدِ خَلْقٍ فِى ظُلُمَـٰتٍ ثَلَـٰثٍ ۚ ذَٰلِكُمُ ٱللَّهُ رَبُّكُمْ لَهُ ٱلْمُلْكُ ۖ لَآ إِلَـٰهَ إِلَّا هُوَ ۖ فَأَنَّىٰ تُصْرَفُونَ ﴿6﴾</p><p>إِن تَكْفُرُوا۟ فَإِنَّ ٱللَّهَ غَنِىٌّ عَنكُمْ ۖ وَلَا يَرْضَىٰ لِعِبَادِهِ ٱلْكُفْرَ ۖ وَإِن تَشْكُرُوا۟ يَرْضَهُ لَكُمْ ۗ وَلَا تَزِرُ وَازِرَةٌ وِزْرَ أُخْرَىٰ ۗ ثُمَّ إِلَىٰ رَبِّكُم مَّرْجِعُكُمْ فَيُنَبِّئُكُم بِمَا كُنتُمْ تَعْمَلُونَ ۚ إِنَّهُۥ عَلِيمٌۢ بِذَاتِ ٱلصُّدُورِ ﴿7﴾</p><p>وَإِذَا مَسَّ ٱلْإِنسَـٰنَ ضُرٌّ دَعَا رَبَّهُۥ مُنِيبًا إِلَيْهِ ثُمَّ إِذَا خَوَّلَهُۥ نِعْمَةً مِّنْهُ نَسِىَ مَا كَانَ يَدْعُوٓا۟ إِلَيْهِ مِن قَبْلُ وَجَعَلَ لِلَّهِ أَندَادًا لِّيُضِلَّ عَن سَبِيلِهِۦ ۚ قُلْ تَمَتَّعْ بِكُفْرِكَ قَلِيلًا ۖ إِنَّكَ مِنْ أَصْحَـٰبِ ٱلنَّارِ ﴿8﴾</p><p>أَمَّنْ هُوَ قَـٰنِتٌ ءَانَآءَ ٱلَّيْلِ سَاجِدًا وَقَآئِمًا يَحْذَرُ ٱلْـَٔاخِرَةَ وَيَرْجُوا۟ رَحْمَةَ رَبِّهِۦ ۗ قُلْ هَلْ يَسْتَوِى ٱلَّذِينَ يَعْلَمُونَ وَٱلَّذِينَ لَا يَعْلَمُونَ ۗ إِنَّمَا يَتَذَكَّرُ أُو۟لُوا۟ ٱلْأَلْبَـٰبِ ﴿9﴾</p><p>قُلْ يَـٰعِبَادِ ٱلَّذِينَ ءَامَنُوا۟ ٱتَّقُوا۟ رَبَّكُمْ ۚ لِلَّذِينَ أَحْسَنُوا۟ فِى هَـٰذِهِ ٱلدُّنْيَا حَسَنَةٌ ۗ وَأَرْضُ ٱللَّهِ وَٰسِعَةٌ ۗ إِنَّمَا يُوَفَّى ٱلصَّـٰبِرُونَ أَجْرَهُم بِغَيْرِ حِسَابٍ ﴿10﴾</p></div></noscript></body>
 </html>

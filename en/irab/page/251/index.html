@@ -38,6 +38,8 @@
         font-size: 1rem;
         line-height: 1;
       }
+      a.home-brand { display: flex; align-items: center; gap: 0.22rem; flex: none; color: #12352c; font-weight: 700; font-size: 0.68rem; line-height: 1; height: 1rem; }
+      a.home-brand img { width: 1rem; height: 1rem; border-radius: 22%; display: block; }
       header h1 { margin: 0; font-size: 0.9rem; font-weight: 500; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .num {
         text-align: center;
@@ -695,7 +697,7 @@
       <div id="ahits" hidden></div>
     </div>
     <header>
-      <a href="en/" id="back" aria-label="Geri">‹</a>
+      <a href="en/" id="back" aria-label="Geri">‹</a><a class="home-brand" href="en/" aria-label="Mushafuk"><img src="/icon.png" alt="" width="16" height="16"><span>Mushafuk</span></a>
       <h1 id="sure">سورة الفاتحة</h1>
       <div class="hdr-acts">
         <button type="button" class="gear" id="hifz-btn" title="Hifz" aria-label="Hifz" onclick="QM.openHifz()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C6.5 4.5 9.5 4.5 12 6c2.5-1.5 5.5-1.5 8-.5v13c-2.5-1-5.5-1-8 .5-2.5-1.5-5.5-1.5-8-.5zM12 6v13.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
@@ -875,6 +877,8 @@
 
       let job = 0;
       async function show(n) {
+        window.QM_SHOW = show; window.__qmPainting = n;
+        if (window.QM_TURN && QM_TURN(n)) return;
         window.QM && QM.closeWordPop && QM.closeWordPop();
         const id = ++job;
         pageNo = Math.max(1, Math.min(LAST, n));
@@ -1452,7 +1456,7 @@
       Promise.all([fetch("./yazi-pages.json").then((r) => r.json()), fetch("./yazi-words.json").then((r) => r.json()).catch(() => null)]).then(([json, wb]) => { words = wb; pages = json; loadNames().then(function(){ glyphInk.clear(); try { fit(); } catch (e) {} }); const qp = +(window.__PAGE||new URLSearchParams(location.search).get("page")); if (qp >= 1 && qp <= 604) openAt(qp); });
     </script>
     <script>try{localStorage.setItem("qm.lang","en");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");if(!p.tr)p.tr="english_saheeh";localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}</script>
-    <script src="./lib.js?v=26"></script>
+    <script src="./lib.js?v=27"></script>
     <script src="./audio.js?v=5"></script>
   <noscript><div lang="ar" dir="rtl"><p>لَهُۥ دَعْوَةُ ٱلْحَقِّ ۖ وَٱلَّذِينَ يَدْعُونَ مِن دُونِهِۦ لَا يَسْتَجِيبُونَ لَهُم بِشَىْءٍ إِلَّا كَبَـٰسِطِ كَفَّيْهِ إِلَى ٱلْمَآءِ لِيَبْلُغَ فَاهُ وَمَا هُوَ بِبَـٰلِغِهِۦ ۚ وَمَا دُعَآءُ ٱلْكَـٰفِرِينَ إِلَّا فِى ضَلَـٰلٍ ﴿14﴾</p><p>وَلِلَّهِ يَسْجُدُ مَن فِى ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ طَوْعًا وَكَرْهًا وَظِلَـٰلُهُم بِٱلْغُدُوِّ وَٱلْـَٔاصَالِ ۩ ﴿15﴾</p><p>قُلْ مَن رَّبُّ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ قُلِ ٱللَّهُ ۚ قُلْ أَفَٱتَّخَذْتُم مِّن دُونِهِۦٓ أَوْلِيَآءَ لَا يَمْلِكُونَ لِأَنفُسِهِمْ نَفْعًا وَلَا ضَرًّا ۚ قُلْ هَلْ يَسْتَوِى ٱلْأَعْمَىٰ وَٱلْبَصِيرُ أَمْ هَلْ تَسْتَوِى ٱلظُّلُمَـٰتُ وَٱلنُّورُ ۗ أَمْ جَعَلُوا۟ لِلَّهِ شُرَكَآءَ خَلَقُوا۟ كَخَلْقِهِۦ فَتَشَـٰبَهَ ٱلْخَلْقُ عَلَيْهِمْ ۚ قُلِ ٱللَّهُ خَـٰلِقُ كُلِّ شَىْءٍ وَهُوَ ٱلْوَٰحِدُ ٱلْقَهَّـٰرُ ﴿16﴾</p><p>أَنزَلَ مِنَ ٱلسَّمَآءِ مَآءً فَسَالَتْ أَوْدِيَةٌۢ بِقَدَرِهَا فَٱحْتَمَلَ ٱلسَّيْلُ زَبَدًا رَّابِيًا ۚ وَمِمَّا يُوقِدُونَ عَلَيْهِ فِى ٱلنَّارِ ٱبْتِغَآءَ حِلْيَةٍ أَوْ مَتَـٰعٍ زَبَدٌ مِّثْلُهُۥ ۚ كَذَٰلِكَ يَضْرِبُ ٱللَّهُ ٱلْحَقَّ وَٱلْبَـٰطِلَ ۚ فَأَمَّا ٱلزَّبَدُ فَيَذْهَبُ جُفَآءً ۖ وَأَمَّا مَا يَنفَعُ ٱلنَّاسَ فَيَمْكُثُ فِى ٱلْأَرْضِ ۚ كَذَٰلِكَ يَضْرِبُ ٱللَّهُ ٱلْأَمْثَالَ ﴿17﴾</p><p>لِلَّذِينَ ٱسْتَجَابُوا۟ لِرَبِّهِمُ ٱلْحُسْنَىٰ ۚ وَٱلَّذِينَ لَمْ يَسْتَجِيبُوا۟ لَهُۥ لَوْ أَنَّ لَهُم مَّا فِى ٱلْأَرْضِ جَمِيعًا وَمِثْلَهُۥ مَعَهُۥ لَٱفْتَدَوْا۟ بِهِۦٓ ۚ أُو۟لَـٰٓئِكَ لَهُمْ سُوٓءُ ٱلْحِسَابِ وَمَأْوَىٰهُمْ جَهَنَّمُ ۖ وَبِئْسَ ٱلْمِهَادُ ﴿18﴾</p></div></noscript><script>(function w(i){if(window.QM&&window.QM_PAGE&&window.QM_PAGE(251)){QM.openFull("ir",null,251);return}if(i<200)setTimeout(function(){w(i+1)},100)})(0)</script></body>
 </html>

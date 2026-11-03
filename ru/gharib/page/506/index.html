@@ -38,6 +38,8 @@
         font-size: 1rem;
         line-height: 1;
       }
+      a.home-brand { display: flex; align-items: center; gap: 0.22rem; flex: none; color: #12352c; font-weight: 700; font-size: 0.68rem; line-height: 1; height: 1rem; }
+      a.home-brand img { width: 1rem; height: 1rem; border-radius: 22%; display: block; }
       header h1 { margin: 0; font-size: 0.9rem; font-weight: 500; flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
       .num {
         text-align: center;
@@ -695,7 +697,7 @@
       <div id="ahits" hidden></div>
     </div>
     <header>
-      <a href="ru/" id="back" aria-label="Geri">‹</a>
+      <a href="ru/" id="back" aria-label="Geri">‹</a><a class="home-brand" href="ru/" aria-label="Mushafuk"><img src="/icon.png" alt="" width="16" height="16"><span>Mushafuk</span></a>
       <h1 id="sure">سورة الفاتحة</h1>
       <div class="hdr-acts">
         <button type="button" class="gear" id="hifz-btn" title="Hifz" aria-label="Hifz" onclick="QM.openHifz()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5.5C6.5 4.5 9.5 4.5 12 6c2.5-1.5 5.5-1.5 8-.5v13c-2.5-1-5.5-1-8 .5-2.5-1.5-5.5-1.5-8-.5zM12 6v13.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></button>
@@ -875,6 +877,8 @@
 
       let job = 0;
       async function show(n) {
+        window.QM_SHOW = show; window.__qmPainting = n;
+        if (window.QM_TURN && QM_TURN(n)) return;
         window.QM && QM.closeWordPop && QM.closeWordPop();
         const id = ++job;
         pageNo = Math.max(1, Math.min(LAST, n));
@@ -1452,7 +1456,7 @@
       Promise.all([fetch("./yazi-pages.json").then((r) => r.json()), fetch("./yazi-words.json").then((r) => r.json()).catch(() => null)]).then(([json, wb]) => { words = wb; pages = json; loadNames().then(function(){ glyphInk.clear(); try { fit(); } catch (e) {} }); const qp = +(window.__PAGE||new URLSearchParams(location.search).get("page")); if (qp >= 1 && qp <= 604) openAt(qp); });
     </script>
     <script>try{localStorage.setItem("qm.lang","ru");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");if(!p.tr)p.tr="ru.kuliev";localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}</script>
-    <script src="./lib.js?v=26"></script>
+    <script src="./lib.js?v=27"></script>
     <script src="./audio.js?v=5"></script>
   <noscript><div lang="ar" dir="rtl"><p>وَإِذْ صَرَفْنَآ إِلَيْكَ نَفَرًا مِّنَ ٱلْجِنِّ يَسْتَمِعُونَ ٱلْقُرْءَانَ فَلَمَّا حَضَرُوهُ قَالُوٓا۟ أَنصِتُوا۟ ۖ فَلَمَّا قُضِىَ وَلَّوْا۟ إِلَىٰ قَوْمِهِم مُّنذِرِينَ ﴿29﴾</p><p>قَالُوا۟ يَـٰقَوْمَنَآ إِنَّا سَمِعْنَا كِتَـٰبًا أُنزِلَ مِنۢ بَعْدِ مُوسَىٰ مُصَدِّقًا لِّمَا بَيْنَ يَدَيْهِ يَهْدِىٓ إِلَى ٱلْحَقِّ وَإِلَىٰ طَرِيقٍ مُّسْتَقِيمٍ ﴿30﴾</p><p>يَـٰقَوْمَنَآ أَجِيبُوا۟ دَاعِىَ ٱللَّهِ وَءَامِنُوا۟ بِهِۦ يَغْفِرْ لَكُم مِّن ذُنُوبِكُمْ وَيُجِرْكُم مِّنْ عَذَابٍ أَلِيمٍ ﴿31﴾</p><p>وَمَن لَّا يُجِبْ دَاعِىَ ٱللَّهِ فَلَيْسَ بِمُعْجِزٍ فِى ٱلْأَرْضِ وَلَيْسَ لَهُۥ مِن دُونِهِۦٓ أَوْلِيَآءُ ۚ أُو۟لَـٰٓئِكَ فِى ضَلَـٰلٍ مُّبِينٍ ﴿32﴾</p><p>أَوَلَمْ يَرَوْا۟ أَنَّ ٱللَّهَ ٱلَّذِى خَلَقَ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضَ وَلَمْ يَعْىَ بِخَلْقِهِنَّ بِقَـٰدِرٍ عَلَىٰٓ أَن يُحْـِۧىَ ٱلْمَوْتَىٰ ۚ بَلَىٰٓ إِنَّهُۥ عَلَىٰ كُلِّ شَىْءٍ قَدِيرٌ ﴿33﴾</p><p>وَيَوْمَ يُعْرَضُ ٱلَّذِينَ كَفَرُوا۟ عَلَى ٱلنَّارِ أَلَيْسَ هَـٰذَا بِٱلْحَقِّ ۖ قَالُوا۟ بَلَىٰ وَرَبِّنَا ۚ قَالَ فَذُوقُوا۟ ٱلْعَذَابَ بِمَا كُنتُمْ تَكْفُرُونَ ﴿34﴾</p><p>فَٱصْبِرْ كَمَا صَبَرَ أُو۟لُوا۟ ٱلْعَزْمِ مِنَ ٱلرُّسُلِ وَلَا تَسْتَعْجِل لَّهُمْ ۚ كَأَنَّهُمْ يَوْمَ يَرَوْنَ مَا يُوعَدُونَ لَمْ يَلْبَثُوٓا۟ إِلَّا سَاعَةً مِّن نَّهَارٍۭ ۚ بَلَـٰغٌ ۚ فَهَلْ يُهْلَكُ إِلَّا ٱلْقَوْمُ ٱلْفَـٰسِقُونَ ﴿35﴾</p></div></noscript><script>(function w(i){if(window.QM&&window.QM_PAGE&&window.QM_PAGE(506)){QM.openFull("wb",null,506);return}if(i<200)setTimeout(function(){w(i+1)},100)})(0)</script></body>
 </html>

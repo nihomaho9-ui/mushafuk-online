@@ -20,6 +20,30 @@
   }
   warm(next, "data-next", 2);
   warm(prev, "data-prev", 2);
+  try {
+    if (window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports("speculationrules")) {
+      var spec = document.createElement("script");
+      spec.type = "speculationrules";
+      var urls = [next, prev].filter(Boolean);
+      spec.textContent = JSON.stringify({
+        prerender: [{ source: "list", urls: urls.slice(0, 1) }],
+        prefetch: [{ source: "list", urls: urls }]
+      });
+      document.head.appendChild(spec);
+    }
+  } catch (e) {}
+  if (!document.querySelector("a.home-brand")) {
+    var st = document.createElement("style");
+    st.textContent = "a.home-brand{display:flex;align-items:center;gap:.28rem;margin-inline-start:auto;flex:none;text-decoration:none;color:#12352c;font-weight:700;font-size:.72rem;line-height:1}a.home-brand img{width:1.05rem;height:1.05rem;border-radius:22%;display:block}";
+    document.head.appendChild(st);
+    var brand = document.createElement("a");
+    brand.className = "home-brand";
+    brand.href = "/";
+    brand.setAttribute("aria-label", "Mushafuk");
+    brand.innerHTML = '<img src="/icon.png" alt="" width="18" height="18"><span>Mushafuk</span>';
+    var bar = document.querySelector(".bar");
+    if (bar) bar.appendChild(brand);
+  }
 
   var x = null, y = null, lock = null, lastDx = 0;
   function go(dir) {

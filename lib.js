@@ -1131,18 +1131,31 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     l.href = href;
     document.head.appendChild(l);
   }
+  function preloadQcf(n) {
+    if (n < 1 || n > 604 || document.getElementById("qm-qcf-" + n)) return;
+    const l = document.createElement("link");
+    l.id = "qm-qcf-" + n;
+    l.rel = "preload";
+    l.as = "font";
+    l.type = "font/woff2";
+    l.crossOrigin = "anonymous";
+    l.href = "/yazi-fonts/qcf/p" + n + ".woff2";
+    document.head.appendChild(l);
+  }
   function warmMushaf() {
-    const m = location.pathname.match(/^(.*\/page\/)(\d+)\/?$/);
+    const m = location.pathname.match(/\/page\/(\d+)\/?$/);
     if (!m) return;
-    const n = +m[2];
-    const lang = location.pathname.match(/^\/(az|tr|en|ru)(?=\/)/);
-    for (const d of [-3, -2, -1, 1, 2, 3]) {
+    const n = +m[1];
+    for (const d of [-2, -1, 1, 2, 3]) {
       const k = n + d;
       if (k < 1 || k > 604) continue;
-      const leaf = m[1] + k + "/";
+      preloadQcf(k);
+    }
+    for (const d of [-1, 1]) {
+      const k = n + d;
+      if (k < 1 || k > 604) continue;
+      const leaf = location.pathname.replace(/\/page\/\d+\/?$/, "/page/" + k + "/");
       prefetchDoc(leaf);
-      const shell = (lang ? "/" + lang[1] : "") + "/page/" + k + "/";
-      if (shell !== leaf) prefetchDoc(shell);
     }
   }
   window.QM_TURN = function (n) {
@@ -1153,13 +1166,31 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     const href = hereLeaf || mushafTurnHref(n);
     if (!href) return false;
     if (!path.endsWith("/")) path += "/";
+    if (window.__qmPop) { window.__qmPop = false; return false; }
     if (path === href) return false;
-    if (turnLock) return true;
-    turnLock = true;
-    try { sessionStorage.removeItem("qm.turn"); } catch (e) {}
-    location.assign(href + location.search);
-    return true;
+    if (Date.now() - (window.__qmTurnAt || 0) < 450) return true;
+    if (!document.getElementById("page")) {
+      window.__qmTurnAt = Date.now();
+      turnLock = true;
+      location.assign(href + location.search);
+      return true;
+    }
+    window.__qmTurnAt = Date.now();
+    history.pushState({ qm: n }, "", href + location.search);
+    preloadQcf(n); preloadQcf(n + 1); preloadQcf(n - 1); preloadQcf(n + 2);
+    queueMicrotask(function () {
+      if (window.__qmPainting === n) return;
+      if (window.QM_SHOW) window.QM_SHOW(n);
+    });
+    return false;
   };
+  window.addEventListener("popstate", function () {
+    const m = location.pathname.match(/\/page\/(\d+)\/?$/);
+    if (!m || !window.QM_SHOW) return;
+    window.__qmPop = true;
+    window.__qmTurnAt = 0;
+    window.QM_SHOW(+m[1]);
+  });
   function settleTurn() {
     try { sessionStorage.removeItem("qm.turn"); } catch (e) {}
     document.documentElement.classList.remove("qm-turning");
@@ -1177,7 +1208,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     const target = finger.target;
     const dx = x - finger.x, dy = y - finger.y;
     finger = null;
-    if (target && target.closest && target.closest(".qm-full")) return;
+    if (target && target.closest && target.closest("#page,#gate,.qm-full")) return;
     if (Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)) return;
     const m = location.pathname.match(/\/page\/(\d+)\/?$/);
     if (!m) return;

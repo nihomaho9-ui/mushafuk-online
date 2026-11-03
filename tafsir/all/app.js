@@ -58,7 +58,7 @@
     else if (a > AYAHS[s - 1]) { s++; if (s > 114) return null; a = 1; }
     return href(s, a);
   }
-  [1, 2, 3].forEach(function (d) {
+  [1, 2].forEach(function (d) {
     [step(info.s, info.a, d), step(info.s, info.a, -d)].forEach(function (u) {
       if (!u) return;
       var l = document.createElement("link");
@@ -66,6 +66,24 @@
       document.head.appendChild(l);
     });
   });
+  try {
+    if (window.HTMLScriptElement && HTMLScriptElement.supports && HTMLScriptElement.supports("speculationrules")) {
+      var spec = document.createElement("script");
+      spec.type = "speculationrules";
+      var nxt = step(info.s, info.a, 1);
+      spec.textContent = JSON.stringify({ prerender: [{ source: "list", urls: nxt ? [nxt] : [] }] });
+      document.head.appendChild(spec);
+    }
+  } catch (e) {}
+  if (!document.querySelector("a.home-brand")) {
+    var brand = document.createElement("a");
+    brand.className = "home-brand";
+    brand.href = "/";
+    brand.setAttribute("aria-label", "Mushafuk");
+    brand.innerHTML = '<img src="/icon.png" alt="" width="18" height="18"><span>Mushafuk</span>';
+    var bar = document.querySelector(".bar");
+    if (bar) bar.appendChild(brand);
+  }
 
   var x = null, y = null, lock = null, lastDx = 0;
   function down(cx, cy, t) {

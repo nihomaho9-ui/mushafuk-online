@@ -5,6 +5,8 @@ a { color: inherit; }
 .who { display: flex; flex-direction: column; min-width: 0; }
 .who b { color: #1a3330; font-size: 1.15rem; }
 .who small { color: #8a7d68; font-size: 0.78rem; }
+a.home-brand { display: flex; align-items: center; gap: 0.28rem; margin-inline-start: auto; flex: none; text-decoration: none; color: #12352c; font-weight: 700; font-size: 0.72rem; line-height: 1; }
+a.home-brand img { width: 1.05rem; height: 1.05rem; border-radius: 22%; display: block; }
 main { max-width: 46rem; margin: 0 auto; padding: 0.85rem 0.85rem 2.2rem; }
 .ay { margin: 0.2rem 0 0.9rem; font-family: "Amiri", "Scheherazade New", serif; font-size: 1.55rem; line-height: 2.25; text-align: center; }
 .card { height: 50vh; display: flex; flex-direction: column; margin: 0 0 0.75rem; background: #fff; border: 1px solid rgba(196, 165, 110, 0.55); border-radius: 16px; overflow: hidden; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.03); }
