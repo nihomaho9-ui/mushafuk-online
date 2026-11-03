@@ -1,4 +1,4 @@
-const RB = location.hostname.endsWith("github.io") ? "./" : "https://nihomaho9-ui.github.io/quran-medine/";
+const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.online$/.test(location.hostname) ? "/" : "https://nihomaho9-ui.github.io/quran-medine/";
 // Settings (tafsir / translation downloads, text size) and the ayah sheet. Data is stored on the device (IndexedDB) and works offline.
 (function () {
   const AYAHS = window.QM_AYAHS;
@@ -15,7 +15,30 @@ const RB = location.hostname.endsWith("github.io") ? "./" : "https://nihomaho9-u
   let dbp = null;
   const db = () => (dbp ||= new Promise((ok, no) => { const r = indexedDB.open("qm-lib", 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); }));
   async function tx(mode, f) { const d = await db(); return new Promise((ok, no) => { const t = d.transaction("kv", mode); const r = f(t.objectStore("kv")); t.oncomplete = () => ok(r ? r.result : undefined); t.onerror = () => no(t.error); }); }
-  const get = (k) => tx("readonly", (s) => s.get(k));
+  // website: every book is open — files stream from the server on demand, no download step (native app keeps offline downloads)
+  const WEB = !(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+  const netP = {};
+  const netSurah = (r, s) => (netP[r.id + ":" + s] ||= (async () => {
+    if (r.k === "tr" && !r.per) { const j = await (netP[r.id + ":all"] ||= fetch(RB + "tr/" + r.id + ".json").then((x) => { if (!x.ok) throw new Error("http"); return x.json(); })); return { v: j.v[s - 1] }; }
+    const res = await fetch(RB + (r.p || r.k) + "/" + r.id + "/" + s + ".json"); if (!res.ok) throw new Error("http");
+    const j = await res.json(); return r.k === "tr" ? { v: j.t, f: j.f } : { v: j };
+  })().catch((e) => { delete netP[r.id + ":" + s]; throw e; }));
+  const netWbw = (s) => (netP["wbw:" + s] ||= fetch(RB + "wb/seraj/w" + s + ".json").then((x) => { if (!x.ok) throw new Error("http"); return x.json(); }).catch(() => { delete netP["wbw:" + s]; return null; }));
+  const idbGet = (k) => tx("readonly", (s) => s.get(k));
+  async function get(k) {
+    const v = await idbGet(k).catch(() => undefined);
+    if (v != null || !WEB) return v;
+    let m;
+    if ((m = /^wbw:(\d+)$/.exec(k))) return netWbw(+m[1]);
+    if ((m = /^(.+?):(f:)?(\d+|n)$/.exec(k))) {
+      if (!LIST.length) LIST = await (await fetch(RB + "lib-list.json")).json().catch(() => []);
+      const r = LIST.find((x) => x.id === m[1]); if (!r) return v;
+      if (m[3] === "n") return 114;
+      const o = await netSurah(r, +m[3]).catch(() => null); if (!o) return v;
+      return m[2] ? o.f : o.v;
+    }
+    return v;
+  }
   const put = (k, v) => tx("readwrite", (s) => { s.put(v, k); });
   const status = async (id) => (await get(id + ":n")) || 0;
   const running = {};
@@ -341,7 +364,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : "https://nihomaho9-u
   }
   function resRow(r) {
     const li = el("li", "qm-res"); li.dataset.id = r.id;
-    const tx = el("div", "qm-tx"); const nm = el("b", "", r.name); nm.dir = "auto"; const sm = el("small", "", (r.k === "tr" ? "" : r.by + " · ") + r.mb + " MB"); sm.dir = "auto";
+    const tx = el("div", "qm-tx"); const nm = el("b", "", r.name); nm.dir = "auto"; const sm = el("small", "", WEB ? (r.k === "tr" ? "" : r.by) : (r.k === "tr" ? "" : r.by + " · ") + r.mb + " MB"); sm.dir = "auto";
     const bar = el("span", "qm-bar"); const fill = el("i"); bar.append(fill); bar.hidden = true; const err = el("small", "qm-err", ""); tx.append(nm, sm, bar, err);
     if (r.credit) { const cr = el("small", "qm-credit", T(r.credit)); cr.dir = uiLang() === "ar" ? "rtl" : "ltr"; cr.hidden = true; tx.insertBefore(cr, bar); const ib = el("button", "qm-info", "i"); ib.type = "button"; ib.setAttribute("aria-label", "Info"); ib.setAttribute("aria-expanded", "false"); ib.onclick = (e) => { e.stopPropagation(); e.preventDefault(); cr.hidden = !cr.hidden; ib.classList.toggle("on", !cr.hidden); ib.setAttribute("aria-expanded", String(!cr.hidden)); }; nm.after(ib); }
     const act = el("div", "qm-act"); li.append(tx, act);
@@ -352,6 +375,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : "https://nihomaho9-u
       bar.hidden = !(busy || (n > 0 && !done)); fill.style.width = (n / 114) * 100 + "%";
       act.replaceChildren();
       const b = (t, c, f) => { const x = el("button", "qm-rb " + c, t); x.onclick = f; act.append(x); };
+      if (WEB) { b(chosen ? T("✓ Seçilib") : T("Seç"), chosen ? "sel" : "", () => { setPrefs({ [r.k]: r.id }); document.querySelectorAll(".qm-res").forEach((x) => x._draw && x._draw()); renderHome(); }); return; }
       if (busy) b(T("Dayandır"), "", () => { running[r.id] && (running[r.id].stop = true); });
       else if (!done) b(T("Endir"), "main", go);
       else if (ask) { b(T("Sil"), "danger", del); b("✕", "", () => { ask = false; draw(); }); }
