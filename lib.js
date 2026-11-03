@@ -1167,7 +1167,10 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
       const v = g.dx / Math.max(1, performance.now() - g.t), n = pg.n + (g.dx > 0 ? 1 : -1);
       if ((Math.abs(g.dx) > W() * 0.25 || Math.abs(v) > 0.6) && n >= 1 && n <= 604) {
         const dir = g.dx > 0 ? 1 : -1; slideTo(dir * W(), 220);
-        setTimeout(() => openFull(kind, null, n, -dir), 220);
+        // Translation sections are one real URL per mushaf page. A finger swipe must land on that page, not stay on the page that was opened.
+        const path = location.pathname;
+        const leaf = /\/(?:tercume|meal|translation|perevod)\/page\/\d+\/?$/.test(path) ? path.replace(/\/\d+\/?$/, "/" + n + "/") + location.search : "";
+        setTimeout(() => { if (leaf) location.assign(leaf); else openFull(kind, null, n, -dir); }, 220);
       } else slideTo(0, 220);
     };
     body.onpointerup = end; body.onpointercancel = () => { if (d && d.mode === "x") slideTo(0, 220); d = null; };
