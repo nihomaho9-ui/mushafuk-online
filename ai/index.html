@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="az">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Axtarış — Mushafuk</title>
+<meta name="description" content="Mushafuk axtarışı: surə, ayə, səhifə və ya söz yazın, uyğun ayə açılsın.">
+<link rel="canonical" href="https://mushafuk.online/ai/">
+<link rel="icon" href="../icon.png">
+<meta property="og:title" content="Axtarış — Mushafuk">
+<meta property="og:description" content="Surə, ayə, səhifə və ya söz. Uyğun ayə birbaşa açılır.">
+<meta property="og:image" content="https://mushafuk.online/share.jpg">
+<meta property="og:url" content="https://mushafuk.online/ai/">
+<link rel="stylesheet" href="../site.css?v=8">
+<style>
+body{background:#f8f3e7}
+.ai{max-width:760px;margin:0 auto;padding:1.2rem 1rem 4rem}
+.ai h1{text-align:center;color:#0f3d2a;font-size:2.2rem;margin:.4rem 0}
+.lead{text-align:center;color:#4a564e;margin:0 auto 1.2rem;max-width:36rem;line-height:1.6}
+form{display:flex;gap:.5rem;background:#fffdf8;border:1px solid #e3d3ac;border-radius:999px;padding:.35rem .35rem .35rem .9rem;box-shadow:0 8px 24px #0f3d2a12}
+form input{flex:1;border:0;background:transparent;font:inherit;font-size:1.05rem;outline:none;min-width:0;color:#1d2a22}
+form button{border:0;background:#0f3d2a;color:#fff;border-radius:999px;padding:.7rem 1.1rem;font:inherit;font-weight:700;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center;margin:1rem 0 1.2rem}
+.chips button{border:1px solid #e3d3ac;background:#fff;color:#0f3d2a;border-radius:999px;padding:.35rem .75rem;font:inherit;cursor:pointer}
+.note{text-align:center;color:#8a7d68;font-size:.82rem;margin:0 0 .6rem}
+.hit{display:block;background:#fffdf8;border:1px solid #e3d3ac;border-radius:16px;padding:.85rem 1rem;margin:.55rem 0;color:inherit}
+.hit:hover{border-color:#b8913f}
+.hit-h{display:flex;justify-content:space-between;gap:.6rem;align-items:baseline}
+.hit-h b{color:#0f3d2a}
+.hit-h small{color:#8a6a2e}
+.hit p{margin:.45rem 0 .2rem;line-height:1.65;color:#2c332f}
+.hit mark{background:#f3e7d0;color:#0f3d2a;border-radius:.2rem;padding:0 .15rem}
+.hit-links{display:flex;justify-content:flex-end}
+.tf{color:#8a6a2e;font-size:.82rem;font-weight:700}
+.wait{text-align:center;color:#5c675f}
+html[dir=rtl] form{padding:.35rem .9rem .35rem .35rem}
+</style>
+</head>
+<body>
+<header class="nav"><div class="in">
+<a class="logo" href="../" dir="ltr"><img src="../icon.png" alt="">Mushafuk<span>.online</span></a>
+<nav id="nav"></nav>
+<span class="langs"><button type="button" class="lbtn" id="lbtn" aria-haspopup="true" aria-expanded="false">🌐 AZ ▾</button>
+<span class="lmenu" id="langs"><a href="?lang=ar" data-l="ar">AR</a><a href="?lang=az" data-l="az">AZ</a><a href="?lang=tr" data-l="tr">TR</a><a href="?lang=en" data-l="en">EN</a><a href="?lang=ru" data-l="ru">RU</a></span>
+</span>
+</div></header>
+<main class="ai">
+<h1 id="title">Axtarış</h1>
+<p class="lead" id="lead"></p>
+<form id="form"><input id="q" type="search" autocomplete="off" enterkeyhint="search"><button id="go" type="submit">Axtar</button></form>
+<div class="chips" id="chips"></div>
+<p class="note" id="note"></p>
+<div id="out"></div>
+</main>
+<script src="../site.js?v=8"></script>
+<script src="app.js?v=1"></script>
+</body>
+</html>
