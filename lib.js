@@ -1111,7 +1111,32 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
   /* ---------- fullscreen reader: every ayah of the current mushaf page + tafsir / translation ---------- */
   const fsEl = el("div", "qm-full"); fsEl.hidden = true; document.body.appendChild(fsEl);
   let fsState = null;
+  // Quran, tafsir and translation each turn a real page: /page/N/ (and /az/page/N/, …).
+  function mushafTurnHref(n) {
+    if (n < 1 || n > 604) return "";
+    let path = location.pathname;
+    if (path.length > 1 && path.endsWith("/")) path = path.slice(0, -1);
+    const lang = path.match(/^\/(az|tr|en|ru)(?=\/|$)/);
+    const prefix = lang ? lang[0] : "";
+    const rest = prefix ? path.slice(prefix.length) : path;
+    if (rest !== "/quran" && !/^\/page\/\d+$/.test(rest)) return "";
+    return prefix + "/page/" + n + "/";
+  }
+  window.QM_TURN = function (n) {
+    n = n | 0; if (n < 1) n = 1; if (n > 604) n = 604;
+    const href = mushafTurnHref(n); if (!href) return false;
+    let here = location.pathname; if (!here.endsWith("/")) here += "/";
+    if (here === href) return false;
+    location.assign(href);
+    return true;
+  };
   async function openFull(kind, focusKey, pageN, enterFrom) {
+    if (kind === "tf") {
+      let key = focusKey;
+      if (!key && window.QM_PAGE) { const pg0 = QM_PAGE(pageN); if (pg0 && pg0.keys && pg0.keys[0]) key = pg0.keys[0]; }
+      const ps = key ? String(key).split(":") : [];
+      if (ps.length === 2 && +ps[0] >= 1 && +ps[1] >= 1) { location.assign("/tafsir/saadi/" + (+ps[0]) + "/" + (+ps[1]) + "/"); return; }
+    }
     if (!LIST.length) LIST = await (await fetch("./lib-list.json")).json();
     const pg = window.QM_PAGE(pageN); if (!pg) return;
     fsState = { kind, n: pg.n }; quranFont();
@@ -1167,10 +1192,16 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
       const v = g.dx / Math.max(1, performance.now() - g.t), n = pg.n + (g.dx > 0 ? 1 : -1);
       if ((Math.abs(g.dx) > W() * 0.25 || Math.abs(v) > 0.6) && n >= 1 && n <= 604) {
         const dir = g.dx > 0 ? 1 : -1; slideTo(dir * W(), 220);
-        // Translation sections are one real URL per mushaf page. A finger swipe must land on that page, not stay on the page that was opened.
+        // A finger swipe must land on that page's own address (Quran, tafsir and translation alike).
         const path = location.pathname;
-        const leaf = /\/(?:tercume|meal|translation|perevod)\/page\/\d+\/?$/.test(path) ? path.replace(/\/\d+\/?$/, "/" + n + "/") + location.search : "";
-        setTimeout(() => { if (leaf) location.assign(leaf); else openFull(kind, null, n, -dir); }, 220);
+        const trLeaf = /\/(?:tercume|meal|translation|perevod)\/page\/\d+\/?$/.test(path) ? path.replace(/\/\d+\/?$/, "/" + n + "/") + location.search : "";
+        const qLeaf = mushafTurnHref(n);
+        const leaf = trLeaf || qLeaf;
+        setTimeout(() => {
+          if (!leaf) { openFull(kind, null, n, -dir); return; }
+          if (qLeaf && kind !== "tf") { try { sessionStorage.setItem("qm.reopen", kind); } catch (e) {} }
+          location.assign(leaf);
+        }, 220);
       } else slideTo(0, 220);
     };
     body.onpointerup = end; body.onpointercancel = () => { if (d && d.mode === "x") slideTo(0, 220); d = null; };
@@ -1479,6 +1510,18 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     menu.onclick = (ev) => { if (ev.target === menu) menu.hidden = true; };
   }
   window.QM = { openPlan, openHifz, hifzProgress, openNotes, openNote, openSettings, openFull, openFullHere: () => { const k = prefs().tab === "tr" ? "tr" : "tf"; const f = cur ? cur.s + ":" + cur.a : null; openFull(k, f); }, openAyah, openCompare, wordPop, closeWordPop: closeWpop, selecting: () => !!sel, tapAyah, t: T };
+  try {
+    const reopen = sessionStorage.getItem("qm.reopen");
+    if (reopen === "tr" || reopen === "tf" || reopen === "wb" || reopen === "ir") {
+      sessionStorage.removeItem("qm.reopen");
+      const want = +(location.pathname.match(/\/page\/(\d+)\/?$/) || [0, 0])[1];
+      if (want && mushafTurnHref(want)) (function w(i) {
+        const q = window.QM_PAGE && QM_PAGE();
+        if (q && q.n === want) { openFull(reopen, null, want); return; }
+        if (i < 200) setTimeout(() => w(i + 1), 100);
+      })(0);
+    }
+  } catch (e) {}
   (async () => {
     try { if (!LIST.length) LIST = await (await fetch("./lib-list.json")).json(); } catch (e) {}
     refreshUi();
