@@ -17,6 +17,7 @@ for p in range(1,605):
   for k,_ in AY[str(p)]:
     s,a=map(int,k.split(':'));SP[(s,a)]=p
     if a==1 and s not in START:START[s]=p
+TRID={'az': 'az.musayev', 'tr': 'turkish_shahin', 'en': 'english_saheeh', 'ru': 'ru.kuliev'}
 L={
 'az':dict(slug='tercume',n=AZ,tn='Əlixan Musayev',T=lambda:flat('tr/az.musayev.json'),title='Tərcümə',h='Quran tərcüməsi — Azərbaycanca',pg='Səhifə',su='surəsi',ay='ayə',pv='Əvvəlki',nx='Sonrakı',all='Bütün surələr',mu='Mushafda aç',d='Quranın Azərbaycan dilinə tərcüməsi (Musayev), səhifə {p}: {s}. Ərəbcə mətn və tərcümə ayə-ayə.'),
 'tr':dict(slug='meal',n=EN,tn='Ali Özek ve diğerleri',T=lambda:dirj('turkish_shahin'),title='Meal',h="Kur'an meali — Türkçe",pg='Sayfa',su='Suresi',ay='ayet',pv='Önceki',nx='Sonraki',all='Tüm sureler',mu="Mushafta aç",d="Kur'an-ı Kerim Türkçe meali, sayfa {p}: {s}. Arapça metin ve meal ayet ayet."),
@@ -40,20 +41,15 @@ for lg,c in L.items():
   os.makedirs(base,exist_ok=True);open(base+'/index.html','w',encoding='utf8').write(h)
   up='../../../../'
   for p in range(1,605):
-    keys=[tuple(map(int,k.split(':'))) for k,_ in AY[str(p)]]
-    ss=[];[ss.append(s) for s,_ in keys if s not in ss]
-    sn=' / '.join(c['n'][s-1] for s in ss)
     url=f"{B}/{base}/page/{p}/";urls.append(url)
-    body='';last=None
-    for s,a in keys:
-      if s!=last:
-        body+=f'<div class="sh" id="s{s}"><div class="a" dir="rtl">سورة {E(AR[s-1])}</div><div>{E(c["n"][s-1])} {c["su"]}</div></div>';last=s
-      tt=T[s-1][a-1] if a-1<len(T[s-1]) else ''
-      body+=f'<div class="v" id="{s}-{a}"><div class="r" dir="rtl" lang="ar">{E(TXT.get((s,a),""))} ﴿{a}﴾</div><div class="t"><span class="k">{s}:{a}</span>{E(tt)}</div></div>'
-    pn=(f'<a class="btn" rel="prev" href="../{p-1}/">← {c["pv"]}</a>' if p>1 else '<span></span>')+(f'<a class="btn" rel="next" href="../{p+1}/">{c["nx"]} →</a>' if p<604 else '<span></span>')
-    t=f'{sn} — {c["title"]}, {c["pg"]} {p}'
-    ex=(f'<link rel="prev" href="../{p-1}/">' if p>1 else '')+(f'<link rel="next" href="../{p+1}/">' if p<604 else '')
-    h=head(lg,t,c['d'].format(p=p,s=sn),url,up,ex)+nav(c,up,pre)+f'<main class="tw"><div class="top"><a href="../../">☰ {c["all"]}</a><strong>{E(sn)} · {c["pg"]} {p}</strong><a href="{up}{pre}page/{p}/">{c["mu"]}</a></div>{body}<nav class="pn">{pn}</nav></main><footer>© 2026 Mushafuk.online</footer><script src="{up}site.js?v=7"></script></body></html>'
+    h=open(f"{pre}page/{p}/index.html",encoding='utf8').read()
+    h=re.sub(r'<link rel="canonical" href="[^"]*">',f'<link rel="canonical" href="{url}">',h)
+    h=re.sub(r'<link rel="alternate" hreflang[^>]*>','',h)
+    tid=TRID[lg]
+    pre_js=f'<script>try{{var q=JSON.parse(localStorage.getItem("qm.prefs")||"{{}}");q.tr="{tid}";q.tab="tr";localStorage.setItem("qm.prefs",JSON.stringify(q));}}catch(e){{}}</script>'
+    h=h.replace('<base href="/">','<base href="/">'+pre_js,1)
+    post_js=f'<script>(function w(i){{if(window.QM&&window.QM_PAGE&&window.QM_PAGE({p})){{QM.openFull("tr",null,{p});return}}if(i<200)setTimeout(function(){{w(i+1)}},100)}})(0)</script>'
+    h=h.replace('</body>',post_js+'</body>',1)
     o=f"{base}/page/{p}";os.makedirs(o,exist_ok=True);open(o+'/index.html','w',encoding='utf8').write(h)
   # link from translations page
   f=f'{lg}/translations.html';x=open(f,encoding='utf8').read()
