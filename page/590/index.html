@@ -91,6 +91,7 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
       }
       .shead img { position: absolute; inset: 0; width: 100%; height: 100%; }
       .snames {
@@ -813,26 +814,43 @@
       const OVAL = { x0: 181 / 1020, x1: 839 / 1020, y0: 21 / 116, y1: 94 / 116 };
       const glyphInk = new Map();
       function inkOf(ch) {
-        if (!glyphInk.has(ch)) {
-          const c = (inkOf.c ||= document.createElement("canvas").getContext("2d"));
-          c.font = "100px surahnames";
-          if (!document.fonts.check("100px surahnames", ch)) return { w: 270, a: 86, d: 9, l: 0, r: 270 };
-          const m = c.measureText(ch);
-          glyphInk.set(ch, { w: m.width, a: m.actualBoundingBoxAscent, d: m.actualBoundingBoxDescent, l: m.actualBoundingBoxLeft, r: m.actualBoundingBoxRight });
+        if (glyphInk.has(ch)) return glyphInk.get(ch);
+        if (!document.fonts.check("100px surahnames", ch)) return null;
+        const S = 100, ox = 320, oy = 240;
+        const cnv = document.createElement("canvas");
+        cnv.width = 640; cnv.height = 480;
+        const c = cnv.getContext("2d", { willReadFrequently: true });
+        c.font = S + "px surahnames";
+        c.fillStyle = "#000";
+        c.textBaseline = "alphabetic";
+        c.fillText(ch, ox, oy);
+        const data = c.getImageData(0, 0, cnv.width, cnv.height).data;
+        let minX = cnv.width, minY = cnv.height, maxX = -1, maxY = -1;
+        for (let i = 3; i < data.length; i += 4) {
+          if (data[i] < 16) continue;
+          const p = (i - 3) >> 2, x = p % cnv.width, y = (p / cnv.width) | 0;
+          if (x < minX) minX = x;
+          if (x > maxX) maxX = x;
+          if (y < minY) minY = y;
+          if (y > maxY) maxY = y;
         }
-        return glyphInk.get(ch);
+        if (maxX < 0) return null;
+        const box = { w: maxX - minX + 1, a: oy - minY, d: Math.max(0, maxY - oy), l: ox - minX, r: maxX - ox };
+        if (box.w < 4 || box.a + box.d < 4) return null;
+        glyphInk.set(ch, box);
+        return box;
       }
       function fitName(row) {
         const head = row.parentElement;
-        const spans = row.querySelectorAll(".sname");
-        const g = [...spans].map((s) => inkOf(s.textContent));
+        const spans = [...row.querySelectorAll(".sname")];
+        const ovW = head.clientWidth * (OVAL.x1 - OVAL.x0), ovH = head.clientHeight * (OVAL.y1 - OVAL.y0);
+        const g = spans.map((s) => inkOf(s.textContent));
+        if (!ovW || !ovH || g.some((x) => !x)) { row.style.visibility = "hidden"; return; }
         const asc = Math.max(...g.map((x) => x.a)), desc = Math.max(...g.map((x) => x.d));
         const wid = g.reduce((t, x) => t + x.w, 0) + 28 * (g.length - 1);
-        const ovW = head.clientWidth * (OVAL.x1 - OVAL.x0), ovH = head.clientHeight * (OVAL.y1 - OVAL.y0);
-        // ink (harakat included) fills at most 62% of the oval height and 78% of its width
-        const size = Math.max(6, Math.min((ovH * 0.62 * 100) / (asc + desc), (ovW * 0.78 * 100) / wid));
+        const size = Math.max(6, Math.min((ovH * 0.62 * 100) / (asc + desc), (ovW * 0.78 * 100) / wid, ovH));
         row.style.fontSize = size + "px";
-        row.style.transform = "";
+        row.style.visibility = "visible";
         let mark = row.querySelector(".sbase");
         if (!mark) {
           mark = document.createElement("i");
@@ -845,7 +863,6 @@
         const base = mark.getBoundingClientRect().top - hr.top;
         const inkMid = base - (size * (asc - desc)) / 200;
         const ovMid = (head.clientHeight * (OVAL.y0 + OVAL.y1)) / 2;
-        // horizontal: rtl row puts the last glyph (name) on the left, the word on the right
         let lo = Infinity, hi = -Infinity, x = 0;
         for (let i = g.length - 1; i >= 0; i--) {
           lo = Math.min(lo, x - g[i].l);
@@ -1433,7 +1450,7 @@
       window.QM_AYAHS = AYAHS;
       window.QM_NAMES = NAMES;
       fetch("./yazi-ayahs.json").then((r) => r.json()).then((j) => { ayahMap = j; if (pages && !gate.hidden === false) show(pageNo); });
-      Promise.all([fetch("./yazi-pages.json").then((r) => r.json()), fetch("./yazi-words.json").then((r) => r.json()).catch(() => null)]).then(([json, wb]) => { words = wb; pages = json; loadNames(); const qp = +(window.__PAGE||new URLSearchParams(location.search).get("page")); if (qp >= 1 && qp <= 604) openAt(qp); });
+      Promise.all([fetch("./yazi-pages.json").then((r) => r.json()), fetch("./yazi-words.json").then((r) => r.json()).catch(() => null)]).then(([json, wb]) => { words = wb; pages = json; loadNames().then(function(){ glyphInk.clear(); try { fit(); } catch (e) {} }); const qp = +(window.__PAGE||new URLSearchParams(location.search).get("page")); if (qp >= 1 && qp <= 604) openAt(qp); });
     </script>
     <script>try{localStorage.setItem("qm.lang","ar");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}</script>
     <script src="./lib.js?v=26"></script>
