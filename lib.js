@@ -1124,12 +1124,41 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
   }
   window.QM_TURN = function (n) {
     n = n | 0; if (n < 1) n = 1; if (n > 604) n = 604;
-    const href = mushafTurnHref(n); if (!href) return false;
-    let here = location.pathname; if (!here.endsWith("/")) here += "/";
-    if (here === href) return false;
-    location.assign(href);
+    let path = location.pathname;
+    const pm = path.match(/^(.*\/page\/)\d+\/?$/);
+    const hereLeaf = pm ? pm[1] + n + "/" : "";
+    const href = hereLeaf || mushafTurnHref(n);
+    if (!href) return false;
+    if (!path.endsWith("/")) path += "/";
+    if (path === href) return false;
+    location.assign(href + location.search);
     return true;
   };
+  // A horizontal finger swipe on any real mushaf page opens the next page's address.
+  let finger = null;
+  const fingerStart = (x, y, target) => {
+    if (target && target.closest && target.closest("a,button,input,textarea,select,label")) { finger = null; return; }
+    finger = { x: x, y: y };
+  };
+  const fingerEnd = (x, y) => {
+    if (!finger) return;
+    const dx = x - finger.x, dy = y - finger.y;
+    finger = null;
+    if (Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)) return;
+    const m = location.pathname.match(/\/page\/(\d+)\/?$/);
+    if (!m) return;
+    const n = +m[1] + (dx > 0 ? 1 : -1);
+    if (n < 1 || n > 604) return;
+    const full = document.querySelector(".qm-full");
+    if (full && !full.hidden && mushafTurnHref(n) && full.dataset.kind && full.dataset.kind !== "tf") {
+      try { sessionStorage.setItem("qm.reopen", full.dataset.kind); } catch (e) {}
+    }
+    QM_TURN(n);
+  };
+  document.addEventListener("touchstart", (e) => { if (e.touches.length !== 1) return; fingerStart(e.touches[0].clientX, e.touches[0].clientY, e.target); }, { capture: true, passive: true });
+  document.addEventListener("touchend", (e) => { if (!e.changedTouches.length) return; fingerEnd(e.changedTouches[0].clientX, e.changedTouches[0].clientY); }, { capture: true, passive: true });
+  document.addEventListener("pointerdown", (e) => { if (e.pointerType === "touch") return; fingerStart(e.clientX, e.clientY, e.target); }, true);
+  document.addEventListener("pointerup", (e) => { if (e.pointerType === "touch") return; fingerEnd(e.clientX, e.clientY); }, true);
   async function openFull(kind, focusKey, pageN, enterFrom) {
     if (kind === "tf") {
       let key = focusKey;
@@ -1140,6 +1169,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     if (!LIST.length) LIST = await (await fetch("./lib-list.json")).json();
     const pg = window.QM_PAGE(pageN); if (!pg) return;
     fsState = { kind, n: pg.n }; quranFont();
+    fsEl.dataset.kind = kind;
     const p = prefs();
     const have = []; for (const r of LIST) if (r.k === kind && (await status(r.id)) >= 114) have.push(r);
     const r = have.find((x) => x.id === p[kind]) || have[0];
@@ -1153,7 +1183,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     for (const k of (LOCK ? [kind] : kind === "ir" || kind === "wb" ? [kind, "tf", "tr"] : ["tr", "tf"])) { const b = el("button", k === kind ? "on" : "", k === "tf" ? T("Təfsir") : k === "tr" ? T("Tərcümə") : k === "ir" ? T("Erab") : T("Söz mənaları")); b.onclick = () => { setPrefs({ tab: k }); openFull(k, null, pg.n); }; sw.append(b); }
     const x = icon("close", T("Bağla")); x.onclick = () => { fsEl.hidden = true; fsState = null; };
     head.append(ttl, sw, x); fsEl.append(head);
-    const body = el("div", "qm-full-b"); fsEl.append(body);
+    const body = el("div", "qm-full-b"); body.style.touchAction = "pan-y"; fsEl.append(body);
     if (!r) {
       const box = el("div", "qm-empty"); box.append(el("p", "", T("Hələ endirilməyib.")));
       const b = el("button", "qm-rb main", T("Ayarlarda endir")); b.onclick = () => { fsEl.hidden = true; openSettings(kind); }; box.append(b); body.append(box);
@@ -1191,19 +1221,9 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
       const g = d; d = null; if (!g || g.mode !== "x") return;
       const v = g.dx / Math.max(1, performance.now() - g.t), n = pg.n + (g.dx > 0 ? 1 : -1);
       if ((Math.abs(g.dx) > W() * 0.25 || Math.abs(v) > 0.6) && n >= 1 && n <= 604) {
-        const dir = g.dx > 0 ? 1 : -1; slideTo(dir * W(), 220);
-        // A finger swipe must land on that page's own address (Quran, tafsir and translation alike).
-        const path = location.pathname;
-        const pm = path.match(/^(.*\/page\/)\d+\/?$/);
-        const hereLeaf = pm ? pm[1] + n + "/" + location.search : "";
-        const qLeaf = mushafTurnHref(n);
-        const same = (a, b) => String(a).replace(/\?.*$/, "").replace(/\/$/, "") === String(b).replace(/\?.*$/, "").replace(/\/$/, "");
-        const leaf = hereLeaf && (!qLeaf || !same(hereLeaf, qLeaf)) ? hereLeaf : qLeaf;
-        setTimeout(() => {
-          if (!leaf) { openFull(kind, null, n, -dir); return; }
-          if (qLeaf && kind !== "tf") { try { sessionStorage.setItem("qm.reopen", kind); } catch (e) {} }
-          location.assign(leaf);
-        }, 220);
+        const dir = g.dx > 0 ? 1 : -1; slideTo(dir * W(), 180);
+        if (mushafTurnHref(n) && kind !== "tf") { try { sessionStorage.setItem("qm.reopen", kind); } catch (e) {} }
+        setTimeout(() => { if (!(window.QM_TURN && QM_TURN(n))) openFull(kind, null, n, -dir); }, 180);
       } else slideTo(0, 220);
     };
     body.onpointerup = end; body.onpointercancel = () => { if (d && d.mode === "x") slideTo(0, 220); d = null; };
