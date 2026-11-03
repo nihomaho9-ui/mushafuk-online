@@ -68,7 +68,8 @@
     for (let s = 1; s <= 114; s++) {
       for (const code of ["az", "tr", "en", "ru", "ar"]) {
         const n = fold(arNorm(meta.names[code][s - 1])).replace(/[^a-z0-9\u0600-\u06ff]+/gi, "");
-        if (n === qn || (qn.length >= 4 && (n.includes(qn) || qn.includes(n)))) return s;
+        if (!n || n.length < 3 || /^\d+$/.test(qn)) continue;
+        if (n === qn || n.startsWith(qn) || (qn.length >= 4 && qn.startsWith(n))) return s;
       }
     }
     return 0;
@@ -178,29 +179,45 @@
     note.textContent = "";
   }
 
+  const verse = {};
+  async function loadVerses() {
+    const need = ["ar"];
+    if (lang !== "ar") need.push(lang);
+    await Promise.all(need.map(async (c) => {
+      if (!verse[c]) verse[c] = await (await fetch(c + ".json")).json();
+    }));
+  }
   function card(hit) {
     const u = t();
-    const ref = hit.page ? hit : at(hit.i);
-    const src = sources[hit.src];
-    const href = urlOf(hit.src, ref);
-    const a = document.createElement("a");
-    a.className = "hit";
-    a.href = href;
-    const h = document.createElement("div");
-    h.className = "hit-h";
-    const b = document.createElement("b");
-    const name = meta.names[lang][ref.s - 1];
-    if (hit.kind === "page") b.textContent = u.page + " " + hit.page;
-    else if (hit.kind === "surah") b.textContent = u.surah + " " + name;
-    else b.textContent = name + "  " + ref.s + ":" + ref.a;
-    const small = document.createElement("small");
-    small.textContent = hit.kind === "page" || hit.kind === "surah" ? KIND[lang].q : KIND[lang][src.k] + " · " + src.n;
-    h.append(b, small);
-    const addr = document.createElement("span");
+    const ref = hit.i != null ? at(hit.i) : { s: hit.s, a: hit.a, page: hit.page };
+    const i = hit.i != null ? hit.i : indexOf(ref.s, ref.a);
+    const src = sources[hit.src] || sources[0];
+    const href = urlOf(hit.src || 0, ref);
+    const box = document.createElement("article");
+    box.className = "hit";
+    const ar = document.createElement("p");
+    ar.className = "ay";
+    ar.dir = "rtl";
+    ar.lang = "ar";
+    ar.textContent = (verse.ar && verse.ar[i]) || "";
+    box.append(ar);
+    if (lang !== "ar" && verse[lang] && verse[lang][i]) {
+      const tr = document.createElement("p");
+      tr.className = "tr";
+      tr.textContent = verse[lang][i];
+      box.append(tr);
+    }
+    const addr = document.createElement("a");
     addr.className = "addr";
-    addr.textContent = "mushafuk.online" + href;
-    a.append(h, addr);
-    return a;
+    addr.href = href;
+    const name = meta.names[lang][ref.s - 1];
+    let where = name + " " + ref.s + ":" + ref.a;
+    if (src.k === "q") where += " · " + u.page + " " + ref.page;
+    else if (src.k === "tr" || src.k === "ir" || src.k === "wb") where = src.n + " · " + u.page + " " + ref.page;
+    else where = src.n + " · " + ref.s + ":" + ref.a;
+    addr.textContent = where;
+    box.append(addr);
+    return box;
   }
 
   let job = 0;
@@ -258,6 +275,8 @@
       return sa - sb || a.src - b.src || a.i - b.i;
     });
     shown = direct.concat(rest);
+    if (shown.length) await loadVerses();
+    if (id !== job) return;
     paint(0);
   }
 
