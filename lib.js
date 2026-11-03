@@ -1210,7 +1210,13 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
       let key = focusKey;
       if (!key && window.QM_PAGE) { const pg0 = QM_PAGE(pageN); if (pg0 && pg0.keys && pg0.keys[0]) key = pg0.keys[0]; }
       const ps = key ? String(key).split(":") : [];
-      if (ps.length === 2 && +ps[0] >= 1 && +ps[1] >= 1) { location.assign("/tafsir/saadi/" + (+ps[0]) + "/" + (+ps[1]) + "/"); return; }
+      if (ps.length === 2 && +ps[0] >= 1 && +ps[1] >= 1) {
+        let id = "saadi";
+        try { id = (prefs().tf) || "saadi"; } catch (e) {}
+        if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari)$/.test(id)) id = "saadi";
+        location.assign("/tafsir/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
+        return;
+      }
     }
     if (!LIST.length) LIST = await (await fetch("./lib-list.json")).json();
     const pg = window.QM_PAGE(pageN); if (!pg) return;
