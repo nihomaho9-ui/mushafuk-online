@@ -263,6 +263,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     ]},
   };
 
+  let infoRes = null;
   function paintSettings() {
     sheet.replaceChildren();
     sheet.dir = uiLang() === "ar" ? "rtl" : "ltr";
@@ -271,8 +272,8 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     const bk = el("button", "qm-page-back", "‹");
     bk.type = "button";
     bk.setAttribute("aria-label", T("Əvvəlki"));
-    bk.onclick = () => { if (setView !== "menu") { setView = "menu"; paintSettings(); } else closeAll(); };
-    bar.append(bk, el("h2", "", (DOCS[setView] && L(DOCS[setView].title)) || titles[setView] || T("Ayarlar")), el("span", "qm-page-sp"));
+    bk.onclick = () => { if (setView === "info" && infoRes) { setView = infoRes.k; paintSettings(); } else if (setView !== "menu") { setView = "menu"; paintSettings(); } else closeAll(); };
+    bar.append(bk, el("h2", "", (DOCS[setView] && L(DOCS[setView].title)) || (setView === "info" && infoRes ? (infoRes.k === "wb" ? (infoRes.id === "seraj" ? T("Sirac") : infoRes.id === "ibnqutaybah" ? T("İbn Qutəybə") : infoRes.name) : infoRes.name) : "") || titles[setView] || T("Ayarlar")), el("span", "qm-page-sp"));
     const body = el("div", "qm-scroll");
     sheet.append(bar, body);
     if (DOCS[setView]) {
@@ -296,6 +297,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
       body.append(box);
       return;
     }
+    if (setView === "info" && infoRes) { const ul = el("ul", "qm-list qm-info-page"); ul.append(resRow(infoRes)); body.append(ul); return; }
     if (setView === "lang") {
       const list = el("div", "qm-page-list");
       for (const [id, nm] of LANGS) {
@@ -366,7 +368,8 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     const li = el("li", "qm-res"); li.dataset.id = r.id;
     const tx = el("div", "qm-tx"); const nm = el("b", "", r.name); nm.dir = "auto"; const sm = el("small", "", WEB ? (r.k === "tr" ? "" : r.by) : (r.k === "tr" ? "" : r.by + " · ") + r.mb + " MB"); sm.dir = "auto";
     const bar = el("span", "qm-bar"); const fill = el("i"); bar.append(fill); bar.hidden = true; const err = el("small", "qm-err", ""); tx.append(nm, sm, bar, err);
-    if (r.credit) { const cr = el("small", "qm-credit", T(r.credit)); cr.dir = uiLang() === "ar" ? "rtl" : "ltr"; cr.hidden = true; tx.insertBefore(cr, bar); const ib = el("button", "qm-info", "i"); ib.type = "button"; ib.setAttribute("aria-label", "Info"); ib.setAttribute("aria-expanded", "false"); ib.onclick = (e) => { e.stopPropagation(); e.preventDefault(); cr.hidden = !cr.hidden; ib.classList.toggle("on", !cr.hidden); ib.setAttribute("aria-expanded", String(!cr.hidden)); }; nm.after(ib); }
+    if (r.credit && setView !== "info") { const ib = el("button", "qm-info", "i"); ib.type = "button"; ib.setAttribute("aria-label", "Info"); const op = (e) => { if (e.target.closest(".qm-act")) return; e.stopPropagation(); e.preventDefault(); infoRes = r; setView = "info"; paintSettings(); }; ib.onclick = op; nm.after(ib); tx.style.cursor = "pointer"; tx.onclick = op; }
+    else if (r.credit) { const cr = el("small", "qm-credit", T(r.credit)); cr.dir = uiLang() === "ar" ? "rtl" : "ltr"; tx.insertBefore(cr, bar); }
     const act = el("div", "qm-act"); li.append(tx, act);
     let n = 0, busy = false, ask = false;
     const draw = () => {
