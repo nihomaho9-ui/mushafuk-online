@@ -22,11 +22,11 @@
   };
   const SHORT = new Set(["السعدي", "التفسير الميسر", "المختصر", "أيسر التفاسير"]);
   const ANS = {
-    az: { ans: "Cavab", saadi: "Təfsir · əs-Sədi", ayahs: "ayədir", places: "Digər yerlər" },
-    tr: { ans: "Cevap", saadi: "Tefsir · es-Sa'dî", ayahs: "ayettir", places: "Diğer yerler" },
-    en: { ans: "Answer", saadi: "Tafsir · al-Saadi", ayahs: "verses", places: "Other places" },
-    ar: { ans: "الجواب", saadi: "التفسير · السعدي", ayahs: "آية", places: "مواضع أخرى" },
-    ru: { ans: "Ответ", saadi: "Тафсир · ас-Саади", ayahs: "аятов", places: "Другие места" },
+    az: { ans: "Cavab", saadi: "Təfsir · əs-Sədi", ayahs: "ayədir", places: "Digər yerlər", gloss: "Söz mənası · İbn Quteybə" },
+    tr: { ans: "Cevap", saadi: "Tefsir · es-Sa'dî", ayahs: "ayettir", places: "Diğer yerler", gloss: "Kelime anlamı · İbn Kuteybe" },
+    en: { ans: "Answer", saadi: "Tafsir · al-Saadi", ayahs: "verses", places: "Other places", gloss: "Word meaning · Ibn Qutaybah" },
+    ar: { ans: "الجواب", saadi: "التفسير · السعدي", ayahs: "آية", places: "مواضع أخرى", gloss: "الغريب · ابن قتيبة" },
+    ru: { ans: "Ответ", saadi: "Тафсир · ас-Саади", ayahs: "аятов", places: "Другие места", gloss: "Значение слова · Ибн Кутайба" },
   };
   const CONCEPTS = [
     ["merhemet merhamet rahmet mercy милость", "رحمه"],
@@ -84,7 +84,7 @@
   };
   const AR_DIAC = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g;
   const fold = (s) => s.replace(/İ/g, "i").replace(/I/g, "ı").toLowerCase().replace(/ə/g, "e").replace(/ı/g, "i").replace(/[öó]/g, "o").replace(/[üú]/g, "u").replace(/ş/g, "s").replace(/ç/g, "c").replace(/ğ/g, "g").replace(/â/g, "a").replace(/î/g, "i").replace(/û/g, "u");
-  const arNorm = (s) => s.replace(AR_DIAC, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي").replace(/\u0640/g, "");
+  const arNorm = (s) => s.replace(AR_DIAC, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي").replace(/\u0621/g, "").replace(/\u0640/g, "");
   const isAr = (s) => /[\u0600-\u06FF]/.test(s);
   const digits = (s) => s.replace(/[٠-٩۰-۹]/g, (ch) => "0123456789"["٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹".indexOf(ch) % 10]);
   const keyOf = (t) => (t.startsWith("ال") && t.length > 4 ? t.slice(2) : t);
@@ -168,7 +168,7 @@
   }
   function stripArabic(raw) {
     let s = arNorm(digits(raw));
-    const cut = [/ما\s*معنى/g, /ما\s*المراد/g, /ما\s*المقصود/g, /ماذا\s*يعني/g, /ماذا\s*تقصد/g, /ما\s*هو/g, /ما\s*هي/g, /اشرح(?:\s*لي)?/g, /فسر(?:\s*لي)?/g, /بين(?:\s*لي)?/g, /تفسير/g, /معنى/g, /كلمه/g, /من\s*فضلك/g, /لو\s*سمحت/g, /كم\s*عدد/g, /كم\s*ايه/g, /في\s*اي\s*سوره/g, /اين\s*ذكرت/g];
+    const cut = [/ما\s*معنى/g, /ما\s*المراد/g, /ما\s*المقصود/g, /ماذا\s*يعني/g, /ماذا\s*تقصد/g, /ما\s*هو/g, /ما\s*هي/g, /ما\s*حكم/g, /ما\s*فضل/g, /من\s*هو/g, /لماذا/g, /متي/g, /اشرح(?:\s*لي)?/g, /فسر(?:\s*لي)?/g, /بين(?:\s*لي)?/g, /اذكر(?:\s*لي)?/g, /تفسير/g, /معنى/g, /كلمه/g, /من\s*فضلك/g, /لو\s*سمحت/g, /كم\s*عدد/g, /كم\s*ايه/g, /في\s*اي\s*سوره/g, /اين\s*ذكرت/g];
     for (const r of cut) s = s.replace(r, " ");
     return s.replace(/[^\u0600-\u06FF\s\d:./-]/g, " ").replace(/\s+/g, " ").trim();
   }
@@ -227,6 +227,10 @@
     if (/آيه\s*الكرسي/.test(norm) || /ayat al kursi|ayatul kursi|ayetul kursi|аят аль курси/.test(flat)) return { s: 2, a: 255 };
     if (/آيه\s*النور/.test(norm)) return { s: 24, a: 35 };
     if (/آيه\s*الدين|المداينه/.test(norm)) return { s: 2, a: 282 };
+    if (/آيه\s*الوضوء|آيه\s*الوضو/.test(norm)) return { s: 5, a: 6 };
+    if (/آيه\s*الحجاب/.test(norm)) return { s: 24, a: 31 };
+    if (/قل\s*هو\s*الله\s*احد/.test(norm)) return { s: 112, a: 1 };
+    if (/لا\s*يكلف\s*الله/.test(norm)) return { s: 2, a: 286 };
     if (/امن الرسول|خواتيم البقره/.test(norm)) return { s: 2, a: 285 };
     const named = norm.match(/(?:الآيه|آيه|الايه)\s*(\d{1,3})\s*(?:من\s*)?(?:سوره\s*)?([\u0600-\u06FF]{3,})/);
     if (named) {
@@ -309,17 +313,26 @@
         seen.add(b);
         bags.push(await bucket(b));
       }
+      if (arabic && part.length >= 3) {
+        for (const p of ["و", "ف", "ب", "ل"]) {
+          const b = (p + part).slice(0, 2);
+          if (b === "ال" || b === "وا" || seen.has(b)) continue;
+          seen.add(b);
+          bags.push(await bucket(b));
+        }
+      }
       const u = new Set();
       for (const bag of bags) {
         for (const w in bag) {
-          const ok = arabic ? arHit(w, stems) : (w === part || w.startsWith(part));
+          const ok = arabic ? arHit(w, stems) || arHit(w.replace(/^[وفبلكس]/, ""), stems) : (w === part || w.startsWith(part));
           if (!ok) continue;
           for (const pair of bag[w]) u.add(pair[0] * 10000 + pair[1]);
         }
       }
-      if (!u.size) return new Set();
+      if (!u.size) continue;
       sets.push(u);
     }
+    if (!sets.length) return new Set();
     sets.sort((a, b) => a.size - b.size);
     let acc = sets[0];
     for (let i = 1; i < sets.length; i++) {
@@ -327,7 +340,7 @@
       for (const x of acc) if (sets[i].has(x)) next.add(x);
       acc = next;
     }
-    return acc;
+    return acc.size ? acc : sets[0];
   }
   function writtenLang(raw) {
     if (isAr(raw)) return "ar";
@@ -471,6 +484,29 @@
     const bit = clean.slice(start, start + len);
     return (start ? "…" : "") + bit + (start + len < clean.length ? "…" : "");
   }
+  function paintMark(el, text) {
+    const norm = arNorm(text);
+    let at = -1, nlen = 0;
+    for (const p of partsNow) {
+      if (!p || p.length < 2) continue;
+      let i = norm.indexOf(p);
+      if (i < 0 && p.endsWith("ه")) i = norm.indexOf(p.slice(0, -1) + "ت");
+      if (i >= 0) { at = i; nlen = p.length; break; }
+    }
+    if (at < 0) { el.textContent = text; return; }
+    let ni = 0, a = 0, b = text.length;
+    for (let i = 0; i < text.length; i++) {
+      const ch = arNorm(text[i]);
+      if (!ch) continue;
+      if (ni === at) a = i;
+      ni += ch.length;
+      if (ni >= at + nlen) { b = i + 1; break; }
+    }
+    el.replaceChildren(text.slice(0, a));
+    const m = document.createElement("mark");
+    m.textContent = text.slice(a, b);
+    el.append(m, text.slice(b));
+  }
   async function loadVerses() {
     const need = ["ar"];
     if (lang !== "ar") need.push(lang);
@@ -520,6 +556,18 @@
   let shown = [];
   let analNote = "";
   let answerPlan = null;
+  let meaningQ = false;
+  function asksMeaning(raw) {
+    return /معنى|مراد|مقصود|nədir|nə demək|ne demek|mənası|anlam|what does|meaning|что такое|означает/i.test(raw);
+  }
+  async function gharibLine(s, a) {
+    const key = "iq/" + s;
+    if (!tfCache[key]) {
+      const r = await fetch("../wb/ibnqutaybah/" + s + ".json");
+      tfCache[key] = r.ok ? await r.json() : [];
+    }
+    return tfCache[key][a - 1] || "";
+  }
   async function buildAnswer() {
     if (!answerPlan) return null;
     const a = ANS[lang];
@@ -550,6 +598,22 @@
     ar.lang = "ar";
     ar.textContent = (verse.ar && verse.ar[i]) || "";
     box.append(ar);
+    if (meaningQ) {
+      const gloss = await gharibLine(ref.s, ref.a);
+      const bit = gloss ? clip(gloss) : "";
+      if (bit && partsNow.some((p) => arNorm(bit).includes(p) || (p.endsWith("ه") && arNorm(bit).includes(p.slice(0, -1) + "ت")))) {
+        const who = document.createElement("p");
+        who.className = "who";
+        who.textContent = a.gloss;
+        box.append(who);
+        const tx = document.createElement("p");
+        tx.className = "ay tf";
+        tx.dir = "rtl";
+        tx.lang = "ar";
+        paintMark(tx, bit);
+        box.append(tx);
+      }
+    }
     const saadi = await tafsirAyah("السعدي", ref.s, ref.a);
     if (saadi) {
       const who = document.createElement("p");
@@ -560,7 +624,7 @@
       tx.className = "ay tf";
       tx.dir = "rtl";
       tx.lang = "ar";
-      tx.textContent = clip(saadi);
+      paintMark(tx, clip(saadi));
       box.append(tx);
     }
     const addr = document.createElement("a");
@@ -613,6 +677,7 @@
     const raw = digits(input.value.trim());
     const id = ++job;
     answerPlan = null;
+    meaningQ = asksMeaning(raw);
     out.replaceChildren();
     if (!raw) return;
     const wait = document.createElement("p");
