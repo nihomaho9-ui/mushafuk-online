@@ -679,30 +679,30 @@
           <div class="brand-tx"><strong>Mushafuk</strong></div>
         </a>
         <div class="home-bar">
-          <button type="button" class="home-ico" id="notes-btn" aria-label="Qeydlər və əlfəcinlər" onclick="QM.openNotes()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></button>
-          <button type="button" class="home-ico" id="recent-btn" aria-label="Son oxunan" onclick="QM_RECENT()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-          <button type="button" class="home-search" id="search-btn" aria-label="Axtarış"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16.5 20 20.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
-          <button type="button" class="home-ico home-hi" id="menu-btn" aria-label="Ayarlar" onclick="QM.openSettings()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.1v2.2M12 18.7v2.2M4.9 6.1l1.6 1.4M17.5 16.5l1.6 1.4M3.1 12h2.2M18.7 12h2.2M4.9 17.9l1.6-1.4M17.5 7.5l1.6-1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          <button type="button" class="home-ico" id="notes-btn" aria-label="الملاحظات والعلامات" onclick="QM.openNotes()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 3.5h11v17L12 16.5l-5.5 4z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="home-ico" id="recent-btn" aria-label="آخر ما قُرئ" onclick="QM_RECENT()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7.5V12l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          <button type="button" class="home-search" id="search-btn" aria-label="بحث"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M16 16.5 20 20.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+          <button type="button" class="home-ico home-hi" id="menu-btn" aria-label="الإعدادات" onclick="QM.openSettings()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 3.1v2.2M12 18.7v2.2M4.9 6.1l1.6 1.4M17.5 16.5l1.6 1.4M3.1 12h2.2M18.7 12h2.2M4.9 17.9l1.6-1.4M17.5 7.5l1.6-1.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
         </div>
         <div class="recent-pop" id="recent-pop" hidden></div>
         <div class="home-q" id="search-wrap" hidden>
-          <input id="q" type="search" enterkeyhint="search" placeholder="Surə və ya ərəbcə söz…" autocomplete="off" />
+          <input id="q" type="search" enterkeyhint="search" placeholder="سورة أو كلمة…" autocomplete="off" />
         </div>
-        <p class="home-empty" id="empty" hidden>Tapılmadı</p>
+        <p class="home-empty" id="empty" hidden>لا نتائج</p>
       </div>
-      <div class="htabs" id="htabs"><button type="button" class="on" data-t="s">Surələr</button><button type="button" data-t="j">Cüzlər</button></div>
+      <div class="htabs" id="htabs"><button type="button" class="on" data-t="s">السور</button><button type="button" data-t="j">الأجزاء</button></div>
       <div id="rows"></div>
       <div id="jrows" hidden></div>
       <div id="ahits" hidden></div>
     </div>
     <header>
-      <a href="./" id="back" aria-label="Geri">‹</a><a class="home-brand" href="./" aria-label="Mushafuk"><img src="/icon.png" alt="" width="16" height="16"><span>Mushafuk</span></a>
+      <a href="./" id="back" aria-label="رجوع">‹</a><a class="home-brand" href="./" aria-label="Mushafuk"><img src="/icon.png" alt="" width="16" height="16"><span>Mushafuk</span></a>
       <h1 id="sure">سورة الفاتحة</h1>
       <div class="hdr-acts">
-        <button type="button" class="gear" aria-label="Ayarlar" onclick="QM.openSettings()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3.1v2.2M12 18.7v2.2M4.9 6.1l1.6 1.4M17.5 16.5l1.6 1.4M3.1 12h2.2M18.7 12h2.2M4.9 17.9l1.6-1.4M17.5 7.5l1.6-1.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
+        <button type="button" class="gear" aria-label="الإعدادات" onclick="QM.openSettings()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3.1v2.2M12 18.7v2.2M4.9 6.1l1.6 1.4M17.5 16.5l1.6 1.4M3.1 12h2.2M18.7 12h2.2M4.9 17.9l1.6-1.4M17.5 7.5l1.6-1.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
       </div>
     </header>
-    <div class="qj" id="qj" hidden><div class="qj-box"><input class="qj-in" id="qj-in" type="search" placeholder="🔍 Sürə, 2:255, Səh. 562" autocomplete="off"><div id="qj-res"></div><div class="qj-h" id="qj-rh">Son axtarışlar</div><div id="qj-rec"></div></div></div>
+    <div class="qj" id="qj" hidden><div class="qj-box"><input class="qj-in" id="qj-in" type="search" placeholder="🔍 سورة، 2:255، ص 562" autocomplete="off"><div id="qj-res"></div><div class="qj-h" id="qj-rh">عمليات البحث الأخيرة</div><div id="qj-rec"></div></div></div>
     <main class="page" id="page"></main>
     <div class="num" id="pos">1</div>
     <script>
@@ -1456,5 +1456,5 @@
     <script>try{localStorage.setItem("qm.lang","ar");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}</script>
     <script src="./lib.js?v=31"></script>
     <script src="./audio.js?v=11"></script>
-  <noscript><div lang="ar" dir="rtl"><p>وَلَوْ شَآءَ رَبُّكَ لَجَعَلَ ٱلنَّاسَ أُمَّةً وَٰحِدَةً ۖ وَلَا يَزَالُونَ مُخْتَلِفِينَ ﴿118﴾</p><p>إِلَّا مَن رَّحِمَ رَبُّكَ ۚ وَلِذَٰلِكَ خَلَقَهُمْ ۗ وَتَمَّتْ كَلِمَةُ رَبِّكَ لَأَمْلَأَنَّ جَهَنَّمَ مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ أَجْمَعِينَ ﴿119﴾</p><p>وَكُلًّا نَّقُصُّ عَلَيْكَ مِنْ أَنۢبَآءِ ٱلرُّسُلِ مَا نُثَبِّتُ بِهِۦ فُؤَادَكَ ۚ وَجَآءَكَ فِى هَـٰذِهِ ٱلْحَقُّ وَمَوْعِظَةٌ وَذِكْرَىٰ لِلْمُؤْمِنِينَ ﴿120﴾</p><p>وَقُل لِّلَّذِينَ لَا يُؤْمِنُونَ ٱعْمَلُوا۟ عَلَىٰ مَكَانَتِكُمْ إِنَّا عَـٰمِلُونَ ﴿121﴾</p><p>وَٱنتَظِرُوٓا۟ إِنَّا مُنتَظِرُونَ ﴿122﴾</p><p>وَلِلَّهِ غَيْبُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَإِلَيْهِ يُرْجَعُ ٱلْأَمْرُ كُلُّهُۥ فَٱعْبُدْهُ وَتَوَكَّلْ عَلَيْهِ ۚ وَمَا رَبُّكَ بِغَـٰفِلٍ عَمَّا تَعْمَلُونَ ﴿123﴾</p><p>بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ الٓر ۚ تِلْكَ ءَايَـٰتُ ٱلْكِتَـٰبِ ٱلْمُبِينِ ﴿1﴾</p><p>إِنَّآ أَنزَلْنَـٰهُ قُرْءَٰنًا عَرَبِيًّا لَّعَلَّكُمْ تَعْقِلُونَ ﴿2﴾</p><p>نَحْنُ نَقُصُّ عَلَيْكَ أَحْسَنَ ٱلْقَصَصِ بِمَآ أَوْحَيْنَآ إِلَيْكَ هَـٰذَا ٱلْقُرْءَانَ وَإِن كُنتَ مِن قَبْلِهِۦ لَمِنَ ٱلْغَـٰفِلِينَ ﴿3﴾</p><p>إِذْ قَالَ يُوسُفُ لِأَبِيهِ يَـٰٓأَبَتِ إِنِّى رَأَيْتُ أَحَدَ عَشَرَ كَوْكَبًا وَٱلشَّمْسَ وَٱلْقَمَرَ رَأَيْتُهُمْ لِى سَـٰجِدِينَ ﴿4﴾</p></div></noscript></body>
+  <style>#qtext{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:normal;border:0}#qtext p{margin:.35rem 0}#qtext h2{font-size:1rem}</style><noscript><style>html,body{height:auto!important;overflow:auto!important;display:block!important}#qtext{position:static;width:auto;height:auto;margin:0 auto;padding:1.25rem 1rem 3rem;overflow:visible;clip:auto;max-width:42rem;font:1.2rem/2 Amiri,'Noto Naskh Arabic',serif}</style></noscript><article id="qtext" lang="ar" dir="rtl"><p>وَلَوْ شَآءَ رَبُّكَ لَجَعَلَ ٱلنَّاسَ أُمَّةً وَٰحِدَةً ۖ وَلَا يَزَالُونَ مُخْتَلِفِينَ ﴿118﴾</p><p>إِلَّا مَن رَّحِمَ رَبُّكَ ۚ وَلِذَٰلِكَ خَلَقَهُمْ ۗ وَتَمَّتْ كَلِمَةُ رَبِّكَ لَأَمْلَأَنَّ جَهَنَّمَ مِنَ ٱلْجِنَّةِ وَٱلنَّاسِ أَجْمَعِينَ ﴿119﴾</p><p>وَكُلًّا نَّقُصُّ عَلَيْكَ مِنْ أَنۢبَآءِ ٱلرُّسُلِ مَا نُثَبِّتُ بِهِۦ فُؤَادَكَ ۚ وَجَآءَكَ فِى هَـٰذِهِ ٱلْحَقُّ وَمَوْعِظَةٌ وَذِكْرَىٰ لِلْمُؤْمِنِينَ ﴿120﴾</p><p>وَقُل لِّلَّذِينَ لَا يُؤْمِنُونَ ٱعْمَلُوا۟ عَلَىٰ مَكَانَتِكُمْ إِنَّا عَـٰمِلُونَ ﴿121﴾</p><p>وَٱنتَظِرُوٓا۟ إِنَّا مُنتَظِرُونَ ﴿122﴾</p><p>وَلِلَّهِ غَيْبُ ٱلسَّمَـٰوَٰتِ وَٱلْأَرْضِ وَإِلَيْهِ يُرْجَعُ ٱلْأَمْرُ كُلُّهُۥ فَٱعْبُدْهُ وَتَوَكَّلْ عَلَيْهِ ۚ وَمَا رَبُّكَ بِغَـٰفِلٍ عَمَّا تَعْمَلُونَ ﴿123﴾</p><p>بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ الٓر ۚ تِلْكَ ءَايَـٰتُ ٱلْكِتَـٰبِ ٱلْمُبِينِ ﴿1﴾</p><p>إِنَّآ أَنزَلْنَـٰهُ قُرْءَٰنًا عَرَبِيًّا لَّعَلَّكُمْ تَعْقِلُونَ ﴿2﴾</p><p>نَحْنُ نَقُصُّ عَلَيْكَ أَحْسَنَ ٱلْقَصَصِ بِمَآ أَوْحَيْنَآ إِلَيْكَ هَـٰذَا ٱلْقُرْءَانَ وَإِن كُنتَ مِن قَبْلِهِۦ لَمِنَ ٱلْغَـٰفِلِينَ ﴿3﴾</p><p>إِذْ قَالَ يُوسُفُ لِأَبِيهِ يَـٰٓأَبَتِ إِنِّى رَأَيْتُ أَحَدَ عَشَرَ كَوْكَبًا وَٱلشَّمْسَ وَٱلْقَمَرَ رَأَيْتُهُمْ لِى سَـٰجِدِينَ ﴿4﴾</p></article></body>
 </html>
