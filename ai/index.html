@@ -15,7 +15,7 @@
 <style>
 body{background:#fff!important}
 .nav{background:#fff!important;border-bottom:1px solid #f2f2f2!important;box-shadow:none!important}
-.nav .in{padding:.55rem .9rem!important}
+.nav.ai-top .in{flex-direction:row!important;justify-content:center!important;padding:.65rem 1rem!important}
 .nav nav a{font-size:.82rem}
 .ai{max-width:720px;margin:0 auto;padding:.4rem 1rem 7.2rem}
 .brand{text-align:center;padding:.6rem 0 .2rem}
@@ -55,12 +55,8 @@ html[dir=rtl] .dock form{padding:.35rem .95rem .35rem .35rem}
 <div class="orn"><i></i><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path fill="#c6a24e" d="M9 0l1.6 5.4L16 4.2 12.2 8 18 9l-5.8 1 3.8 3.8-5.4-1.6L9 18l-1.6-5.8L2 13.8 5.8 10 0 9l5.8-1L2 4.2l5.4 1.6z"/></svg><i></i></div>
 <div class="spin" role="status" aria-label="Loading"></div>
 </div>
-<header class="nav"><div class="in">
+<header class="nav ai-top"><div class="in">
 <a class="logo" href="../" dir="ltr"><img src="../icon.png" alt="">Mushafuk<span>.online</span></a>
-<nav id="nav"></nav>
-<span class="langs"><button type="button" class="lbtn" id="lbtn" aria-haspopup="true" aria-expanded="false">🌐 AZ ▾</button>
-<span class="lmenu" id="langs"><a href="?lang=ar" data-l="ar">AR</a><a href="?lang=az" data-l="az">AZ</a><a href="?lang=tr" data-l="tr">TR</a><a href="?lang=en" data-l="en">EN</a><a href="?lang=ru" data-l="ru">RU</a></span>
-</span>
 </div></header>
 <main class="ai">
 <div class="brand">
@@ -75,7 +71,7 @@ html[dir=rtl] .dock form{padding:.35rem .95rem .35rem .35rem}
 </main>
 <div class="dock"><form id="form"><input id="q" type="search" autocomplete="off" enterkeyhint="search"><button id="go" type="submit">Axtar</button></form></div>
 <script src="../site.js?v=8"></script>
-<script src="app.js?v=4"></script>
+<script src="app.js?v=5"></script>
 <script>
 setTimeout(function () {
   var s = document.getElementById("splash");

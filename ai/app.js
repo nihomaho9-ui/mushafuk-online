@@ -163,11 +163,13 @@
     lead.textContent = u.lead;
     input.placeholder = u.ph;
     go.textContent = u.go;
-    lbtn.textContent = "🌐 " + lang.toUpperCase() + " ▾";
-    nav.replaceChildren();
-    for (const [href, label] of NAV[lang]) {
-      const a = document.createElement("a");
-      a.href = href; a.textContent = label; nav.append(a);
+    if (lbtn) lbtn.textContent = "🌐 " + lang.toUpperCase() + " ▾";
+    if (nav) {
+      nav.replaceChildren();
+      for (const [href, label] of NAV[lang]) {
+        const a = document.createElement("a");
+        a.href = href; a.textContent = label; nav.append(a);
+      }
     }
     chips.replaceChildren();
     for (const [query, label] of u.chips) {
