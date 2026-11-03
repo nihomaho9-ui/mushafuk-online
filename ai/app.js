@@ -21,6 +21,53 @@
     ru: { fast: "Быстрый", deep: "Глубокий" },
   };
   const SHORT = new Set(["السعدي", "التفسير الميسر", "المختصر", "أيسر التفاسير"]);
+  const ANS = {
+    az: { ans: "Cavab", saadi: "Təfsir · əs-Sədi", ayahs: "ayədir", places: "Digər yerlər" },
+    tr: { ans: "Cevap", saadi: "Tefsir · es-Sa'dî", ayahs: "ayettir", places: "Diğer yerler" },
+    en: { ans: "Answer", saadi: "Tafsir · al-Saadi", ayahs: "verses", places: "Other places" },
+    ar: { ans: "الجواب", saadi: "التفسير · السعدي", ayahs: "آية", places: "مواضع أخرى" },
+    ru: { ans: "Ответ", saadi: "Тафсир · ас-Саади", ayahs: "аятов", places: "Другие места" },
+  };
+  const CONCEPTS = [
+    ["merhemet merhamet rahmet mercy милость", "رحمه"],
+    ["namaz salat salah prayer намаз", "صلاه"],
+    ["oruc savm fasting пост", "صوم"],
+    ["zekat zakat закят", "زكاه"],
+    ["hecc hac hajj хадж", "حج"],
+    ["tovhid tevhid tawhid таухид", "توحيد"],
+    ["iman faith иман", "ايمان"],
+    ["cennet paradise рай", "جنه"],
+    ["cehennem hell جهنم", "جهنم"],
+    ["peygember peygamber prophet пророк", "رسول"],
+    ["bagislanma magfiret forgiveness прощение", "مغفره"],
+    ["sukur gratitude", "شكر"],
+    ["sebir sabir patience терпение", "صبر"],
+    ["teqva takva taqwa", "تقوي"],
+    ["ilim knowledge знание", "علم"],
+    ["dua мольба", "دعا"],
+    ["cihad jihad джихад", "جهاد"],
+    ["halal helal халяль", "حلال"],
+    ["haram харам", "حرام"],
+    ["sirk shirk ширк", "شرك"],
+    ["melekler melek angels ангелы", "ملائكه"],
+    ["qiyamet kiyamet", "قيامه"],
+    ["valideyn родители", "والدين"],
+    ["yetim сирота", "يتيم"],
+    ["riba faiz риба", "ربا"],
+    ["serab вино", "خمر"],
+    ["hicab hijab хиджаб", "حجاب"],
+    ["nikah никах", "نكاح"],
+    ["bosanma развод", "طلاق"],
+    ["miras наследство", "ميراث"],
+    ["secde суджуд", "سجده"],
+    ["qible кибла", "قبله"],
+    ["ramazan ramadan рамадан", "رمضان"],
+    ["qedr kadir qadr", "قدر"],
+    ["ixlas ihlas ихлас", "اخلاص"],
+    ["tevekkul", "توكل"],
+    ["zikir dhikr", "ذكر"],
+    ["quran kuran коран", "قران"],
+  ];
   const NAV = {
     az: [["../quran/", "Quran"], ["../tafsir.html", "Təfsir"], ["../translations/", "Tərcümələr"], ["../about.html", "Haqqında"]],
     tr: [["../quran/", "Kur'an"], ["../tafsir.html", "Tefsir"], ["../translations/", "Mealler"], ["../about.html", "Hakkında"]],
@@ -118,6 +165,42 @@
     for (const r of cut) s = s.replace(r, " ");
     return s.replace(/\s+/g, " ").trim();
   }
+  function conceptOf(raw) {
+    if (isAr(raw)) return "";
+    const words = fold(arNorm(stripQ(raw))).split(/[^a-z0-9\u0400-\u04ff]+/i).filter((w) => w.length > 2).map(peelWord);
+    for (const [keys, ar] of CONCEPTS) {
+      for (const k of keys.split(" ")) {
+        if (words.some((w) => w === k || (k.length >= 5 && w.length >= 5 && (w.startsWith(k) || k.startsWith(w))))) return ar;
+      }
+    }
+    return "";
+  }
+  function countQuestion(raw) {
+    const f = fold(arNorm(raw));
+    const asks = /nece|kac ayet|how many|сколько/.test(f) || /كم/.test(raw);
+    const about = /aye|ayet|verse|аят/.test(f) || /آي/.test(raw);
+    if (!asks || !about) return "";
+    const sur = surahInText(raw) || surahHit(raw);
+    if (!sur) return "";
+    return meta.names[lang][sur - 1] + " " + meta.counts[sur - 1] + " " + ANS[lang].ayahs;
+  }
+  function bestShort(set) {
+    const tally = new Map();
+    for (const x of set) {
+      const src = Math.floor(x / 10000), i = x % 10000;
+      if (!sources[src] || !SHORT.has(sources[src].n)) continue;
+      const rec = tally.get(i) || { n: 0, saadi: 0 };
+      rec.n++;
+      if (sources[src].n === "السعدي") rec.saadi = 1;
+      tally.set(i, rec);
+    }
+    let best = -1, score = -1;
+    for (const [i, rec] of tally) {
+      const s = rec.saadi * 10 + rec.n;
+      if (s > score) { score = s; best = i; }
+    }
+    return best;
+  }
   function findAyah(raw) {
     const direct = raw.match(/(\d{1,3})\s*[:./-]\s*(\d{1,3})/);
     if (direct) {
@@ -149,7 +232,7 @@
     }
     const cleaned = stripQ(raw);
     const use = cleaned || raw.trim();
-    const where = scope === "deep" ? u.anDeep : (writtenLang(use) === "ar" ? u.anTf : u.anTr);
+    const where = scope === "deep" ? u.anDeep : (conceptOf(raw) || writtenLang(use) === "ar" ? u.anTf : u.anTr);
     return { search: use, note: u.an + ": «" + use + "». " + where };
   }
   function urlOf(src, ref) {
@@ -410,6 +493,57 @@
   let job = 0;
   let shown = [];
   let analNote = "";
+  let answerPlan = null;
+  async function buildAnswer() {
+    if (!answerPlan) return null;
+    const a = ANS[lang];
+    const box = document.createElement("article");
+    box.className = "answer";
+    const k = document.createElement("p");
+    k.className = "kicker";
+    k.textContent = a.ans;
+    box.append(k);
+    if (answerPlan.kind === "count") {
+      const said = document.createElement("p");
+      said.className = "said";
+      said.textContent = answerPlan.text;
+      box.append(said);
+      return box;
+    }
+    const i = answerPlan.i;
+    const ref = at(i);
+    if (lang !== "ar" && verse[lang] && verse[lang][i]) {
+      const said = document.createElement("p");
+      said.className = "said";
+      said.textContent = verse[lang][i];
+      box.append(said);
+    }
+    const ar = document.createElement("p");
+    ar.className = "ay";
+    ar.dir = "rtl";
+    ar.lang = "ar";
+    ar.textContent = (verse.ar && verse.ar[i]) || "";
+    box.append(ar);
+    const saadi = await tafsirAyah("السعدي", ref.s, ref.a);
+    if (saadi) {
+      const who = document.createElement("p");
+      who.className = "who";
+      who.textContent = a.saadi;
+      box.append(who);
+      const tx = document.createElement("p");
+      tx.className = "ay tf";
+      tx.dir = "rtl";
+      tx.lang = "ar";
+      tx.textContent = clip(saadi);
+      box.append(tx);
+    }
+    const addr = document.createElement("a");
+    addr.className = "addr";
+    addr.href = "/tafsir/saadi/" + ref.s + "/" + ref.a + "/";
+    addr.textContent = meta.names[lang][ref.s - 1] + " " + ref.s + ":" + ref.a;
+    box.append(addr);
+    return box;
+  }
   async function paint(from) {
     const id = job;
     const u = t();
@@ -421,15 +555,18 @@
         a.textContent = analNote;
         out.append(a);
       }
+      const ans = await buildAnswer();
+      if (id !== job) return;
+      if (ans) out.append(ans);
     }
-    if (!shown.length) {
+    if (!shown.length && !answerPlan) {
       const p = document.createElement("p");
       p.className = "wait"; p.textContent = u.empty; out.append(p); return;
     }
-    if (from === 0) {
+    if (from === 0 && shown.length) {
       const c = document.createElement("p");
       c.className = "count";
-      c.textContent = shown.length + " " + u.n;
+      c.textContent = (answerPlan ? ANS[lang].places + " · " : "") + shown.length + " " + u.n;
       out.append(c);
     }
     const end = Math.min(shown.length, from + 30);
@@ -449,6 +586,7 @@
   async function run() {
     const raw = input.value.trim();
     const id = ++job;
+    answerPlan = null;
     out.replaceChildren();
     if (!raw) return;
     const wait = document.createElement("p");
@@ -489,8 +627,19 @@
         : (r.k === "q" ? 0 : r.k === "tr" && r.l === lang ? 1 : r.k === "tr" ? 2 : r.k === "tf" ? 3 : 4);
       return score(ra) - score(rb) || a.src - b.src || a.i - b.i;
     });
+    const counted = countQuestion(raw);
+    const arConcept = ay ? "" : conceptOf(raw);
+    let topic = new Set();
+    if (arConcept) topic = await wordHits(tokens(arConcept));
+    if (id !== job) return;
+    if (counted) answerPlan = { kind: "count", text: counted };
+    else if (ay) answerPlan = { kind: "ayah", i: indexOf(ay.s, ay.a) };
+    else {
+      const idx = bestShort(topic.size ? topic : found);
+      answerPlan = idx >= 0 ? { kind: "topic", i: idx } : null;
+    }
     shown = direct.concat(rest);
-    if (shown.length) await loadVerses();
+    if (shown.length || (answerPlan && answerPlan.i != null)) await loadVerses();
     if (id !== job) return;
     paint(0);
   }
