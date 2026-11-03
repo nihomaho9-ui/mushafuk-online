@@ -29,3 +29,5 @@ footer{border-top:1px solid #e8dfc9;text-align:center;padding:2rem;color:var(--m
 [dir=rtl] .nav nav a{margin-left:0;margin-right:2rem}[dir=rtl] body,[dir=rtl]{font-family:"Amiri","Traditional Arabic","Segoe UI",serif}
 .langs{display:flex;gap:.5rem;margin-inline-start:1.5rem}.langs a{font-size:.8rem;padding:.15rem .5rem;border:1px solid #e0d4b5;border-radius:99px;color:var(--mut);margin:0!important}.langs a.on{background:var(--em);color:#fff;border-color:var(--em)}
 .nav nav{display:flex;align-items:center;flex-wrap:wrap}
+@font-face{font-family:QCF1;src:url(./yazi-fonts/qcf/p1.woff2) format("woff2");font-display:swap}
+.hero .ar.bism{font-family:QCF1,serif;font-size:2.6rem;line-height:1.4;direction:rtl;color:var(--gold)}
