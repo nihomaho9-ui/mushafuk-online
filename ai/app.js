@@ -14,12 +14,13 @@
     ru: { q: "Коран", tr: "Перевод", tf: "Тафсир", ir: "Иараб", wb: "Слово" },
   };
   const SCOPE = {
-    az: { all: "Hamısı", q: "Quran", tf: "Təfsir" },
-    tr: { all: "Hepsi", q: "Kur'an", tf: "Tefsir" },
-    en: { all: "All", q: "Quran", tf: "Tafsir" },
-    ar: { all: "الكل", q: "القرآن", tf: "التفسير" },
-    ru: { all: "Все", q: "Коран", tf: "Тафсир" },
+    az: { fast: "Sürətli", deep: "Dərin" },
+    tr: { fast: "Hızlı", deep: "Derin" },
+    en: { fast: "Fast", deep: "Deep" },
+    ar: { fast: "سريع", deep: "عميق" },
+    ru: { fast: "Быстрый", deep: "Глубокий" },
   };
+  const SHORT = new Set(["السعدي", "التفسير الميسر", "المختصر", "أيسر التفاسير"]);
   const NAV = {
     az: [["../quran/", "Quran"], ["../tafsir.html", "Təfsir"], ["../translations/", "Tərcümələr"], ["../about.html", "Haqqında"]],
     tr: [["../quran/", "Kur'an"], ["../tafsir.html", "Tefsir"], ["../translations/", "Mealler"], ["../about.html", "Hakkında"]],
@@ -41,8 +42,7 @@
   const keyOf = (t) => (t.startsWith("ال") && t.length > 4 ? t.slice(2) : t);
 
   let lang = "az";
-  let scope = localStorage.getItem("qm.ai.scope") || "all";
-  if (scope !== "q" && scope !== "tf") scope = "all";
+  let scope = localStorage.getItem("qm.ai.scope") === "deep" ? "deep" : "fast";
   let meta = null;
   let sources = null;
   const buckets = {};
@@ -165,6 +165,18 @@
     }
     return acc;
   }
+  function writtenLang(raw) {
+    if (isAr(raw)) return "ar";
+    if (/[\u0400-\u04FF]/.test(raw)) return "ru";
+    if (/ə/i.test(raw)) return "az";
+    if (/[ığşöüçİĞŞÖÜÇ]/.test(raw)) return "tr";
+    return ["az", "tr", "en", "ru"].includes(lang) ? lang : "az";
+  }
+  function fastOk(src, raw) {
+    const s = sources[src];
+    if (writtenLang(raw) === "ar") return SHORT.has(s.n);
+    return s.k === "tr" && s.l === writtenLang(raw);
+  }
   function directHits(raw) {
     const out = [];
     const pg = pageQuery(raw);
@@ -201,7 +213,7 @@
     const labels = SCOPE[lang];
     scopeBtn.textContent = labels[scope];
     scopeMenu.replaceChildren();
-    for (const key of ["all", "q", "tf"]) {
+    for (const key of ["fast", "deep"]) {
       const b = document.createElement("button");
       b.type = "button";
       b.dataset.s = key;
@@ -382,17 +394,21 @@
     arabicQ = isAr(raw);
     const found = parts.length ? await wordHits(parts) : new Set();
     if (id !== job) return;
-    const direct = directHits(raw).filter((h) => scope === "all" || scope === "q");
-    const seen = new Set(direct.map((h) => "0:" + (h.page || "") + ":" + h.s + ":" + h.a));
+    const direct = directHits(raw);
+    const seen = new Set(direct.map((h) => (h.src || 0) + ":" + (h.i != null ? h.i : indexOf(h.s, h.a))));
     const rest = [];
     const ay = ayahQuery(raw);
-    if (scope === "tf" && ay) {
+    if (ay && scope === "fast") {
       const i = indexOf(ay.s, ay.a);
-      for (let s = 0; s < sources.length; s++) if (sources[s].k === "tf") rest.push({ src: s, i });
+      for (let s = 0; s < sources.length; s++) if (SHORT.has(sources[s].n)) rest.push({ src: s, i });
+    }
+    if (ay && scope === "deep") {
+      const i = indexOf(ay.s, ay.a);
+      for (let s = 1; s < sources.length; s++) rest.push({ src: s, i });
     }
     for (const x of found) {
       const src = Math.floor(x / 10000), i = x % 10000;
-      if (scope !== "all" && sources[src].k !== scope) continue;
+      if (scope === "fast" && !fastOk(src, raw)) continue;
       const k = src + ":" + i;
       if (seen.has(k)) continue;
       seen.add(k);
