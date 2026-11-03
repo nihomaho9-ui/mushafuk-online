@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="ar">
-  <head><base href="/">
+  <head><script>try{var d=sessionStorage.getItem("qm.turn");if(d){document.documentElement.classList.add("qm-turning");}}catch(e){}</script><style>html.qm-turning{background:#f6f1e4}html.qm-turning body{opacity:0!important}</style><base href="/">
     <meta charset="UTF-8" />
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -1436,7 +1436,7 @@
       Promise.all([fetch("./yazi-pages.json").then((r) => r.json()), fetch("./yazi-words.json").then((r) => r.json()).catch(() => null)]).then(([json, wb]) => { words = wb; pages = json; loadNames(); const qp = +(window.__PAGE||new URLSearchParams(location.search).get("page")); if (qp >= 1 && qp <= 604) openAt(qp); });
     </script>
     <script>try{localStorage.setItem("qm.lang","ar");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}</script>
-    <script src="./lib.js?v=21"></script>
+    <script src="./lib.js?v=24"></script>
     <script src="./audio.js?v=5"></script>
   </body>
 </html>

@@ -1122,6 +1122,37 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     if (rest !== "/quran" && !/^\/page\/\d+$/.test(rest)) return "";
     return prefix + "/page/" + n + "/";
   }
+  let turnLock = false;
+  function turnSheet() {
+    const full = document.querySelector(".qm-full");
+    if (full && !full.hidden) return full;
+    return document.body;
+  }
+  function flipSheet(dir, incoming) {
+    const sheet = turnSheet();
+    const edge = dir > 0 ? "right center" : "left center";
+    const angle = dir > 0 ? 72 : -72;
+    sheet.style.transformOrigin = edge;
+    sheet.style.backfaceVisibility = "hidden";
+    if (incoming) {
+      sheet.style.transition = "none";
+      sheet.style.transform = "perspective(1800px) rotateY(" + (-angle) + "deg)";
+      document.documentElement.classList.remove("qm-turning");
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        sheet.style.transition = "transform .46s cubic-bezier(.16,1,.3,1)";
+        sheet.style.transform = "perspective(1800px) rotateY(0deg)";
+      }));
+      return;
+    }
+    if (!document.getElementById("qm-under")) {
+      const under = document.createElement("div");
+      under.id = "qm-under";
+      under.style.cssText = "position:fixed;inset:0;background:#efe6d4;z-index:1";
+      document.body.appendChild(under);
+    }
+    sheet.style.transition = "transform .4s cubic-bezier(.22,.75,.2,1)";
+    sheet.style.transform = "perspective(1800px) rotateY(" + angle + "deg)";
+  }
   window.QM_TURN = function (n) {
     n = n | 0; if (n < 1) n = 1; if (n > 604) n = 604;
     let path = location.pathname;
@@ -1131,19 +1162,33 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     if (!href) return false;
     if (!path.endsWith("/")) path += "/";
     if (path === href) return false;
-    location.assign(href + location.search);
+    if (turnLock) return true;
+    turnLock = true;
+    const dir = window.__qmTurnDir || 1;
+    try { sessionStorage.setItem("qm.turn", String(dir)); } catch (e) {}
+    flipSheet(dir, false);
+    setTimeout(() => location.assign(href + location.search), 400);
     return true;
   };
+  function settleTurn() {
+    let dir = 0;
+    try { dir = +sessionStorage.getItem("qm.turn") || 0; } catch (e) {}
+    if (!dir) { document.documentElement.classList.remove("qm-turning"); return; }
+    try { sessionStorage.removeItem("qm.turn"); } catch (e) {}
+    flipSheet(dir, true);
+  }
   // A horizontal finger swipe on any real mushaf page opens the next page's address.
   let finger = null;
   const fingerStart = (x, y, target) => {
     if (target && target.closest && target.closest("a,button,input,textarea,select,label")) { finger = null; return; }
-    finger = { x: x, y: y };
+    finger = { x: x, y: y, target: target };
   };
   const fingerEnd = (x, y) => {
     if (!finger) return;
+    const target = finger.target;
     const dx = x - finger.x, dy = y - finger.y;
     finger = null;
+    if (target && target.closest && target.closest(".qm-full")) return;
     if (Math.abs(dx) < 36 || Math.abs(dx) < Math.abs(dy)) return;
     const m = location.pathname.match(/\/page\/(\d+)\/?$/);
     if (!m) return;
@@ -1153,6 +1198,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     if (full && !full.hidden && mushafTurnHref(n) && full.dataset.kind && full.dataset.kind !== "tf") {
       try { sessionStorage.setItem("qm.reopen", full.dataset.kind); } catch (e) {}
     }
+    window.__qmTurnDir = dx > 0 ? 1 : -1;
     QM_TURN(n);
   };
   document.addEventListener("touchstart", (e) => { if (e.touches.length !== 1) return; fingerStart(e.touches[0].clientX, e.touches[0].clientY, e.target); }, { capture: true, passive: true });
@@ -1220,10 +1266,12 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     const end = () => {
       const g = d; d = null; if (!g || g.mode !== "x") return;
       const v = g.dx / Math.max(1, performance.now() - g.t), n = pg.n + (g.dx > 0 ? 1 : -1);
-      if ((Math.abs(g.dx) > W() * 0.25 || Math.abs(v) > 0.6) && n >= 1 && n <= 604) {
-        const dir = g.dx > 0 ? 1 : -1; slideTo(dir * W(), 180);
+      if ((Math.abs(g.dx) > W() * 0.18 || Math.abs(v) > 0.45) && n >= 1 && n <= 604) {
+        const dir = g.dx > 0 ? 1 : -1;
+        slideTo(0, 0);
         if (mushafTurnHref(n) && kind !== "tf") { try { sessionStorage.setItem("qm.reopen", kind); } catch (e) {} }
-        setTimeout(() => { if (!(window.QM_TURN && QM_TURN(n))) openFull(kind, null, n, -dir); }, 180);
+        window.__qmTurnDir = dir;
+        if (!(window.QM_TURN && QM_TURN(n))) openFull(kind, null, n, -dir);
       } else slideTo(0, 220);
     };
     body.onpointerup = end; body.onpointercancel = () => { if (d && d.mode === "x") slideTo(0, 220); d = null; };
@@ -1231,6 +1279,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     fsEl.hidden = false;
     const target = focusKey && body.querySelector('[data-k="' + focusKey + '"]');
     if (target) { target.classList.add("cur"); target.scrollIntoView({ block: "start" }); } else body.scrollTop = 0;
+    if (document.documentElement.classList.contains("qm-turning") || sessionStorage.getItem("qm.turn")) settleTurn();
   }
   /* ---------- word meanings (as-Sirac): "word: meaning" lines ---------- */
   // Ibn Qutaybah: paragraphs; Qur'an words in ﴿…﴾ / (…) stand out, the editor's notes [[…]] go to numbered footnotes
@@ -1534,6 +1583,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
   window.QM = { openPlan, openHifz, hifzProgress, openNotes, openNote, openSettings, openFull, openFullHere: () => { const k = prefs().tab === "tr" ? "tr" : "tf"; const f = cur ? cur.s + ":" + cur.a : null; openFull(k, f); }, openAyah, openCompare, wordPop, closeWordPop: closeWpop, selecting: () => !!sel, tapAyah, t: T };
   try {
     const reopen = sessionStorage.getItem("qm.reopen");
+    const turning = !!sessionStorage.getItem("qm.turn");
     if (reopen === "tr" || reopen === "tf" || reopen === "wb" || reopen === "ir") {
       sessionStorage.removeItem("qm.reopen");
       const want = +(location.pathname.match(/\/page\/(\d+)\/?$/) || [0, 0])[1];
@@ -1542,6 +1592,16 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
         if (q && q.n === want) { openFull(reopen, null, want); return; }
         if (i < 200) setTimeout(() => w(i + 1), 100);
       })(0);
+    }
+    if (turning) {
+      const dedicated = /\/page\/\d+\/?$/.test(location.pathname) && !mushafTurnHref(1);
+      if (!dedicated && !reopen) {
+        (function w(i) {
+          const page = document.getElementById("page");
+          if ((page && page.childElementCount) || i > 30) settleTurn();
+          else setTimeout(() => w(i + 1), 40);
+        })(0);
+      } else setTimeout(() => { try { if (sessionStorage.getItem("qm.turn")) settleTurn(); } catch (e) {} }, 2200);
     }
   } catch (e) {}
   (async () => {
