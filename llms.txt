@@ -11,7 +11,7 @@ Mushafuk.online is a reading website. The Arabic text is the Madinah mushaf, pag
 - [Surah index](https://mushafuk.online/quran/)
 - [Tafsirs](https://mushafuk.online/tafsir.html)
 - [Translations](https://mushafuk.online/translations/)
-- [About](https://mushafuk.online/about.html)
+- [Reciters](https://mushafuk.online/qiraat/): seven reciters; the choice is remembered and page 1 opens
 - [Azerbaijani](https://mushafuk.online/az/)
 - [Turkish](https://mushafuk.online/tr/)
 - [English](https://mushafuk.online/en/)

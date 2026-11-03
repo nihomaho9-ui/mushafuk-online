@@ -1,4 +1,5 @@
 const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.online$/.test(location.hostname) ? "/" : "https://nihomaho9-ui.github.io/quran-medine/";
+if (document.currentScript) { const fl = document.createElement("link"); fl.rel = "stylesheet"; fl.href = new URL("fonts.css?v=1", document.currentScript.src).href; document.head.appendChild(fl); }
 // Settings (tafsir / translation downloads, text size) and the ayah sheet. Data is stored on the device (IndexedDB) and works offline.
 (function () {
   const AYAHS = window.QM_AYAHS;

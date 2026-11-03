@@ -1,5 +1,7 @@
+@import url("fonts.css?v=1");
 @font-face{font-family:QCF1;src:url(./yazi-fonts/qcf/p1.woff2) format("woff2");font-display:swap}
-.h{--g:#0f3d2a;--g2:#1c5a3d;--gold:#b8913f;--cr:#f8f3e7;margin:0;background:var(--cr);color:#1d2a22;font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic",sans-serif}
+.h{--g:#0f3d2a;--g2:#1c5a3d;--gold:#b8913f;--cr:#f8f3e7;margin:0;background:var(--cr);color:#1d2a22;font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic","Amiri",sans-serif}
+html[dir="rtl"] .h{font-family:"Noto Naskh Arabic","Amiri","Scheherazade New",UthmanTaha,"Traditional Arabic","Segoe UI",serif}
 .h a{color:inherit;text-decoration:none}
 .h .top{max-width:1100px;margin:14px auto 0;padding:0 14px;position:relative;z-index:3}
 .h .bar{background:#fffdf8;border-radius:26px;box-shadow:0 6px 24px #0f3d2a14;padding:14px 18px}
