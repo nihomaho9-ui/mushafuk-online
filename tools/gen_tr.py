@@ -53,7 +53,7 @@ for lg,c in L.items():
     h=h.replace('</body>',post_js+'</body>',1)
     o=f"{base}/page/{p}";os.makedirs(o,exist_ok=True);open(o+'/index.html','w',encoding='utf8').write(h)
   # the language buttons stay off this page; the translator cards open the reader
-  f=f'{lg}/translations.html';x=open(f,encoding='utf8').read()
+  f=f'{lg}/translations/index.html';x=open(f,encoding='utf8').read()
   x=re.sub(r'<p class="trl"[^>]*>.*?</p>','',x)
   rel={'az':{'Əlixan Musayev':'tercume/','Ali Özek ve diğerleri':'../tr/meal/','Saheeh International':'../en/translation/','Эльмир Кулиев':'../ru/perevod/'},
        'tr':{'Əlixan Musayev':'../az/tercume/','Ali Özek ve diğerleri':'meal/','Saheeh International':'../en/translation/','Эльмир Кулиев':'../ru/perevod/'},

@@ -73,10 +73,10 @@ for r in books:
             os.makedirs(o, exist_ok=True)
             open(o + "/index.html", "w", encoding="utf8").write(doc)
     # Arabic list keeps the root reader; each other site language keeps its own copy
-    for path, pre in (("translations.html", ""), ("az/translations.html", ""), ("tr/translations.html", ""), ("en/translations.html", ""), ("ru/translations.html", "")):
+    for path, pre in (("translations/index.html", ""), ("az/translations/index.html", ""), ("tr/translations/index.html", ""), ("en/translations/index.html", ""), ("ru/translations/index.html", "")):
         t = open(path, encoding="utf8").read()
         pat = r'(<a class="item" href=")[^"]*("><div class="n"[^>]*>' + re.escape(name) + r'</div>)'
-        t2, c = re.subn(pat, r'\1' + pre + slug + r'/\2', t, count=1)
+        t2, c = re.subn(pat, r'\1' + pre + slug + r'/page/1/\2', t, count=1)
         if c != 1:
             raise SystemExit(f"card {path} {name} {c}")
         open(path, "w", encoding="utf8").write(t2)
