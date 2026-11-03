@@ -1121,7 +1121,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     const [s0] = pg.keys[0].split(":").map(Number);
     const ttl = el("div", "qm-full-t"); ttl.append(el("b", "", NAMES[s0 - 1]), el("small", "", T("Səhifə") + " " + pg.n));
     const sw = el("div", "qm-switch");
-    for (const k of ["tr", "tf"]) { const b = el("button", k === kind ? "on" : "", k === "tf" ? T("Təfsir") : T("Tərcümə")); b.onclick = () => { setPrefs({ tab: k }); openFull(k, null, pg.n); }; sw.append(b); }
+    for (const k of (kind === "ir" || kind === "wb" ? [kind, "tf", "tr"] : ["tr", "tf"])) { const b = el("button", k === kind ? "on" : "", k === "tf" ? T("Təfsir") : k === "tr" ? T("Tərcümə") : k === "ir" ? T("Erab") : T("Söz mənaları")); b.onclick = () => { setPrefs({ tab: k }); openFull(k, null, pg.n); }; sw.append(b); }
     const x = icon("close", T("Bağla")); x.onclick = () => { fsEl.hidden = true; fsState = null; };
     head.append(ttl, sw, x); fsEl.append(head);
     const body = el("div", "qm-full-b"); fsEl.append(body);
