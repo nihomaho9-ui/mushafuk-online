@@ -26,7 +26,8 @@ body{background:#fff!important}
 .lead{text-align:center;color:#6a746e;margin:0 auto .9rem;max-width:34rem;line-height:1.55;font-size:.95rem}
 .chips{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center;margin:0 0 1rem}
 .chips button{border:1px solid #ead9b0;background:#fff;color:#0e3d2c;border-radius:999px;padding:.35rem .75rem;font:inherit;cursor:pointer}
-.hit{display:block;background:#fff;border:1px solid #eee4cf;border-radius:16px;padding:.9rem 1rem .7rem;margin:.55rem 0;color:inherit}
+.hit{display:block;background:#fff;border:1px solid #eee4cf;border-radius:16px;padding:.9rem 1rem .7rem;margin:.55rem 0;color:inherit;cursor:pointer}
+.hit.on{border-color:#0e3d2c;box-shadow:0 0 0 2px #0e3d2c22}
 .hit .ay{margin:0;font-family:"Amiri","Noto Naskh Arabic",serif;font-size:1.35rem;line-height:2;text-align:right;color:#14261e}
 .hit mark,.answer mark{background:#f6e7c1;color:inherit;border-radius:4px;padding:0 .1rem}
 .hit .tr{margin:.45rem 0 0;line-height:1.6;color:#2c332f}
@@ -85,7 +86,7 @@ html[dir=rtl] .dock form{padding:.35rem .95rem .35rem .35rem}
 </main>
 <div class="dock"><form id="form"><input id="q" type="search" autocomplete="off" enterkeyhint="search"><div class="scope" id="scope"><button type="button" class="scope-btn" id="scopeBtn" aria-expanded="false">Sürətli</button><div class="scope-menu" id="scopeMenu" hidden></div></div><button id="go" type="submit" aria-label="Göndər"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4z"/></svg></button></form></div>
 <script src="../site.js?v=8"></script>
-<script src="app.js?v=16"></script>
+<script src="app.js?v=17"></script>
 <script>
 setTimeout(function () {
   var s = document.getElementById("splash");

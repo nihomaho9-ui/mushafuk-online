@@ -1,10 +1,10 @@
 (function () {
   const UI = {
-    az: { title: "Axtarış", lead: "Quran, təfsir, tərcümə, erab və söz mənalarında axtarır. Cavab yalnız saytdakı mətndən götürülür.", ph: "", go: "Axtar", empty: "Heç nə tapılmadı. Başqa söz yoxlayın.", page: "Səhifə", surah: "Surə", loading: "Hazırlanır…", more: "Daha çox", n: "nəticə", chips: [["2:255", "Ayətül-Kürsi"], ["Fatihə", "Fatihə"], ["mərhəmət", "mərhəmət"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sədi və qısa təfsirlərdə axtarıram.", anTr: "Bu dildəki tərcümədə axtarıram.", anDeep: "Bütün saytda axtarıram.", only: "Yalnız", srcCap: "Mənbə", fTf: "Əvvəlki ayənin təfsiri", fTr: "Əvvəlki ayənin tərcüməsi", fNext: "Növbəti ayə", fPrev: "Əvvəlki ayə" },
-    tr: { title: "Arama", lead: "Kur'an, tefsir, meal, irab ve kelime anlamlarında arar. Cevap yalnız sitedeki metinden alınır.", ph: "", go: "Ara", empty: "Bir şey bulunamadı. Başka bir söz deneyin.", page: "Sayfa", surah: "Sure", loading: "Hazırlanıyor…", more: "Daha fazla", n: "sonuç", chips: [["2:255", "Ayetel Kürsi"], ["Fatiha", "Fatiha"], ["rahmet", "rahmet"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sa'dî ve kısa tefsirlerde arıyorum.", anTr: "Bu dilin mealinde arıyorum.", anDeep: "Tüm sitede arıyorum.", only: "Yalnız", srcCap: "Kaynak", fTf: "Önceki ayetin tefsiri", fTr: "Önceki ayetin meali", fNext: "Sonraki ayet", fPrev: "Önceki ayet" },
-    en: { title: "Search", lead: "Searches the Quran, tafsir, translations, i'rab and word meanings. The answer is taken only from text on this site.", ph: "", go: "Search", empty: "Nothing matched. Try another word.", page: "Page", surah: "Surah", loading: "Getting ready…", more: "More", n: "results", chips: [["2:255", "Ayat al-Kursi"], ["Al-Fatihah", "Al-Fatihah"], ["mercy", "mercy"], ["كرسي", "كرسي"]], an: "Reading", anTf: "Searching Saadi and the short tafsirs.", anTr: "Searching the translation in this language.", anDeep: "Searching the whole site.", only: "Only", srcCap: "Source", fTf: "Tafsir of the previous verse", fTr: "Translation of the previous verse", fNext: "Next verse", fPrev: "Previous verse" },
-    ar: { title: "بحث", lead: "يبحث في المصحف والتفسير والترجمة والإعراب وغريب القرآن. الجواب مأخوذ من نص الموقع فقط.", ph: "", go: "بحث", empty: "لا نتيجة. جرّب كلمة أخرى.", page: "صفحة", surah: "سورة", loading: "جارٍ التحضير…", more: "المزيد", n: "نتيجة", chips: [["2:255", "آية الكرسي"], ["الفاتحة", "الفاتحة"], ["رحمة", "رحمة"], ["كرسي", "كرسي"]], an: "تحليل", anTf: "أبحث في السعدي والتفاسير المختصرة.", anTr: "أبحث في ترجمة هذه اللغة.", anDeep: "أبحث في الموقع كله.", only: "فقط", srcCap: "المصدر", fTf: "تفسير الآية السابقة", fTr: "ترجمة الآية السابقة", fNext: "الآية التالية", fPrev: "الآية السابقة" },
-    ru: { title: "Поиск", lead: "Ищет в Коране, тафсире, переводах, иарабе и значениях слов. Ответ берётся только из текста на сайте.", ph: "", go: "Найти", empty: "Ничего не найдено. Попробуйте другое слово.", page: "Страница", surah: "Сура", loading: "Готовлю…", more: "Ещё", n: "результат", chips: [["2:255", "Аят аль-Курси"], ["Аль-Фатиха", "Аль-Фатиха"], ["милость", "милость"], ["كرسي", "كرسي"]], an: "Разбор", anTf: "Ищу у ас-Саади и в кратких тафсирах.", anTr: "Ищу в переводе этого языка.", anDeep: "Ищу по всему сайту.", only: "Только", srcCap: "Источник", fTf: "Тафсир предыдущего аята", fTr: "Перевод предыдущего аята", fNext: "Следующий аят", fPrev: "Предыдущий аят" },
+    az: { title: "Axtarış", lead: "Quran, təfsir, tərcümə, erab və söz mənalarında axtarır. Cavab yalnız saytdakı mətndən götürülür.", ph: "", go: "Axtar", empty: "Heç nə tapılmadı. Başqa söz yoxlayın.", page: "Səhifə", surah: "Surə", loading: "Hazırlanır…", more: "Daha çox", n: "nəticə", chips: [["2:255", "Ayətül-Kürsi"], ["Fatihə", "Fatihə"], ["mərhəmət", "mərhəmət"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sədi və qısa təfsirlərdə axtarıram.", anTr: "Bu dildəki tərcümədə axtarıram.", anDeep: "Bütün saytda axtarıram.", only: "Yalnız", srcCap: "Mənbə", fTf: "Əvvəlki ayənin təfsiri", fTr: "Əvvəlki ayənin tərcüməsi", fNext: "Növbəti ayə", fPrev: "Əvvəlki ayə", pick: "Suala birbaşa cavab tapılmadı. Yaxın ayədən birini seçin.", picked: "Seçilən ayə" },
+    tr: { title: "Arama", lead: "Kur'an, tefsir, meal, irab ve kelime anlamlarında arar. Cevap yalnız sitedeki metinden alınır.", ph: "", go: "Ara", empty: "Bir şey bulunamadı. Başka bir söz deneyin.", page: "Sayfa", surah: "Sure", loading: "Hazırlanıyor…", more: "Daha fazla", n: "sonuç", chips: [["2:255", "Ayetel Kürsi"], ["Fatiha", "Fatiha"], ["rahmet", "rahmet"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sa'dî ve kısa tefsirlerde arıyorum.", anTr: "Bu dilin mealinde arıyorum.", anDeep: "Tüm sitede arıyorum.", only: "Yalnız", srcCap: "Kaynak", fTf: "Önceki ayetin tefsiri", fTr: "Önceki ayetin meali", fNext: "Sonraki ayet", fPrev: "Önceki ayet", pick: "Soruya doğrudan cevap çıkmadı. Yakın bir ayet seçin.", picked: "Seçilen ayet" },
+    en: { title: "Search", lead: "Searches the Quran, tafsir, translations, i'rab and word meanings. The answer is taken only from text on this site.", ph: "", go: "Search", empty: "Nothing matched. Try another word.", page: "Page", surah: "Surah", loading: "Getting ready…", more: "More", n: "results", chips: [["2:255", "Ayat al-Kursi"], ["Al-Fatihah", "Al-Fatihah"], ["mercy", "mercy"], ["كرسي", "كرسي"]], an: "Reading", anTf: "Searching Saadi and the short tafsirs.", anTr: "Searching the translation in this language.", anDeep: "Searching the whole site.", only: "Only", srcCap: "Source", fTf: "Tafsir of the previous verse", fTr: "Translation of the previous verse", fNext: "Next verse", fPrev: "Previous verse", pick: "No single answer matched. Choose a nearby verse.", picked: "Chosen verse" },
+    ar: { title: "بحث", lead: "يبحث في المصحف والتفسير والترجمة والإعراب وغريب القرآن. الجواب مأخوذ من نص الموقع فقط.", ph: "", go: "بحث", empty: "لا نتيجة. جرّب كلمة أخرى.", page: "صفحة", surah: "سورة", loading: "جارٍ التحضير…", more: "المزيد", n: "نتيجة", chips: [["2:255", "آية الكرسي"], ["الفاتحة", "الفاتحة"], ["رحمة", "رحمة"], ["كرسي", "كرسي"]], an: "تحليل", anTf: "أبحث في السعدي والتفاسير المختصرة.", anTr: "أبحث في ترجمة هذه اللغة.", anDeep: "أبحث في الموقع كله.", only: "فقط", srcCap: "المصدر", fTf: "تفسير الآية السابقة", fTr: "ترجمة الآية السابقة", fNext: "الآية التالية", fPrev: "الآية السابقة", pick: "لم يُختر جواب واحد. اختر آية قريبة.", picked: "الآية المختارة" },
+    ru: { title: "Поиск", lead: "Ищет в Коране, тафсире, переводах, иарабе и значениях слов. Ответ берётся только из текста на сайте.", ph: "", go: "Найти", empty: "Ничего не найдено. Попробуйте другое слово.", page: "Страница", surah: "Сура", loading: "Готовлю…", more: "Ещё", n: "результат", chips: [["2:255", "Аят аль-Курси"], ["Аль-Фатиха", "Аль-Фатиха"], ["милость", "милость"], ["كرسي", "كرسي"]], an: "Разбор", anTf: "Ищу у ас-Саади и в кратких тафсирах.", anTr: "Ищу в переводе этого языка.", anDeep: "Ищу по всему сайту.", only: "Только", srcCap: "Источник", fTf: "Тафсир предыдущего аята", fTr: "Перевод предыдущего аята", fNext: "Следующий аят", fPrev: "Предыдущий аят", pick: "Прямого ответа нет. Выберите близкий аят.", picked: "Выбранный аят" },
   };
   const KIND = {
     az: { q: "Quran", tr: "Tərcümə", tf: "Təfsir", ir: "Erab", wb: "Söz mənası" },
@@ -631,6 +631,7 @@
     } else if (src.k === "tr") {
       const code = src.l || "az";
       main = (verse[code] && verse[code][i]) || "";
+      if (main.length > 180) main = main.slice(0, 170).trim() + "…";
       ar.className = "tr";
       ar.dir = "auto";
       ar.lang = code;
@@ -645,17 +646,38 @@
     const name = meta.names[lang][ref.s - 1];
     let where = name + " " + ref.s + ":" + ref.a;
     if (src.k === "q") where += " · " + u.page + " " + ref.page;
-    else if (src.k === "tr" || src.k === "ir" || src.k === "wb") where = src.n + " · " + u.page + " " + ref.page;
+    else if (src.k === "tr" || src.k === "ir" || src.k === "wb") where = src.n + " · " + name + " " + ref.s + ":" + ref.a;
     else where = src.n + " · " + ref.s + ":" + ref.a;
     addr.textContent = where;
     box.append(addr);
+    if (answerPlan && answerPlan.i === i) box.classList.add("on");
+    box.tabIndex = 0;
+    box.onclick = (e) => { if (!e.target.closest("a")) choose(i); };
+    box.onkeydown = (e) => { if (e.key === "Enter") choose(i); };
     return box;
+  }
+  async function choose(i) {
+    const id = ++job;
+    const ref = at(i);
+    answerPlan = readNow === "tr"
+      ? { kind: "pick", i, mode: "tr", lang: qlNow, book: TR_IDS.has(bookNow) ? bookNow : "" }
+      : { kind: "pick", i, mode: "tf", tfName: TF_AR[bookNow] || "السعدي", showAyah: readNow === "mix" };
+    analNote = t().picked + " · " + meta.names[lang][ref.s - 1] + " " + ref.s + ":" + ref.a;
+    remember(i, readNow !== "tr", qlNow);
+    if (readNow === "tr") await loadVerses(qlNow);
+    else await loadVerses("ar");
+    if (id !== job) return;
+    await paint(0);
+    const ans = document.querySelector(".answer");
+    if (ans) ans.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
   let job = 0;
   let shown = [];
   let analNote = "";
   let answerPlan = null;
+  let readNow = "tr";
+  let bookNow = "";
   let meaningQ = false;
   function asksMeaning(raw) {
     return /معنى|مراد|مقصود|nədir|nə demək|ne demek|mənası|anlam|what does|meaning|что такое|означает/i.test(raw);
@@ -876,7 +898,10 @@
     let topic = new Set();
     if (!fol && arConcept && readMode !== "tr") topic = await wordHits(tokens(arConcept));
     if (id !== job) return;
+    const nAyah = new Set(rest.filter((h) => Number.isInteger(h.i)).map((h) => h.i)).size;
+    const sure = !!(counted || fol || ayRaw || nAyah === 1);
     if (counted) answerPlan = { kind: "count", text: counted };
+    else if (!sure) answerPlan = null;
     else if (readMode === "tr") {
       const i = fol ? fol.i : (ayRaw ? indexOf(ayRaw.s, ayRaw.a) : (rest[0] ? rest[0].i : null));
       if (i != null) answerPlan = { kind: "topic", i, mode: "tr", lang: qlNow, book: TR_IDS.has(book) ? book : "" };
@@ -887,6 +912,7 @@
       if (i == null || i < 0) i = rest[0] ? rest[0].i : null;
       if (i != null) answerPlan = { kind: "topic", i, mode: "tf", tfName: TF_AR[book] || "السعدي", showAyah: readMode === "mix" };
     }
+    if (!sure && !counted) analNote = t().pick + (book ? " · " + t().only + " " + BOOKL[lang][book] : "");
     if (answerPlan && answerPlan.mode === "tr") {
       for (let n = rest.length - 1; n >= 0; n--) if (rest[n].i === answerPlan.i) rest.splice(n, 1);
     } else if (answerPlan && answerPlan.mode === "tf") {
@@ -900,8 +926,9 @@
     if (needAr) await loadVerses("ar");
     if (needTr) await loadVerses(qlNow);
     if (id !== job) return;
-    const remembered = answerPlan && Number.isInteger(answerPlan.i) ? answerPlan.i : (shown[0] && Number.isInteger(shown[0].i) ? shown[0].i : null);
-    if (remembered != null) remember(remembered, readMode !== "tr", qlNow);
+    readNow = readMode;
+    bookNow = book;
+    if (answerPlan && Number.isInteger(answerPlan.i)) remember(answerPlan.i, readMode !== "tr", qlNow);
     paint(0);
   }
 
