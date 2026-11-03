@@ -1,10 +1,10 @@
 (function () {
   const UI = {
-    az: { title: "Axtarış", lead: "Quran, təfsir, tərcümə, erab və söz mənalarında axtarır. Nəticə sayı və ünvanı göstərilir.", ph: "", go: "Axtar", empty: "Heç nə tapılmadı. Başqa söz yoxlayın.", page: "Səhifə", surah: "Surə", loading: "Hazırlanır…", more: "Daha çox", n: "nəticə", chips: [["2:255", "Ayətül-Kürsi"], ["Fatihə", "Fatihə"], ["mərhəmət", "mərhəmət"], ["كرسي", "كرسي"]] },
-    tr: { title: "Arama", lead: "Kur'an, tefsir, meal, irab ve kelime anlamlarında arar. Sonuç sayısı ve adres çıkar.", ph: "", go: "Ara", empty: "Bir şey bulunamadı. Başka bir söz deneyin.", page: "Sayfa", surah: "Sure", loading: "Hazırlanıyor…", more: "Daha fazla", n: "sonuç", chips: [["2:255", "Ayetel Kürsi"], ["Fatiha", "Fatiha"], ["rahmet", "rahmet"], ["كرسي", "كرسي"]] },
-    en: { title: "Search", lead: "Searches the Quran, tafsir, translations, i'rab and word meanings. Shows the count and the address.", ph: "", go: "Search", empty: "Nothing matched. Try another word.", page: "Page", surah: "Surah", loading: "Getting ready…", more: "More", n: "results", chips: [["2:255", "Ayat al-Kursi"], ["Al-Fatihah", "Al-Fatihah"], ["mercy", "mercy"], ["كرسي", "كرسي"]] },
-    ar: { title: "بحث", lead: "يبحث في المصحف والتفسير والترجمة والإعراب وغريب القرآن. يظهر عدد النتائج والعنوان.", ph: "", go: "بحث", empty: "لا نتيجة. جرّب كلمة أخرى.", page: "صفحة", surah: "سورة", loading: "جارٍ التحضير…", more: "المزيد", n: "نتيجة", chips: [["2:255", "آية الكرسي"], ["الفاتحة", "الفاتحة"], ["رحمة", "رحمة"], ["كرسي", "كرسي"]] },
-    ru: { title: "Поиск", lead: "Ищет в Коране, тафсире, переводах, иарабе и значениях слов. Показывает число и адрес.", ph: "", go: "Найти", empty: "Ничего не найдено. Попробуйте другое слово.", page: "Страница", surah: "Сура", loading: "Готовлю…", more: "Ещё", n: "результат", chips: [["2:255", "Аят аль-Курси"], ["Аль-Фатиха", "Аль-Фатиха"], ["милость", "милость"], ["كرسي", "كرسي"]] },
+    az: { title: "Axtarış", lead: "Quran, təfsir, tərcümə, erab və söz mənalarında axtarır. Nəticə sayı və ünvanı göstərilir.", ph: "", go: "Axtar", empty: "Heç nə tapılmadı. Başqa söz yoxlayın.", page: "Səhifə", surah: "Surə", loading: "Hazırlanır…", more: "Daha çox", n: "nəticə", chips: [["2:255", "Ayətül-Kürsi"], ["Fatihə", "Fatihə"], ["mərhəmət", "mərhəmət"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sədi və qısa təfsirlərdə axtarıram.", anTr: "Bu dildəki tərcümədə axtarıram.", anDeep: "Bütün saytda axtarıram." },
+    tr: { title: "Arama", lead: "Kur'an, tefsir, meal, irab ve kelime anlamlarında arar. Sonuç sayısı ve adres çıkar.", ph: "", go: "Ara", empty: "Bir şey bulunamadı. Başka bir söz deneyin.", page: "Sayfa", surah: "Sure", loading: "Hazırlanıyor…", more: "Daha fazla", n: "sonuç", chips: [["2:255", "Ayetel Kürsi"], ["Fatiha", "Fatiha"], ["rahmet", "rahmet"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sa'dî ve kısa tefsirlerde arıyorum.", anTr: "Bu dilin mealinde arıyorum.", anDeep: "Tüm sitede arıyorum." },
+    en: { title: "Search", lead: "Searches the Quran, tafsir, translations, i'rab and word meanings. Shows the count and the address.", ph: "", go: "Search", empty: "Nothing matched. Try another word.", page: "Page", surah: "Surah", loading: "Getting ready…", more: "More", n: "results", chips: [["2:255", "Ayat al-Kursi"], ["Al-Fatihah", "Al-Fatihah"], ["mercy", "mercy"], ["كرسي", "كرسي"]], an: "Reading", anTf: "Searching Saadi and the short tafsirs.", anTr: "Searching the translation in this language.", anDeep: "Searching the whole site." },
+    ar: { title: "بحث", lead: "يبحث في المصحف والتفسير والترجمة والإعراب وغريب القرآن. يظهر عدد النتائج والعنوان.", ph: "", go: "بحث", empty: "لا نتيجة. جرّب كلمة أخرى.", page: "صفحة", surah: "سورة", loading: "جارٍ التحضير…", more: "المزيد", n: "نتيجة", chips: [["2:255", "آية الكرسي"], ["الفاتحة", "الفاتحة"], ["رحمة", "رحمة"], ["كرسي", "كرسي"]], an: "تحليل", anTf: "أبحث في السعدي والتفاسير المختصرة.", anTr: "أبحث في ترجمة هذه اللغة.", anDeep: "أبحث في الموقع كله." },
+    ru: { title: "Поиск", lead: "Ищет в Коране, тафсире, переводах, иарабе и значениях слов. Показывает число и адрес.", ph: "", go: "Найти", empty: "Ничего не найдено. Попробуйте другое слово.", page: "Страница", surah: "Сура", loading: "Готовлю…", more: "Ещё", n: "результат", chips: [["2:255", "Аят аль-Курси"], ["Аль-Фатиха", "Аль-Фатиха"], ["милость", "милость"], ["كرسي", "كرسي"]], an: "Разбор", anTf: "Ищу у ас-Саади и в кратких тафсирах.", anTr: "Ищу в переводе этого языка.", anDeep: "Ищу по всему сайту." },
   };
   const KIND = {
     az: { q: "Quran", tr: "Tərcümə", tf: "Təfsir", ir: "Erab", wb: "Söz mənası" },
@@ -90,11 +90,67 @@
     return 0;
   }
   function ayahQuery(raw) {
-    const m = raw.trim().match(/^(\d{1,3})\s*[:/]\s*(\d{1,3})$/);
+    const m = raw.trim().match(/^(\d{1,3})\s*[:./-]\s*(\d{1,3})$/);
     if (!m) return null;
     const s = +m[1], a = +m[2];
     if (s < 1 || s > 114 || a < 1 || a > meta.counts[s - 1]) return null;
     return { s, a };
+  }
+  function peelWord(w) {
+    return w.replace(/(nin|nın|nun|nün|dan|dən|den|də|da|si|sı|su|sü|in|ın|un|ün)$/i, "");
+  }
+  function surahInText(raw) {
+    const words = fold(arNorm(raw)).replace(/[^a-z0-9\u0600-\u06ff]+/gi, " ").split(" ").filter(Boolean).map(peelWord);
+    const f = " " + words.join(" ") + " ";
+    let best = 0, len = 0;
+    for (let s = 1; s <= 114; s++) {
+      for (const code of ["az", "tr", "en", "ar"]) {
+        const n = fold(arNorm(meta.names[code][s - 1])).replace(/[^a-z0-9\u0600-\u06ff]+/gi, "");
+        if (n.length < 4) continue;
+        if (f.includes(" " + n + " ") && n.length > len) { best = s; len = n.length; }
+      }
+    }
+    return best;
+  }
+  function stripQ(raw) {
+    let s = raw;
+    const cut = [/nə\s+deməkdir/gi, /ne\s+demektir/gi, /ne\s+demek/gi, /what\s+does/gi, /what\s+is/gi, /meaning\s+of/gi, /nədir/gi, /nedir/gi, /mənası/gi, /manasi/gi, /anlamı/gi, /anlami/gi, /haqqında/gi, /haqqinda/gi, /hakkında/gi, /hakkinda/gi, /izah\s+et/gi, /açıqla/gi, /aciqla/gi, /explain/gi, /что\s+такое/gi, /что\s+означает/gi, /ما\s+معنى/g, /ما\s+هو/g, /[?؟!.,]/g];
+    for (const r of cut) s = s.replace(r, " ");
+    return s.replace(/\s+/g, " ").trim();
+  }
+  function findAyah(raw) {
+    const direct = raw.match(/(\d{1,3})\s*[:./-]\s*(\d{1,3})/);
+    if (direct) {
+      const s = +direct[1], a = +direct[2];
+      if (s >= 1 && s <= 114 && a >= 1 && a <= meta.counts[s - 1]) return { s, a };
+    }
+    const flat = fold(arNorm(raw));
+    if (/kursi|курси|كرسي/.test(flat) || /كرسي/.test(raw)) return { s: 2, a: 255 };
+    const pair = raw.match(/(?:sur[əea]|sura|sure|surah|сура|سورة)\s*(\d{1,3})\D{0,24}(\d{1,3})/i);
+    if (pair) {
+      const s = +pair[1], a = +pair[2];
+      if (s >= 1 && s <= 114 && a >= 1 && a <= meta.counts[s - 1]) return { s, a };
+    }
+    const sur = surahInText(raw);
+    if (sur) {
+      const nums = [...raw.matchAll(/\d{1,3}/g)].map((x) => +x[0]);
+      const a = nums.find((n) => n >= 1 && n <= meta.counts[sur - 1]);
+      if (a) return { s: sur, a };
+    }
+    return null;
+  }
+  function analyze(raw) {
+    const u = t();
+    const ayah = findAyah(raw);
+    if (ayah) {
+      const name = meta.names[lang][ayah.s - 1];
+      const where = scope === "deep" ? u.anDeep : u.anTf;
+      return { search: ayah.s + ":" + ayah.a, note: u.an + ": " + name + " " + ayah.s + ":" + ayah.a + ". " + where };
+    }
+    const cleaned = stripQ(raw);
+    const use = cleaned || raw.trim();
+    const where = scope === "deep" ? u.anDeep : (writtenLang(use) === "ar" ? u.anTf : u.anTr);
+    return { search: use, note: u.an + ": «" + use + "». " + where };
   }
   function urlOf(src, ref) {
     let path = sources[src].p.split("{p}").join(ref.page).split("{s}").join(ref.s).split("{a}").join(ref.a);
@@ -353,10 +409,19 @@
 
   let job = 0;
   let shown = [];
+  let analNote = "";
   async function paint(from) {
     const id = job;
     const u = t();
-    if (from === 0) out.replaceChildren();
+    if (from === 0) {
+      out.replaceChildren();
+      if (analNote) {
+        const a = document.createElement("p");
+        a.className = "anal";
+        a.textContent = analNote;
+        out.append(a);
+      }
+    }
     if (!shown.length) {
       const p = document.createElement("p");
       p.className = "wait"; p.textContent = u.empty; out.append(p); return;
@@ -389,15 +454,18 @@
     const wait = document.createElement("p");
     wait.className = "wait"; wait.textContent = t().loading; out.append(wait);
     if (!sources) sources = await (await fetch("src.json")).json();
-    const parts = (!pageQuery(raw) && !ayahQuery(raw)) ? tokens(raw) : [];
+    const thought = analyze(raw);
+    const q = thought.search;
+    analNote = thought.note;
+    const parts = (!pageQuery(q) && !ayahQuery(q)) ? tokens(q) : [];
     partsNow = parts;
-    arabicQ = isAr(raw);
+    arabicQ = isAr(q);
     const found = parts.length ? await wordHits(parts) : new Set();
     if (id !== job) return;
-    const direct = directHits(raw);
+    const direct = directHits(q);
     const seen = new Set(direct.map((h) => (h.src || 0) + ":" + (h.i != null ? h.i : indexOf(h.s, h.a))));
     const rest = [];
-    const ay = ayahQuery(raw);
+    const ay = ayahQuery(q);
     if (ay && scope === "fast") {
       const i = indexOf(ay.s, ay.a);
       for (let s = 0; s < sources.length; s++) if (SHORT.has(sources[s].n)) rest.push({ src: s, i });
@@ -408,7 +476,7 @@
     }
     for (const x of found) {
       const src = Math.floor(x / 10000), i = x % 10000;
-      if (scope === "fast" && !fastOk(src, raw)) continue;
+      if (scope === "fast" && !fastOk(src, q)) continue;
       const k = src + ":" + i;
       if (seen.has(k)) continue;
       seen.add(k);
