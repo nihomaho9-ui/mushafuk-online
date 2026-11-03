@@ -11,7 +11,7 @@ Mushafuk.online is a reading website. The Arabic text is the Madinah mushaf, pag
 - [Surah index](https://mushafuk.online/quran/)
 - [Tafsirs](https://mushafuk.online/tafsir.html)
 - [Translations](https://mushafuk.online/translations/)
-- [Search](https://mushafuk.online/ai/): find a surah, ayah, page, or word. Example: https://mushafuk.online/ai/?lang=az&q=2:255
+- [Search](https://mushafuk.online/ai/): finds a word in the mushaf, all translations, the eight tafsirs, i'rab and word meanings. The page shows how many places matched and the address of each. Example: https://mushafuk.online/ai/?lang=az&q=2:255
 - [Azerbaijani](https://mushafuk.online/az/)
 - [Turkish](https://mushafuk.online/tr/)
 - [English](https://mushafuk.online/en/)

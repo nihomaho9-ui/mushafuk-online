@@ -1,10 +1,17 @@
 (function () {
   const UI = {
-    az: { title: "Axtarış", lead: "Surə, ayə, səhifə və ya söz yazın. Uyğun ayə birbaşa açılır.", ph: "2:255, Fatihə, mərhəmət, səhifə 42", go: "Axtar", empty: "Heç nə tapılmadı. Başqa söz yoxlayın.", page: "Səhifə", tafsir: "Təfsir", surah: "Surə", ayah: "ayə", loading: "Hazırlanır…", src: "Əlixan Musayev", chips: [["2:255", "Ayətül-Kürsi"], ["Fatihə", "Fatihə"], ["İxlas", "İxlas"], ["səhifə 1", "Səhifə 1"]] },
-    tr: { title: "Arama", lead: "Sure, ayet, sayfa veya bir kelime yazın. Uygun ayet doğrudan açılır.", ph: "2:255, Fatiha, rahmet, sayfa 42", go: "Ara", empty: "Bir şey bulunamadı. Başka bir söz deneyin.", page: "Sayfa", tafsir: "Tefsir", surah: "Sure", ayah: "ayet", loading: "Hazırlanıyor…", src: "Şahin", chips: [["2:255", "Ayetel Kürsi"], ["Fatiha", "Fatiha"], ["İhlas", "İhlas"], ["sayfa 1", "Sayfa 1"]] },
-    en: { title: "Search", lead: "Type a surah, ayah, page, or a word. The matching ayah opens directly.", ph: "2:255, Fatihah, mercy, page 42", go: "Search", empty: "Nothing matched. Try another word.", page: "Page", tafsir: "Tafsir", surah: "Surah", ayah: "ayah", loading: "Getting ready…", src: "Saheeh International", chips: [["2:255", "Ayat al-Kursi"], ["Al-Fatihah", "Al-Fatihah"], ["Al-Ikhlas", "Al-Ikhlas"], ["page 1", "Page 1"]] },
-    ar: { title: "بحث", lead: "اكتب سورة أو آية أو صفحة أو كلمة. تُفتح الآية المناسبة مباشرة.", ph: "٢:٢٥٥، الفاتحة، رحمة، صفحة ٤٢", go: "بحث", empty: "لا نتيجة. جرّب كلمة أخرى.", page: "صفحة", tafsir: "تفسير", surah: "سورة", ayah: "آية", loading: "جارٍ التحضير…", src: "رسم عثماني", chips: [["2:255", "آية الكرسي"], ["الفاتحة", "الفاتحة"], ["الإخلاص", "الإخلاص"], ["صفحة 1", "الصفحة ١"]] },
-    ru: { title: "Поиск", lead: "Напишите суру, аят, страницу или слово. Нужный аят откроется сразу.", ph: "2:255, Фатиха, милость, страница 42", go: "Найти", empty: "Ничего не найдено. Попробуйте другое слово.", page: "Страница", tafsir: "Тафсир", surah: "Сура", ayah: "аят", loading: "Готовлю…", src: "Кулиев", chips: [["2:255", "Аят аль-Курси"], ["Аль-Фатиха", "Аль-Фатиха"], ["Аль-Ихлас", "Аль-Ихлас"], ["страница 1", "Страница 1"]] },
+    az: { title: "Axtarış", lead: "Quran, təfsir, tərcümə, erab və söz mənalarında axtarır. Nəticə sayı və ünvanı göstərilir.", ph: "2:255, Fatihə, mərhəmət, səhifə 42", go: "Axtar", empty: "Heç nə tapılmadı. Başqa söz yoxlayın.", page: "Səhifə", surah: "Surə", loading: "Hazırlanır…", more: "Daha çox", n: "nəticə", chips: [["2:255", "Ayətül-Kürsi"], ["Fatihə", "Fatihə"], ["mərhəmət", "mərhəmət"], ["كرسي", "كرسي"]] },
+    tr: { title: "Arama", lead: "Kur'an, tefsir, meal, irab ve kelime anlamlarında arar. Sonuç sayısı ve adres çıkar.", ph: "2:255, Fatiha, rahmet, sayfa 42", go: "Ara", empty: "Bir şey bulunamadı. Başka bir söz deneyin.", page: "Sayfa", surah: "Sure", loading: "Hazırlanıyor…", more: "Daha fazla", n: "sonuç", chips: [["2:255", "Ayetel Kürsi"], ["Fatiha", "Fatiha"], ["rahmet", "rahmet"], ["كرسي", "كرسي"]] },
+    en: { title: "Search", lead: "Searches the Quran, tafsir, translations, i'rab and word meanings. Shows the count and the address.", ph: "2:255, Fatihah, mercy, page 42", go: "Search", empty: "Nothing matched. Try another word.", page: "Page", surah: "Surah", loading: "Getting ready…", more: "More", n: "results", chips: [["2:255", "Ayat al-Kursi"], ["Al-Fatihah", "Al-Fatihah"], ["mercy", "mercy"], ["كرسي", "كرسي"]] },
+    ar: { title: "بحث", lead: "يبحث في المصحف والتفسير والترجمة والإعراب وغريب القرآن. يظهر عدد النتائج والعنوان.", ph: "٢:٢٥٥، الفاتحة، رحمة، صفحة ٤٢", go: "بحث", empty: "لا نتيجة. جرّب كلمة أخرى.", page: "صفحة", surah: "سورة", loading: "جارٍ التحضير…", more: "المزيد", n: "نتيجة", chips: [["2:255", "آية الكرسي"], ["الفاتحة", "الفاتحة"], ["رحمة", "رحمة"], ["كرسي", "كرسي"]] },
+    ru: { title: "Поиск", lead: "Ищет в Коране, тафсире, переводах, иарабе и значениях слов. Показывает число и адрес.", ph: "2:255, Фатиха, милость, страница 42", go: "Найти", empty: "Ничего не найдено. Попробуйте другое слово.", page: "Страница", surah: "Сура", loading: "Готовлю…", more: "Ещё", n: "результат", chips: [["2:255", "Аят аль-Курси"], ["Аль-Фатиха", "Аль-Фатиха"], ["милость", "милость"], ["كرسي", "كرسي"]] },
+  };
+  const KIND = {
+    az: { q: "Quran", tr: "Tərcümə", tf: "Təfsir", ir: "Erab", wb: "Söz mənası" },
+    tr: { q: "Kur'an", tr: "Meal", tf: "Tefsir", ir: "İrab", wb: "Kelime" },
+    en: { q: "Quran", tr: "Translation", tf: "Tafsir", ir: "I'rab", wb: "Word" },
+    ar: { q: "المصحف", tr: "ترجمة", tf: "تفسير", ir: "إعراب", wb: "غريب" },
+    ru: { q: "Коран", tr: "Перевод", tf: "Тафсир", ir: "Иараб", wb: "Слово" },
   };
   const NAV = {
     az: [["../quran/", "Quran"], ["../tafsir.html", "Təfsir"], ["../translations/", "Tərcümələr"], ["../about.html", "Haqqında"]],
@@ -14,7 +21,7 @@
     ru: [["../quran/", "Коран"], ["../tafsir.html", "Тафсир"], ["../translations/", "Переводы"], ["../about.html", "О нас"]],
   };
   const STOP = {
-    az: "ve və bir bu da de haqqinda haqqında aye aye ayə ayeler ayələr olan ucun üçün nedir nədir hansı ile ilə oku oxu",
+    az: "ve və bir bu da de haqqinda haqqında aye ayə ayeler ayələr olan ucun üçün nedir nədir hansı ile ilə oku oxu",
     tr: "ve bir bu da hakkında hakkinda ayet ayetler nedir olan ile oku",
     en: "the a an of and to in for verse verses about what is ayah surah",
     ar: "في من عن على ما آية آيات سورة",
@@ -24,18 +31,16 @@
   const fold = (s) => s.replace(/İ/g, "i").replace(/I/g, "ı").toLowerCase().replace(/ə/g, "e").replace(/ı/g, "i").replace(/[öó]/g, "o").replace(/[üú]/g, "u").replace(/ş/g, "s").replace(/ç/g, "c").replace(/ğ/g, "g").replace(/â/g, "a").replace(/î/g, "i").replace(/û/g, "u");
   const arNorm = (s) => s.replace(AR_DIAC, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي").replace(/\u0640/g, "");
   const isAr = (s) => /[\u0600-\u06FF]/.test(s);
+  const keyOf = (t) => (t.startsWith("ال") && t.length > 4 ? t.slice(2) : t);
 
   let lang = "az";
   let meta = null;
-  const texts = {};
-  const folded = {};
-
+  let sources = null;
+  const buckets = {};
   const q = new URLSearchParams(location.search).get("lang");
   const saved = localStorage.getItem("qm.lang");
   lang = UI[q] ? q : (UI[saved] ? saved : "az");
-
   const t = () => UI[lang];
-  const base = () => (lang === "ar" ? "/" : "/" + lang + "/");
 
   function at(i) {
     let s = 1, left = i;
@@ -47,38 +52,31 @@
     for (let n = 1; n < s; n++) i += meta.counts[n - 1];
     return i + a - 1;
   }
-
   function tokens(raw) {
     const arabic = isAr(raw);
-    const src = arabic ? arNorm(raw) : fold(raw);
-    const stop = new Set((arabic ? STOP.ar : STOP[lang]).split(" ").map((w) => arabic ? arNorm(w) : fold(w)));
-    let parts = src.split(/[^\p{L}\p{N}]+/u).filter((w) => w && w.length > 1 && !stop.has(w));
-    if (!parts.length) parts = src.split(/[^\p{L}\p{N}]+/u).filter((w) => w.length > 1);
-    return { arabic, parts };
+    const src = arabic ? arNorm(raw) : fold(arNorm(raw));
+    const stop = new Set((arabic ? STOP.ar : STOP[lang]).split(" ").map((w) => keyOf(arabic ? arNorm(w) : fold(w))));
+    let parts = src.split(/[^\p{L}\p{N}]+/u).map(keyOf).filter((w) => w && w.length > 1 && !stop.has(w));
+    if (!parts.length) parts = src.split(/[^\p{L}\p{N}]+/u).map(keyOf).filter((w) => w.length > 1);
+    return parts;
   }
-
   function surahHit(raw) {
     const f = fold(arNorm(raw)).replace(/\s+/g, " ").trim();
     if (f.length < 3) return 0;
-    const names = meta.names;
+    const qn = f.replace(/[^a-z0-9\u0600-\u06ff]+/gi, "");
+    if (!qn || qn.length < 3) return 0;
     for (let s = 1; s <= 114; s++) {
       for (const code of ["az", "tr", "en", "ru", "ar"]) {
-        const n = fold(arNorm(names[code][s - 1])).replace(/[^a-z0-9\u0600-\u06ff]+/gi, "");
-        const qn = f.replace(/[^a-z0-9\u0600-\u06ff]+/gi, "");
-        if (!qn || qn.length < 3) continue;
+        const n = fold(arNorm(meta.names[code][s - 1])).replace(/[^a-z0-9\u0600-\u06ff]+/gi, "");
         if (n === qn || (qn.length >= 4 && (n.includes(qn) || qn.includes(n)))) return s;
       }
     }
     return 0;
   }
-
   function pageQuery(raw) {
     const m = raw.trim().match(/^(?:səhifə|sehife|sayfa|page|стр(?:аница)?|صفحة)\s*(\d{1,3})$/i);
     if (m) return +m[1];
-    if (/^\d{1,3}$/.test(raw.trim())) {
-      const n = +raw.trim();
-      if (n >= 115 && n <= 604) return n;
-    }
+    if (/^\d{1,3}$/.test(raw.trim())) { const n = +raw.trim(); if (n >= 115 && n <= 604) return n; }
     return 0;
   }
   function ayahQuery(raw) {
@@ -88,76 +86,61 @@
     if (s < 1 || s > 114 || a < 1 || a > meta.counts[s - 1]) return null;
     return { s, a };
   }
-
-  function search(raw) {
+  function urlOf(src, ref) {
+    let path = sources[src].p.split("{p}").join(ref.page).split("{s}").join(ref.s).split("{a}").join(ref.a);
+    if (sources[src].k === "q" && lang !== "ar") path = lang + "/" + path;
+    return "/" + path;
+  }
+  async function bucket(key) {
+    const b = key.slice(0, 2);
+    if (buckets[b]) return buckets[b];
+    const r = await fetch("ix/" + encodeURIComponent(b) + ".json");
+    buckets[b] = r.ok ? await r.json() : {};
+    return buckets[b];
+  }
+  function pack(list) {
+    const s = new Set();
+    for (const pair of list) s.add(pair[0] * 10000 + pair[1]);
+    return s;
+  }
+  async function wordHits(parts) {
+    const sets = [];
+    for (const part of parts) {
+      const bag = await bucket(part);
+      const all = [];
+      for (const w in bag) if (w === part || w.startsWith(part)) all.push(bag[w]);
+      if (!all.length) return new Set();
+      const u = new Set();
+      for (const list of all) for (const pair of list) u.add(pair[0] * 10000 + pair[1]);
+      sets.push(u);
+    }
+    sets.sort((a, b) => a.size - b.size);
+    let acc = sets[0];
+    for (let i = 1; i < sets.length; i++) {
+      const next = new Set();
+      for (const x of acc) if (sets[i].has(x)) next.add(x);
+      acc = next;
+    }
+    return acc;
+  }
+  function directHits(raw) {
     const out = [];
-    const seen = new Set();
-    const push = (item) => { const k = item.kind + ":" + item.s + ":" + item.a + ":" + (item.page || ""); if (seen.has(k)) return; seen.add(k); out.push(item); };
     const pg = pageQuery(raw);
     if (pg >= 1 && pg <= 604) {
       const i = meta.page.indexOf(pg);
-      const ref = i >= 0 ? at(i) : { s: 1, a: 1 };
-      push({ kind: "page", s: ref.s, a: ref.a, page: pg });
+      const ref = i >= 0 ? at(i) : { s: 1, a: 1, page: pg };
+      out.push({ kind: "page", s: ref.s, a: ref.a, page: pg, src: 0 });
     }
     const ay = ayahQuery(raw);
-    if (ay) push({ kind: "ayah", s: ay.s, a: ay.a, page: meta.page[indexOf(ay.s, ay.a)], i: indexOf(ay.s, ay.a) });
+    if (ay) out.push({ kind: "ayah", s: ay.s, a: ay.a, page: meta.page[indexOf(ay.s, ay.a)], src: 0 });
     const bare = raw.trim().match(/^(\d{1,3})$/);
     if (bare && +bare[1] >= 1 && +bare[1] <= 114) {
       const s = +bare[1];
-      push({ kind: "surah", s, a: 1, page: meta.page[indexOf(s, 1)] });
+      out.push({ kind: "surah", s, a: 1, page: meta.page[indexOf(s, 1)], src: 0 });
     }
     const sh = surahHit(raw);
-    if (sh) push({ kind: "surah", s: sh, a: 1, page: meta.page[indexOf(sh, 1)] });
-    const { arabic, parts } = tokens(raw);
-    if (!pageQuery(raw) && !ayahQuery(raw) && parts.length) {
-      const bag = arabic ? "ar" : lang;
-      const list = folded[bag];
-      const phrase = parts.join(" ");
-      const scored = [];
-      for (let i = 0; i < list.length; i++) {
-        const hay = list[i];
-        let ok = true, score = 0, pos = hay.length;
-        if (hay.includes(phrase)) { score += 80; pos = hay.indexOf(phrase); }
-        for (const p of parts) {
-          const atp = hay.indexOf(p);
-          if (atp < 0) { ok = false; break; }
-          score += 12;
-          if (atp < pos) pos = atp;
-        }
-        if (ok) scored.push({ i, score: score + Math.max(0, 20 - pos / 20) });
-      }
-      scored.sort((a, b) => b.score - a.score);
-      for (const hit of scored.slice(0, 24)) {
-        const ref = at(hit.i);
-        push({ kind: "text", s: ref.s, a: ref.a, page: ref.page, i: hit.i, bag });
-      }
-    }
-    return out.slice(0, 24);
-  }
-
-  function paintText(el, text, parts, arabic) {
-    el.replaceChildren();
-    if (!parts.length) { el.textContent = text.length > 280 ? text.slice(0, 280) + " …" : text; return; }
-    const words = text.split(/(\s+)/);
-    let used = 0;
-    const max = 46;
-    let start = 0;
-    if (words.length > max) {
-      const hit = words.findIndex((w) => w.trim() && parts.some((p) => (arabic ? arNorm(w) : fold(w)).includes(p)));
-      start = Math.max(0, (hit < 0 ? 0 : hit) - 12);
-    }
-    if (start > 0) el.append("… ");
-    for (let i = start; i < words.length && used < max; i++) {
-      const w = words[i];
-      if (w.trim()) used++;
-      const n = arabic ? arNorm(w) : fold(w);
-      if (w.trim() && parts.some((p) => n.includes(p))) {
-        const m = document.createElement("mark");
-        m.textContent = w;
-        el.append(m);
-      } else el.append(w);
-    }
-    if (start + used < words.filter((w) => w.trim()).length) el.append(" …");
+    if (sh) out.push({ kind: "surah", s: sh, a: 1, page: meta.page[indexOf(sh, 1)], src: 0 });
+    return out;
   }
 
   const nav = document.getElementById("nav");
@@ -183,89 +166,99 @@
     nav.replaceChildren();
     for (const [href, label] of NAV[lang]) {
       const a = document.createElement("a");
-      a.href = href;
-      a.textContent = label;
-      nav.append(a);
+      a.href = href; a.textContent = label; nav.append(a);
     }
     chips.replaceChildren();
     for (const [query, label] of u.chips) {
       const b = document.createElement("button");
-      b.type = "button";
-      b.textContent = label;
+      b.type = "button"; b.textContent = label;
       b.onclick = () => { input.value = query; run(); };
       chips.append(b);
     }
-    note.textContent = u.src;
+    note.textContent = "";
   }
 
-  async function ensure(code) {
-    if (texts[code]) return;
-    texts[code] = await (await fetch(code + ".json")).json();
-    folded[code] = texts[code].map((s) => code === "ar" ? arNorm(s) : fold(s));
-  }
-
-  function card(hit, parts) {
+  function card(hit) {
     const u = t();
+    const ref = hit.page ? hit : at(hit.i);
+    const src = sources[hit.src];
+    const href = urlOf(hit.src, ref);
     const a = document.createElement("a");
     a.className = "hit";
-    a.href = base() + "page/" + hit.page + "/";
+    a.href = href;
     const h = document.createElement("div");
     h.className = "hit-h";
-    const name = meta.names[lang][hit.s - 1];
     const b = document.createElement("b");
-    b.textContent = hit.kind === "page" ? u.page + " " + hit.page : (hit.kind === "surah" ? u.surah + " " + name : name + "  " + hit.s + ":" + hit.a);
+    const name = meta.names[lang][ref.s - 1];
+    if (hit.kind === "page") b.textContent = u.page + " " + hit.page;
+    else if (hit.kind === "surah") b.textContent = u.surah + " " + name;
+    else b.textContent = name + "  " + ref.s + ":" + ref.a;
     const small = document.createElement("small");
-    small.textContent = hit.kind === "page" ? name : u.page + " " + hit.page;
+    small.textContent = hit.kind === "page" || hit.kind === "surah" ? KIND[lang].q : KIND[lang][src.k] + " · " + src.n;
     h.append(b, small);
-    a.append(h);
-    if (hit.kind === "text" || hit.kind === "ayah") {
-      const p = document.createElement("p");
-      const bag = hit.bag || (isAr(input.value) ? "ar" : lang);
-      const text = texts[bag][hit.i != null ? hit.i : indexOf(hit.s, hit.a)];
-      p.dir = bag === "ar" ? "rtl" : "auto";
-      paintText(p, text, hit.kind === "text" ? parts : [], bag === "ar");
-      a.append(p);
-    }
-    const row = document.createElement("div");
-    row.className = "hit-links";
-    const tf = document.createElement("span");
-    tf.textContent = u.tafsir;
-    tf.className = "tf";
-    row.append(tf);
-    a.append(row);
-    a.addEventListener("click", (e) => {
-      if (e.target.classList.contains("tf")) {
-        e.preventDefault();
-        location.href = "/tafsir/all/" + hit.s + "/" + hit.a + "/";
-      }
-    });
+    const addr = document.createElement("span");
+    addr.className = "addr";
+    addr.textContent = "mushafuk.online" + href;
+    a.append(h, addr);
     return a;
   }
 
   let job = 0;
+  let shown = [];
+  function paint(from) {
+    const u = t();
+    if (from === 0) out.replaceChildren();
+    if (!shown.length) {
+      const p = document.createElement("p");
+      p.className = "wait"; p.textContent = u.empty; out.append(p); return;
+    }
+    if (from === 0) {
+      const c = document.createElement("p");
+      c.className = "count";
+      c.textContent = shown.length + " " + u.n;
+      out.append(c);
+    }
+    const end = Math.min(shown.length, from + 30);
+    for (let i = from; i < end; i++) out.append(card(shown[i]));
+    const old = out.querySelector(".more");
+    if (old) old.remove();
+    if (end < shown.length) {
+      const m = document.createElement("button");
+      m.type = "button"; m.className = "more";
+      m.textContent = u.more + " · " + end + " / " + shown.length;
+      m.onclick = () => paint(end);
+      out.append(m);
+    }
+  }
   async function run() {
     const raw = input.value.trim();
     const id = ++job;
     out.replaceChildren();
     if (!raw) return;
     const wait = document.createElement("p");
-    wait.className = "wait";
-    wait.textContent = t().loading;
-    out.append(wait);
-    const arabic = isAr(raw);
-    await ensure(arabic ? "ar" : lang);
+    wait.className = "wait"; wait.textContent = t().loading; out.append(wait);
+    if (!sources) sources = await (await fetch("src.json")).json();
+    const parts = (!pageQuery(raw) && !ayahQuery(raw)) ? tokens(raw) : [];
+    const found = parts.length ? await wordHits(parts) : new Set();
     if (id !== job) return;
-    const { parts } = tokens(raw);
-    const hits = search(raw);
-    out.replaceChildren();
-    if (!hits.length) {
-      const p = document.createElement("p");
-      p.className = "wait";
-      p.textContent = t().empty;
-      out.append(p);
-      return;
+    const direct = directHits(raw);
+    const seen = new Set(direct.map((h) => "0:" + (h.page || "") + ":" + h.s + ":" + h.a));
+    const rest = [];
+    for (const x of found) {
+      const src = Math.floor(x / 10000), i = x % 10000;
+      const k = src + ":" + i;
+      if (seen.has(k)) continue;
+      seen.add(k);
+      rest.push({ src, i });
     }
-    for (const hit of hits) out.append(card(hit, parts));
+    rest.sort((a, b) => {
+      const ra = sources[a.src], rb = sources[b.src];
+      const sa = ra.k === "q" ? 0 : ra.k === "tr" && ra.l === lang ? 1 : ra.k === "tr" ? 2 : ra.k === "tf" ? 3 : 4;
+      const sb = rb.k === "q" ? 0 : rb.k === "tr" && rb.l === lang ? 1 : rb.k === "tr" ? 2 : rb.k === "tf" ? 3 : 4;
+      return sa - sb || a.src - b.src || a.i - b.i;
+    });
+    shown = direct.concat(rest);
+    paint(0);
   }
 
   document.getElementById("form").addEventListener("submit", (e) => { e.preventDefault(); run(); });
@@ -279,5 +272,9 @@
       if (input.value.trim()) run();
     });
   });
-  fetch("meta.json").then((r) => r.json()).then((m) => { meta = m; paintChrome(); const start = new URLSearchParams(location.search).get("q"); if (start) { input.value = start; run(); } });
+  fetch("meta.json").then((r) => r.json()).then((m) => {
+    meta = m; paintChrome();
+    const start = new URLSearchParams(location.search).get("q");
+    if (start) { input.value = start; run(); }
+  });
 })();
