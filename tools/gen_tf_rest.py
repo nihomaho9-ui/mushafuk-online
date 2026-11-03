@@ -63,14 +63,14 @@ for book in BOOKS:
             '<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
             f'<title>{E(title)} | Mushafuk.online</title><meta name="description" content="{E(desc)}">'
             f'<link rel="canonical" href="{url}">{"".join(links)}<link rel="icon" href="/icon.png">'
-            '<link rel="stylesheet" href="/tafsir/saadi.css"><link rel="preconnect" href="https://fonts.googleapis.com">'
+            '<link rel="stylesheet" href="/tafsir/saadi.css?v=2"><link rel="preconnect" href="https://fonts.googleapis.com">'
             '<link href="https://fonts.googleapis.com/css2?family=Amiri&display=swap" rel="stylesheet"></head><body>'
             f'<header class="bar"><a class="x" href="/tafsir/{bid}/" aria-label="إغلاق">×</a>'
             f'<div class="who"><b>{E(sname)}</b><small>الآية {ar(a)}</small></div></header>'
             f'<main id="tf"><p class="src">{E(name)} — {E(by)}</p>'
             f'<p class="ay" dir="rtl" lang="ar">{E(ay)} ﴿{ar(a)}﴾</p>'
             f'<div class="tx" lang="ar">{rng}{body}</div>{pn}</main>'
-            f'<script src="/tafsir/turn.js" data-next="{E(nxt)}" data-prev="{E(prev)}"></script>'
+            f'<script src="/tafsir/turn.js?v=2" data-next="{E(nxt)}" data-prev="{E(prev)}"></script>'
             '</body></html>'
         )
         o = f"tafsir/{bid}/{s}/{a}"
