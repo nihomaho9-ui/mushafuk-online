@@ -52,11 +52,15 @@ for lg,c in L.items():
     post_js=f'<script>(function w(i){{if(window.QM&&window.QM_PAGE&&window.QM_PAGE({p})){{QM.openFull("tr",null,{p});return}}if(i<200)setTimeout(function(){{w(i+1)}},100)}})(0)</script>'
     h=h.replace('</body>',post_js+'</body>',1)
     o=f"{base}/page/{p}";os.makedirs(o,exist_ok=True);open(o+'/index.html','w',encoding='utf8').write(h)
-  # link from translations page
+  # the language buttons stay off this page; the translator cards open the reader
   f=f'{lg}/translations.html';x=open(f,encoding='utf8').read()
-  x=re.sub(r'<p class="trl">.*?</p>','',x)
-  x=x.replace('</h1>',f'</h1><p class="trl"><a class="btn" href="{c["slug"]}/">{E(c["h"])} →</a></p>',1)
-  x=re.sub(r'(<div class="b">'+{'az':'Azərbaycanca','tr':'Türkçe','en':'English','ru':'Русский'}[lg]+r'</div>)',r'\1',x)
+  x=re.sub(r'<p class="trl"[^>]*>.*?</p>','',x)
+  rel={'az':{'Əlixan Musayev':'tercume/','Ali Özek ve diğerleri':'../tr/meal/','Saheeh International':'../en/translation/','Эльмир Кулиев':'../ru/perevod/'},
+       'tr':{'Əlixan Musayev':'../az/tercume/','Ali Özek ve diğerleri':'meal/','Saheeh International':'../en/translation/','Эльмир Кулиев':'../ru/perevod/'},
+       'en':{'Əlixan Musayev':'../az/tercume/','Ali Özek ve diğerleri':'../tr/meal/','Saheeh International':'translation/','Эльмир Кулиев':'../ru/perevod/'},
+       'ru':{'Əlixan Musayev':'../az/tercume/','Ali Özek ve diğerleri':'../tr/meal/','Saheeh International':'../en/translation/','Эльмир Кулиев':'perevod/'}}[lg]
+  for name,href in rel.items():
+    x=re.sub(r'(<a class="item" href=")[^"]*("><div class="n" dir="ltr">'+re.escape(name)+r'</div>)', r'\1'+href+r'\2', x, count=1)
   open(f,'w',encoding='utf8').write(x)
 open('sitemap-tr.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc></url>\n' for u in urls)+'</urlset>\n')
 sm=open('sitemap.xml').read()
