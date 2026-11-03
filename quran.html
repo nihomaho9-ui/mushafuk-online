@@ -1433,6 +1433,7 @@
       fetch("./yazi-ayahs.json").then((r) => r.json()).then((j) => { ayahMap = j; if (pages && !gate.hidden === false) show(pageNo); });
       Promise.all([fetch("./yazi-pages.json").then((r) => r.json()), fetch("./yazi-words.json").then((r) => r.json()).catch(() => null)]).then(([json, wb]) => { words = wb; pages = json; loadNames(); });
     </script>
+    <script>try{localStorage.setItem("qm.lang","ar");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}</script>
     <script src="./lib.js?v=15"></script>
     <script src="./audio.js?v=5"></script>
   </body>
