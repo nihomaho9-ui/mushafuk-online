@@ -347,7 +347,9 @@
     if (/[\u0400-\u04FF]/.test(raw)) return "ru";
     if (/ə/i.test(raw)) return "az";
     if (/[ığşöüçİĞŞÖÜÇ]/.test(raw)) return "tr";
-    return ["az", "tr", "en", "ru"].includes(lang) ? lang : "az";
+    if (/\b(the|and|what|does|meaning|verse|god|mercy|prayer|how|surah|please|explain)\b/i.test(raw)) return "en";
+    if (/[a-z]/i.test(raw)) return ["az", "tr", "en", "ru"].includes(lang) ? lang : "en";
+    return lang === "ar" ? "ar" : (["az", "tr", "en", "ru"].includes(lang) ? lang : "az");
   }
   function fastOk(src, raw) {
     const s = sources[src];
@@ -507,9 +509,8 @@
     m.textContent = text.slice(a, b);
     el.append(m, text.slice(b));
   }
-  async function loadVerses() {
-    const need = ["ar"];
-    if (lang !== "ar") need.push(lang);
+  async function loadVerses(code) {
+    const need = code === "ar" ? ["ar"] : [code];
     await Promise.all(need.map(async (c) => {
       if (!verse[c]) verse[c] = await (await fetch(c + ".json")).json();
     }));
@@ -526,18 +527,21 @@
     ar.className = "ay";
     ar.dir = "rtl";
     ar.lang = "ar";
-    let main = (verse.ar && verse.ar[i]) || "";
+    let main = "";
     if (src.k === "tf") {
       const tx = await tafsirAyah(src.n, ref.s, ref.a);
       if (tx) { main = clip(tx); ar.classList.add("tf"); }
-    }
-    ar.textContent = main;
-    box.append(ar);
-    if (src.k !== "tf" && lang !== "ar" && verse[lang] && verse[lang][i]) {
-      const tr = document.createElement("p");
-      tr.className = "tr";
-      tr.textContent = verse[lang][i];
-      box.append(tr);
+      else main = (verse.ar && verse.ar[i]) || "";
+    } else if (src.k === "tr") {
+      const code = src.l || "az";
+      main = (verse[code] && verse[code][i]) || "";
+      ar.className = "tr";
+      ar.dir = "auto";
+      ar.lang = code;
+    } else main = (verse.ar && verse.ar[i]) || "";
+    if (main) {
+      ar.textContent = main;
+      box.append(ar);
     }
     const addr = document.createElement("a");
     addr.className = "addr";
@@ -688,29 +692,39 @@
     analNote = thought.note;
     const parts = (!pageQuery(q) && !ayahQuery(q)) ? tokens(q) : [];
     partsNow = parts;
-    arabicQ = isAr(q);
+    const ql = writtenLang(raw);
+    arabicQ = ql === "ar";
     const found = parts.length ? await wordHits(parts) : new Set();
     if (id !== job) return;
-    const direct = directHits(q);
+    const direct = arabicQ ? directHits(q) : [];
     const seen = new Set(direct.map((h) => (h.src || 0) + ":" + (h.i != null ? h.i : indexOf(h.s, h.a))));
     const rest = [];
+    const keep = (src, forAyah) => {
+      const s = sources[src];
+      if (!s) return false;
+      if (!arabicQ) return s.k === "tr" && s.l === ql;
+      if (s.k === "tr") return false;
+      if (forAyah) return s.k === "tf" && (scope === "deep" || SHORT.has(s.n));
+      return scope === "deep" || SHORT.has(s.n);
+    };
     const ay = ayahQuery(q);
     if (ay) {
       const i = indexOf(ay.s, ay.a);
-      for (let s = 0; s < sources.length; s++) {
-        if (sources[s].k !== "tf") continue;
-        if (scope === "fast" && !SHORT.has(sources[s].n)) continue;
-        rest.push({ src: s, i });
-      }
+      for (let s = 0; s < sources.length; s++) if (keep(s, true)) rest.push({ src: s, i });
     }
     for (const x of found) {
       const src = Math.floor(x / 10000), i = x % 10000;
-      if (scope === "fast" && !fastOk(src, q)) continue;
-      if ((arabicQ || isAr(raw)) && sources[src].k === "tr") continue;
+      if (!keep(src, false)) continue;
       const k = src + ":" + i;
       if (seen.has(k)) continue;
       seen.add(k);
       rest.push({ src, i });
+    }
+    if (!arabicQ) {
+      const one = new Map();
+      for (const h of rest) if (!one.has(h.i)) one.set(h.i, h);
+      rest.length = 0;
+      for (const h of one.values()) rest.push(h);
     }
     rest.sort((a, b) => {
       const ra = sources[a.src], rb = sources[b.src];
@@ -722,16 +736,17 @@
     const counted = countQuestion(raw);
     const arConcept = ay ? "" : conceptOf(raw);
     let topic = new Set();
-    if (arConcept) topic = await wordHits(tokens(arConcept));
+    if (arConcept && arabicQ) topic = await wordHits(tokens(arConcept));
     if (id !== job) return;
     if (counted) answerPlan = { kind: "count", text: counted };
+    else if (!arabicQ) answerPlan = null;
     else if (ay) answerPlan = { kind: "ayah", i: indexOf(ay.s, ay.a) };
     else {
       const idx = bestShort(topic.size ? topic : found);
       answerPlan = idx >= 0 ? { kind: "topic", i: idx } : null;
     }
     shown = direct.concat(rest);
-    if (shown.length || (answerPlan && answerPlan.i != null)) await loadVerses();
+    if (shown.length || (answerPlan && answerPlan.i != null)) await loadVerses(ql);
     if (id !== job) return;
     paint(0);
   }
