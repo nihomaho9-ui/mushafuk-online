@@ -32,22 +32,36 @@
   var DIG = "٠١٢٣٤٥٦٧٨٩";
   function ar(n) { return String(n).replace(/\d/g, function (c) { return DIG[c]; }); }
 
+  var HEAVY = { ibnkathir: 1, baghawi: 1, tabari: 1 };
+  function showBook(body, arr) {
+    var p = passage(arr, info.a);
+    body.textContent = "";
+    if (p.from !== p.to) {
+      var sm = document.createElement("small");
+      sm.className = "rng";
+      sm.textContent = "الآيات " + ar(p.from) + "–" + ar(p.to);
+      body.appendChild(sm);
+    }
+    body.appendChild(document.createTextNode(String(p.raw).trim() || "لا يوجد نص لهذه الآية في هذا التفسير."));
+  }
+  function fetchBook(id) {
+    return fetch("/tf/" + id + "/" + info.s + ".json").then(function (r) { if (!r.ok) throw new Error(); return r.json(); });
+  }
   BOOKS.forEach(function (b, n) {
-    var body = box.children[n].querySelector(".body");
-    fetch("/tf/" + b[0] + "/" + info.s + ".json")
-      .then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
-      .then(function (arr) {
-        var p = passage(arr, info.a);
-        body.textContent = "";
-        if (p.from !== p.to) {
-          var sm = document.createElement("small");
-          sm.className = "rng";
-          sm.textContent = "الآيات " + ar(p.from) + "–" + ar(p.to);
-          body.appendChild(sm);
-        }
-        body.appendChild(document.createTextNode(String(p.raw).trim() || "لا يوجد نص لهذه الآية في هذا التفسير."));
-      })
-      .catch(function () { body.textContent = "تعذر تحميل هذا التفسير."; });
+    var card = box.children[n];
+    var body = card.querySelector(".body");
+    var run = function () {
+      if (body.dataset.on) return;
+      body.dataset.on = "1";
+      fetchBook(b[0]).then(function (arr) { showBook(body, arr); }).catch(function () { body.textContent = "تعذر تحميل هذا التفسير."; });
+    };
+    if (!HEAVY[b[0]]) run();
+    else if ("IntersectionObserver" in window) {
+      var io = new IntersectionObserver(function (ents) {
+        if (ents.some(function (e) { return e.isIntersecting; })) { io.disconnect(); run(); }
+      }, { rootMargin: "200px" });
+      io.observe(card);
+    } else run();
   });
 
   var AYAHS = "7,286,200,176,120,165,206,75,129,109,123,111,43,52,99,128,111,110,98,135,112,78,118,64,77,227,93,88,69,60,34,30,73,54,45,83,182,88,75,85,54,53,89,59,37,35,38,29,18,45,60,49,62,55,78,96,29,22,24,13,14,11,11,18,12,12,30,52,52,44,28,28,20,56,40,31,50,40,46,42,29,19,36,25,22,17,19,26,30,20,15,21,11,8,8,19,5,8,8,11,11,8,3,9,5,4,7,3,6,3,5,4,5,6".split(",").map(Number);

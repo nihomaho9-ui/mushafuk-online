@@ -21,6 +21,8 @@ background:radial-gradient(ellipse at 50% 30%,#fffaf0 0,#f4ecdb 60%,#efe5d0 100%
 .h h1{font-size:3.3rem;color:var(--g);margin:6px 0 10px;position:relative}
 .h .hero p{max-width:520px;margin:0 auto 24px;font-size:1.12rem;line-height:1.8;color:#3c4a40;position:relative}
 .h .cta{display:inline-flex;gap:10px;align-items:center;background:linear-gradient(#1c5a3d,#0f3d2a);color:#fff!important;padding:14px 30px;border-radius:30px;font-weight:700;font-size:1.05rem;box-shadow:0 8px 22px #0f3d2a44;position:relative}
+.h .cta.resume{display:flex;width:fit-content;margin:12px auto 0;background:#fff;color:#0f3d2a!important;border:1px solid #c4a56e;box-shadow:none}
+.h .cta.resume[hidden]{display:none}
 .h .rehal{display:block;width:min(440px,86%);margin:26px auto 0;position:relative;mix-blend-mode:multiply}
 .h .lamp{position:absolute;top:60px;inset-inline-end:4%;width:44px;height:120px;font-size:3rem;opacity:.85}
 .h .cards{max-width:1000px;margin:-10px auto 50px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding:0 14px;position:relative}
