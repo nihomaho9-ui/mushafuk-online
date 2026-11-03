@@ -39,3 +39,5 @@ footer{border-top:1px solid #e8dfc9;text-align:center;padding:2rem;color:var(--m
 .langs .lmenu{display:none;position:absolute;top:calc(100% + 6px);inset-inline-end:0;z-index:50;background:#fff;border:1px solid #e0d4b5;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.12);padding:6px;min-width:90px;flex-direction:column;gap:2px}
 .langs.open .lmenu{display:flex}
 .langs .lmenu a{display:block;text-align:center}
+.nav nav{flex-wrap:nowrap!important}.langs .lmenu{display:none!important}.langs.open .lmenu{display:flex!important}
+@media(max-width:700px){.nav .in{flex-direction:row!important;flex-wrap:wrap;gap:.4rem .8rem}.nav nav{flex:1 1 auto;justify-content:flex-end;overflow:visible}.nav nav a{margin-left:.7rem;font-size:.85rem}[dir=rtl] .nav nav a{margin-left:0;margin-right:.7rem}.langs{margin-inline-start:.6rem!important}}
