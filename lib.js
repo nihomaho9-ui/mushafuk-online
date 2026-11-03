@@ -1149,7 +1149,7 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
     const [s0] = pg.keys[0].split(":").map(Number);
     const ttl = el("div", "qm-full-t"); ttl.append(el("b", "", NAMES[s0 - 1]), el("small", "", T("Səhifə") + " " + pg.n));
     const sw = el("div", "qm-switch");
-    const LOCK = /\/(tercume|meal|translation|perevod|tarjama|erab|irab|qerib|garib|gharib)\//.test(location.pathname); if (LOCK) sw.hidden = true;
+    const LOCK = /\/page\/\d+\/?$/.test(location.pathname) && !mushafTurnHref(1); if (LOCK) sw.hidden = true;
     for (const k of (LOCK ? [kind] : kind === "ir" || kind === "wb" ? [kind, "tf", "tr"] : ["tr", "tf"])) { const b = el("button", k === kind ? "on" : "", k === "tf" ? T("Təfsir") : k === "tr" ? T("Tərcümə") : k === "ir" ? T("Erab") : T("Söz mənaları")); b.onclick = () => { setPrefs({ tab: k }); openFull(k, null, pg.n); }; sw.append(b); }
     const x = icon("close", T("Bağla")); x.onclick = () => { fsEl.hidden = true; fsState = null; };
     head.append(ttl, sw, x); fsEl.append(head);
@@ -1194,9 +1194,11 @@ const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.onl
         const dir = g.dx > 0 ? 1 : -1; slideTo(dir * W(), 220);
         // A finger swipe must land on that page's own address (Quran, tafsir and translation alike).
         const path = location.pathname;
-        const trLeaf = /\/(?:tercume|meal|translation|perevod)\/page\/\d+\/?$/.test(path) ? path.replace(/\/\d+\/?$/, "/" + n + "/") + location.search : "";
+        const pm = path.match(/^(.*\/page\/)\d+\/?$/);
+        const hereLeaf = pm ? pm[1] + n + "/" + location.search : "";
         const qLeaf = mushafTurnHref(n);
-        const leaf = trLeaf || qLeaf;
+        const same = (a, b) => String(a).replace(/\?.*$/, "").replace(/\/$/, "") === String(b).replace(/\?.*$/, "").replace(/\/$/, "");
+        const leaf = hereLeaf && (!qLeaf || !same(hereLeaf, qLeaf)) ? hereLeaf : qLeaf;
         setTimeout(() => {
           if (!leaf) { openFull(kind, null, n, -dir); return; }
           if (qLeaf && kind !== "tf") { try { sessionStorage.setItem("qm.reopen", kind); } catch (e) {} }
