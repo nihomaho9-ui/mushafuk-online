@@ -49,5 +49,14 @@ background:radial-gradient(ellipse at 50% 30%,#fffaf0 0,#f4ecdb 60%,#efe5d0 100%
 .h footer svg{bottom:22px;height:70px;opacity:.45}
 .h footer .gb{position:absolute;left:0;right:0;bottom:0;height:22px;background:#0c3323 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='44' height='22'%3E%3Cg fill='none' stroke='%23c9a24f' stroke-width='1.4'%3E%3Cpath d='M0 11h44M22 1l10 10-10 10-10-10zM0 1l10 10L0 21M44 1 34 11l10 10'/%3E%3Ccircle cx='22' cy='11' r='3'/%3E%3C/g%3E%3C/svg%3E") repeat-x center;border-top:2px solid #c9a24f;border-bottom:2px solid #c9a24f}
 @media(max-width:640px){.h .hero{min-height:0;background-size:auto 100%}}
-.h .cards{display:flex;flex-wrap:wrap;justify-content:center}.h .card{flex:0 1 calc(33.333% - 16px)}
-@media(max-width:640px){.h .card{flex-basis:calc(33.333% - 8px)}}
+.h .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;justify-content:stretch}
+.h .card{min-width:0;width:auto;flex:none}
+@media(max-width:640px){
+  .h .cards{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .h .card{padding:12px 5px 12px}
+  .h .card h3{font-size:.9rem;line-height:1.25}
+  .h .card p{font-size:.68rem;line-height:1.35;min-height:0;margin-bottom:8px}
+  .h .ic{width:38px;height:38px;margin-bottom:8px}
+  .h .ic .si{width:18px;height:18px}
+  .h .go{width:30px;height:30px;font-size:.95rem}
+}
