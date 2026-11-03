@@ -79,13 +79,14 @@
     az: "ve və bir bu da de haqqinda haqqında aye ayə ayeler ayələr olan ucun üçün nedir nədir hansı ile ilə oku oxu",
     tr: "ve bir bu da hakkında hakkinda ayet ayetler nedir olan ile oku",
     en: "the a an of and to in for verse verses about what is ayah surah",
-    ar: "في من عن على ما آية آيات سورة",
+    ar: "في من عن على الى الي ما هو هي هذا هذه ذلك التي الذي آية آيات سورة معنى تفسير اشرح فسر بين كلمه قل لي لو سمحت",
     ru: "о и в на что аят аяты сура это",
   };
   const AR_DIAC = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g;
   const fold = (s) => s.replace(/İ/g, "i").replace(/I/g, "ı").toLowerCase().replace(/ə/g, "e").replace(/ı/g, "i").replace(/[öó]/g, "o").replace(/[üú]/g, "u").replace(/ş/g, "s").replace(/ç/g, "c").replace(/ğ/g, "g").replace(/â/g, "a").replace(/î/g, "i").replace(/û/g, "u");
   const arNorm = (s) => s.replace(AR_DIAC, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي").replace(/\u0640/g, "");
   const isAr = (s) => /[\u0600-\u06FF]/.test(s);
+  const digits = (s) => s.replace(/[٠-٩۰-۹]/g, (ch) => "0123456789"["٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹".indexOf(ch) % 10]);
   const keyOf = (t) => (t.startsWith("ال") && t.length > 4 ? t.slice(2) : t);
 
   let lang = "az";
@@ -165,9 +166,22 @@
     for (const r of cut) s = s.replace(r, " ");
     return s.replace(/\s+/g, " ").trim();
   }
+  function stripArabic(raw) {
+    let s = arNorm(digits(raw));
+    const cut = [/ما\s*معنى/g, /ما\s*المراد/g, /ما\s*المقصود/g, /ماذا\s*يعني/g, /ماذا\s*تقصد/g, /ما\s*هو/g, /ما\s*هي/g, /اشرح(?:\s*لي)?/g, /فسر(?:\s*لي)?/g, /بين(?:\s*لي)?/g, /تفسير/g, /معنى/g, /كلمه/g, /من\s*فضلك/g, /لو\s*سمحت/g, /كم\s*عدد/g, /كم\s*ايه/g, /في\s*اي\s*سوره/g, /اين\s*ذكرت/g];
+    for (const r of cut) s = s.replace(r, " ");
+    return s.replace(/[^\u0600-\u06FF\s\d:./-]/g, " ").replace(/\s+/g, " ").trim();
+  }
   function conceptOf(raw) {
-    if (isAr(raw)) return "";
-    const words = fold(arNorm(stripQ(raw))).split(/[^a-z0-9\u0400-\u04ff]+/i).filter((w) => w.length > 2).map(peelWord);
+    const cleaned = arNorm(stripQ(digits(raw)));
+    if (isAr(raw)) {
+      const parts = stripArabic(raw).split(/\s+/).map(keyOf).filter((w) => w.length > 2);
+      for (const [, ar] of CONCEPTS) {
+        if (parts.some((w) => w === ar || w.startsWith(ar) || (ar.startsWith(w) && w.length >= 3))) return ar;
+      }
+      return parts[0] && parts.length === 1 ? parts[0] : "";
+    }
+    const words = fold(cleaned).split(/[^a-z0-9\u0400-\u04ff]+/i).filter((w) => w.length > 2).map(peelWord);
     for (const [keys, ar] of CONCEPTS) {
       for (const k of keys.split(" ")) {
         if (words.some((w) => w === k || (k.length >= 5 && w.length >= 5 && (w.startsWith(k) || k.startsWith(w))))) return ar;
@@ -202,14 +216,25 @@
     return best;
   }
   function findAyah(raw) {
+    raw = digits(raw);
     const direct = raw.match(/(\d{1,3})\s*[:./-]\s*(\d{1,3})/);
     if (direct) {
       const s = +direct[1], a = +direct[2];
       if (s >= 1 && s <= 114 && a >= 1 && a <= meta.counts[s - 1]) return { s, a };
     }
-    const flat = fold(arNorm(raw));
-    if (/kursi|курси|كرسي/.test(flat) || /كرسي/.test(raw)) return { s: 2, a: 255 };
-    const pair = raw.match(/(?:sur[əea]|sura|sure|surah|сура|سورة)\s*(\d{1,3})\D{0,24}(\d{1,3})/i);
+    const norm = arNorm(raw);
+    const flat = fold(norm);
+    if (/آيه\s*الكرسي/.test(norm) || /ayat al kursi|ayatul kursi|ayetul kursi|аят аль курси/.test(flat)) return { s: 2, a: 255 };
+    if (/آيه\s*النور/.test(norm)) return { s: 24, a: 35 };
+    if (/آيه\s*الدين|المداينه/.test(norm)) return { s: 2, a: 282 };
+    if (/امن الرسول|خواتيم البقره/.test(norm)) return { s: 2, a: 285 };
+    const named = norm.match(/(?:الآيه|آيه|الايه)\s*(\d{1,3})\s*(?:من\s*)?(?:سوره\s*)?([\u0600-\u06FF]{3,})/);
+    if (named) {
+      const sur = surahInText(named[2]);
+      const a = +named[1];
+      if (sur && a >= 1 && a <= meta.counts[sur - 1]) return { s: sur, a };
+    }
+    const pair = raw.match(/(?:sur[əea]|sura|sure|surah|сура|سورة|سوره)\s*(\d{1,3})\D{0,24}(\d{1,3})/i);
     if (pair) {
       const s = +pair[1], a = +pair[2];
       if (s >= 1 && s <= 114 && a >= 1 && a <= meta.counts[s - 1]) return { s, a };
@@ -217,7 +242,7 @@
     const sur = surahInText(raw);
     if (sur) {
       const nums = [...raw.matchAll(/\d{1,3}/g)].map((x) => +x[0]);
-      const a = nums.find((n) => n >= 1 && n <= meta.counts[sur - 1]);
+      const a = nums.find((n) => n >= 1 && n <= meta.counts[sur - 1] && n !== sur);
       if (a) return { s: sur, a };
     }
     return null;
@@ -230,7 +255,7 @@
       const where = scope === "deep" ? u.anDeep : u.anTf;
       return { search: ayah.s + ":" + ayah.a, note: u.an + ": " + name + " " + ayah.s + ":" + ayah.a + ". " + where };
     }
-    const cleaned = stripQ(raw);
+    const cleaned = isAr(raw) ? stripArabic(raw) : stripQ(raw);
     const use = cleaned || raw.trim();
     const where = scope === "deep" ? u.anDeep : (conceptOf(raw) || writtenLang(use) === "ar" ? u.anTf : u.anTr);
     return { search: use, note: u.an + ": «" + use + "». " + where };
@@ -425,7 +450,7 @@
   }
   function clip(text) {
     const clean = text.replace(/\s+/g, " ").trim();
-    if (clean.length <= 280) return clean;
+    if (clean.length <= (arabicQ ? 520 : 280)) return clean;
     const norm = arNorm(clean);
     let at = -1;
     for (const p of partsNow) {
@@ -433,7 +458,7 @@
       if (at < 0 && p.endsWith("ه")) at = norm.indexOf(p.slice(0, -1) + "ت");
       if (at >= 0) break;
     }
-    if (at < 0) return clean.slice(0, 260) + "…";
+    if (at < 0) return clean.slice(0, arabicQ ? 480 : 260) + "…";
     let ni = 0, rawAt = clean.length;
     for (let i = 0; i < clean.length; i++) {
       const ch = arNorm(clean[i]);
@@ -441,9 +466,10 @@
       if (ni >= at) { rawAt = i; break; }
       ni += ch.length;
     }
-    const start = Math.max(0, rawAt - 50);
-    const bit = clean.slice(start, start + 240);
-    return (start ? "…" : "") + bit + (start + 240 < clean.length ? "…" : "");
+    const start = Math.max(0, rawAt - (arabicQ ? 80 : 50));
+    const len = arabicQ ? 460 : 240;
+    const bit = clean.slice(start, start + len);
+    return (start ? "…" : "") + bit + (start + len < clean.length ? "…" : "");
   }
   async function loadVerses() {
     const need = ["ar"];
@@ -584,7 +610,7 @@
     }
   }
   async function run() {
-    const raw = input.value.trim();
+    const raw = digits(input.value.trim());
     const id = ++job;
     answerPlan = null;
     out.replaceChildren();
