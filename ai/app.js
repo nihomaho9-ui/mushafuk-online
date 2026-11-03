@@ -108,20 +108,52 @@
     buckets[b] = r.ok ? await r.json() : {};
     return buckets[b];
   }
-  function pack(list) {
-    const s = new Set();
-    for (const pair of list) s.add(pair[0] * 10000 + pair[1]);
-    return s;
+  function arStems(part) {
+    const out = new Set([part]);
+    for (const p of ["وال", "فال", "بال", "كال", "لل", "و", "ف", "ب", "ك", "ل", "س", "ي"]) {
+      if (part.startsWith(p) && part.length - p.length >= 3) out.add(part.slice(p.length));
+    }
+    for (const s of [...out]) {
+      for (const x of ["ون", "ين", "ات", "ان", "وا", "تم", "تن", "ها", "هم", "هن", "كم", "كن", "نا", "تما"]) {
+        if (s.endsWith(x) && s.length - x.length >= 3) out.add(s.slice(0, -x.length));
+      }
+    }
+    const forms = new Set(out);
+    for (const s of out) {
+      if (s.endsWith("ه")) forms.add(s.slice(0, -1) + "ت");
+      if (s.endsWith("ت")) forms.add(s.slice(0, -1) + "ه");
+    }
+    return [...forms].filter((s) => s.length >= 2);
+  }
+  function arHit(word, stems) {
+    for (const s of stems) {
+      if (s.length < 3) { if (word === s) return true; continue; }
+      if (word === s || word.startsWith(s)) return true;
+    }
+    return false;
   }
   async function wordHits(parts) {
     const sets = [];
     for (const part of parts) {
-      const bag = await bucket(part);
-      const all = [];
-      for (const w in bag) if (w === part || w.startsWith(part)) all.push(bag[w]);
-      if (!all.length) return new Set();
+      const arabic = /[\u0600-\u06FF]/.test(part);
+      const stems = arabic ? arStems(part) : [part];
+      const bags = [];
+      const seen = new Set();
+      for (const s of stems) {
+        const b = s.slice(0, 2);
+        if (seen.has(b)) continue;
+        seen.add(b);
+        bags.push(await bucket(b));
+      }
       const u = new Set();
-      for (const list of all) for (const pair of list) u.add(pair[0] * 10000 + pair[1]);
+      for (const bag of bags) {
+        for (const w in bag) {
+          const ok = arabic ? arHit(w, stems) : (w === part || w.startsWith(part));
+          if (!ok) continue;
+          for (const pair of bag[w]) u.add(pair[0] * 10000 + pair[1]);
+        }
+      }
+      if (!u.size) return new Set();
       sets.push(u);
     }
     sets.sort((a, b) => a.size - b.size);
@@ -225,7 +257,43 @@
     note.textContent = "";
   }
 
+  const TFID = { "السعدي": "saadi", "التفسير الميسر": "muyassar", "المختصر": "mukhtasar", "ابن كثير": "ibnkathir", "البغوي": "baghawi", "السمعاني": "samani", "أيسر التفاسير": "aysar", "الطبري": "tabari" };
+  const tfCache = {};
   const verse = {};
+  let partsNow = [];
+  let arabicQ = false;
+  async function tafsirAyah(name, s, a) {
+    const id = TFID[name];
+    if (!id) return "";
+    const key = id + "/" + s;
+    if (!tfCache[key]) {
+      const r = await fetch("../tf/" + id + "/" + s + ".json");
+      tfCache[key] = r.ok ? await r.json() : [];
+    }
+    return tfCache[key][a - 1] || "";
+  }
+  function clip(text) {
+    const clean = text.replace(/\s+/g, " ").trim();
+    if (clean.length <= 280) return clean;
+    const norm = arNorm(clean);
+    let at = -1;
+    for (const p of partsNow) {
+      at = norm.indexOf(p);
+      if (at < 0 && p.endsWith("ه")) at = norm.indexOf(p.slice(0, -1) + "ت");
+      if (at >= 0) break;
+    }
+    if (at < 0) return clean.slice(0, 260) + "…";
+    let ni = 0, rawAt = clean.length;
+    for (let i = 0; i < clean.length; i++) {
+      const ch = arNorm(clean[i]);
+      if (!ch) continue;
+      if (ni >= at) { rawAt = i; break; }
+      ni += ch.length;
+    }
+    const start = Math.max(0, rawAt - 50);
+    const bit = clean.slice(start, start + 240);
+    return (start ? "…" : "") + bit + (start + 240 < clean.length ? "…" : "");
+  }
   async function loadVerses() {
     const need = ["ar"];
     if (lang !== "ar") need.push(lang);
@@ -233,7 +301,7 @@
       if (!verse[c]) verse[c] = await (await fetch(c + ".json")).json();
     }));
   }
-  function card(hit) {
+  async function card(hit) {
     const u = t();
     const ref = hit.i != null ? at(hit.i) : { s: hit.s, a: hit.a, page: hit.page };
     const i = hit.i != null ? hit.i : indexOf(ref.s, ref.a);
@@ -245,9 +313,14 @@
     ar.className = "ay";
     ar.dir = "rtl";
     ar.lang = "ar";
-    ar.textContent = (verse.ar && verse.ar[i]) || "";
+    let main = (verse.ar && verse.ar[i]) || "";
+    if (src.k === "tf") {
+      const tx = await tafsirAyah(src.n, ref.s, ref.a);
+      if (tx) { main = clip(tx); ar.classList.add("tf"); }
+    }
+    ar.textContent = main;
     box.append(ar);
-    if (lang !== "ar" && verse[lang] && verse[lang][i]) {
+    if (src.k !== "tf" && lang !== "ar" && verse[lang] && verse[lang][i]) {
       const tr = document.createElement("p");
       tr.className = "tr";
       tr.textContent = verse[lang][i];
@@ -268,7 +341,8 @@
 
   let job = 0;
   let shown = [];
-  function paint(from) {
+  async function paint(from) {
+    const id = job;
     const u = t();
     if (from === 0) out.replaceChildren();
     if (!shown.length) {
@@ -282,7 +356,9 @@
       out.append(c);
     }
     const end = Math.min(shown.length, from + 30);
-    for (let i = from; i < end; i++) out.append(card(shown[i]));
+    const nodes = await Promise.all(shown.slice(from, end).map(card));
+    if (id !== job) return;
+    for (const n of nodes) out.append(n);
     const old = out.querySelector(".more");
     if (old) old.remove();
     if (end < shown.length) {
@@ -302,6 +378,8 @@
     wait.className = "wait"; wait.textContent = t().loading; out.append(wait);
     if (!sources) sources = await (await fetch("src.json")).json();
     const parts = (!pageQuery(raw) && !ayahQuery(raw)) ? tokens(raw) : [];
+    partsNow = parts;
+    arabicQ = isAr(raw);
     const found = parts.length ? await wordHits(parts) : new Set();
     if (id !== job) return;
     const direct = directHits(raw).filter((h) => scope === "all" || scope === "q");
@@ -322,9 +400,10 @@
     }
     rest.sort((a, b) => {
       const ra = sources[a.src], rb = sources[b.src];
-      const sa = ra.k === "q" ? 0 : ra.k === "tr" && ra.l === lang ? 1 : ra.k === "tr" ? 2 : ra.k === "tf" ? 3 : 4;
-      const sb = rb.k === "q" ? 0 : rb.k === "tr" && rb.l === lang ? 1 : rb.k === "tr" ? 2 : rb.k === "tf" ? 3 : 4;
-      return sa - sb || a.src - b.src || a.i - b.i;
+      const score = (r) => arabicQ
+        ? (r.k === "tf" ? 0 : r.k === "q" ? 1 : r.k === "wb" ? 2 : r.k === "ir" ? 3 : 4)
+        : (r.k === "q" ? 0 : r.k === "tr" && r.l === lang ? 1 : r.k === "tr" ? 2 : r.k === "tf" ? 3 : 4);
+      return score(ra) - score(rb) || a.src - b.src || a.i - b.i;
     });
     shown = direct.concat(rest);
     if (shown.length) await loadVerses();
