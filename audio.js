@@ -164,8 +164,17 @@
     const k = mkey(r, s, n);
     if (memo.has(k)) apply(memo.get(k));
     else resolveSrc(r, s, n).then(apply).catch(() => {});
-    // also prefetch n+1 into memo only (no second element)
-    if (n + 1 <= AYAHS[s - 1] && !memo.has(mkey(r, s, n + 1))) warm(r, s, n + 1);
+    // also keep the next three ayahs as blobs so the handoff does not wait on the network
+    for (let i = 0; i < 3; i++) {
+      const x = n + i;
+      if (x > AYAHS[s - 1] || memo.has(mkey(r, s, x))) continue;
+      saveAyah(r, s, x).then(() => {
+        if (i === 0 && nextReady === token) {
+          const src = memo.get(mkey(r, s, x));
+          if (src) apply(src);
+        }
+      }).catch(() => {});
+    }
   }
   // Instant handoff when next blob is already on the standby element
   function advance() {
@@ -206,7 +215,7 @@
     const r = rec(); const gen = ++st.gen;
     if (st.s !== s || st.a !== a || !rep) st.left = reps() - 1;
     st.s = s; st.a = a; st.playing = true; st.paused = false; notify();
-    hydrateSurah(r, s);
+    if (hydrateJob !== r.id + ":" + s) hydrateSurah(r, s);
     let src = null, useStandby = false;
     if (nextReady && nextReady.r === r.id && nextReady.s === s && nextReady.a === a && nextReady.src) {
       src = nextReady.src; useStandby = true;
@@ -226,10 +235,8 @@
     }
     const el = audio();
     if (!String(src).startsWith("blob:") && navigator.onLine) warm(r, s, a);
-    if (st.cont) {
-      if (!localStorage.getItem(doneKey(r, s))) pullSurah(r, s);
-      armStandby(r, s, a);
-    } else if (navigator.onLine) warm(r, s, a + 1);
+    if (st.cont) armStandby(r, s, a);
+    else if (navigator.onLine) { for (let i = 1; i <= 3; i++) warm(r, s, a + i); }
     try { await el.play(); } catch (e) {
       if (gen !== st.gen) return;
       st.playing = false; st.paused = false; notify();
