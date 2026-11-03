@@ -48,3 +48,10 @@ footer{border-top:1px solid #e8dfc9;text-align:center;padding:2rem;color:var(--m
 .langs .lmenu{display:none!important}.langs.open .lmenu{display:flex!important}
 .hero:before,.hero::before{content:none!important;display:none!important;background:none!important}
 @media(max-width:700px){.nav nav a{white-space:nowrap}.nav .logo{flex:0 0 auto}}
+/* v7: logo centered on top, nav row below */
+.nav .in{flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:.6rem!important;flex-wrap:nowrap!important}
+.nav .logo{margin:0 auto}
+.nav nav{justify-content:center!important;flex-wrap:wrap!important;gap:.3rem 1.6rem}
+.nav nav a,[dir=rtl] .nav nav a{margin:0!important}
+.nav nav .langs{margin:0!important}
+@media(max-width:700px){.nav nav{gap:.3rem .9rem}.nav nav a{font-size:.85rem}}
