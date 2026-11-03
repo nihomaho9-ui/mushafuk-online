@@ -13,6 +13,13 @@
     ar: { q: "المصحف", tr: "ترجمة", tf: "تفسير", ir: "إعراب", wb: "غريب" },
     ru: { q: "Коран", tr: "Перевод", tf: "Тафсир", ir: "Иараб", wb: "Слово" },
   };
+  const SCOPE = {
+    az: { all: "Hamısı", q: "Quran", tf: "Təfsir" },
+    tr: { all: "Hepsi", q: "Kur'an", tf: "Tefsir" },
+    en: { all: "All", q: "Quran", tf: "Tafsir" },
+    ar: { all: "الكل", q: "القرآن", tf: "التفسير" },
+    ru: { all: "Все", q: "Коран", tf: "Тафсир" },
+  };
   const NAV = {
     az: [["../quran/", "Quran"], ["../tafsir.html", "Təfsir"], ["../translations/", "Tərcümələr"], ["../about.html", "Haqqında"]],
     tr: [["../quran/", "Kur'an"], ["../tafsir.html", "Tefsir"], ["../translations/", "Mealler"], ["../about.html", "Hakkında"]],
@@ -34,6 +41,8 @@
   const keyOf = (t) => (t.startsWith("ال") && t.length > 4 ? t.slice(2) : t);
 
   let lang = "az";
+  let scope = localStorage.getItem("qm.ai.scope") || "all";
+  if (scope !== "q" && scope !== "tf") scope = "all";
   let meta = null;
   let sources = null;
   const buckets = {};
@@ -153,6 +162,40 @@
   const out = document.getElementById("out");
   const note = document.getElementById("note");
   const lbtn = document.getElementById("lbtn");
+  const scopeBtn = document.getElementById("scopeBtn");
+  const scopeMenu = document.getElementById("scopeMenu");
+
+  function paintScope() {
+    const labels = SCOPE[lang];
+    scopeBtn.textContent = labels[scope];
+    scopeMenu.replaceChildren();
+    for (const key of ["all", "q", "tf"]) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.dataset.s = key;
+      b.textContent = labels[key];
+      if (key === scope) b.className = "on";
+      b.onclick = () => {
+        scope = key;
+        localStorage.setItem("qm.ai.scope", scope);
+        scopeMenu.hidden = true;
+        scopeBtn.setAttribute("aria-expanded", "false");
+        paintScope();
+        if (input.value.trim()) run();
+      };
+      scopeMenu.append(b);
+    }
+  }
+  scopeBtn.onclick = () => {
+    scopeMenu.hidden = !scopeMenu.hidden;
+    scopeBtn.setAttribute("aria-expanded", scopeMenu.hidden ? "false" : "true");
+  };
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("#scope")) {
+      scopeMenu.hidden = true;
+      scopeBtn.setAttribute("aria-expanded", "false");
+    }
+  });
 
   function paintChrome() {
     const u = t();
@@ -162,7 +205,8 @@
     if (title) title.textContent = u.title;
     lead.textContent = u.lead;
     input.placeholder = u.ph;
-    go.textContent = u.go;
+    go.setAttribute("aria-label", u.go);
+    paintScope();
     if (lbtn) lbtn.textContent = "🌐 " + lang.toUpperCase() + " ▾";
     if (nav) {
       nav.replaceChildren();
@@ -260,11 +304,17 @@
     const parts = (!pageQuery(raw) && !ayahQuery(raw)) ? tokens(raw) : [];
     const found = parts.length ? await wordHits(parts) : new Set();
     if (id !== job) return;
-    const direct = directHits(raw);
+    const direct = directHits(raw).filter((h) => scope === "all" || scope === "q");
     const seen = new Set(direct.map((h) => "0:" + (h.page || "") + ":" + h.s + ":" + h.a));
     const rest = [];
+    const ay = ayahQuery(raw);
+    if (scope === "tf" && ay) {
+      const i = indexOf(ay.s, ay.a);
+      for (let s = 0; s < sources.length; s++) if (sources[s].k === "tf") rest.push({ src: s, i });
+    }
     for (const x of found) {
       const src = Math.floor(x / 10000), i = x % 10000;
+      if (scope !== "all" && sources[src].k !== scope) continue;
       const k = src + ":" + i;
       if (seen.has(k)) continue;
       seen.add(k);

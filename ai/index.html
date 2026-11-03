@@ -37,7 +37,14 @@ body{background:#fff!important}
 .dock{position:fixed;left:0;right:0;bottom:0;z-index:20;background:linear-gradient(#ffffff00,#fff 22%);padding:.35rem .75rem calc(.65rem + env(safe-area-inset-bottom))}
 .dock form{max-width:720px;margin:0 auto;display:flex;gap:.45rem;background:#fff;border:1px solid #ead9b0;border-radius:999px;padding:.35rem .35rem .35rem .95rem;box-shadow:0 8px 28px #0e3d2c14}
 .dock input{flex:1;border:0;background:transparent;font:inherit;font-size:1.02rem;outline:none;min-width:0;color:#1d2a22}
-.dock button{border:0;background:#0e3d2c;color:#fff;border-radius:999px;padding:.7rem 1.05rem;font:inherit;font-weight:700;cursor:pointer}
+.dock button{border:0;background:#0e3d2c;color:#fff;width:46px;height:46px;border-radius:50%;padding:0;display:grid;place-items:center;cursor:pointer;flex:none}
+.dock button svg{width:20px;height:20px}
+.scope{position:relative;margin:0 0 .7rem}
+.scope-btn{border:1px solid #ead9b0;background:#fff;color:#0e3d2c;border-radius:14px;padding:.42rem .75rem;font:inherit;font-size:.86rem;font-weight:700;cursor:pointer;box-shadow:0 4px 14px #0e3d2c10}
+.scope-menu{position:absolute;top:calc(100% + 6px);inset-inline-start:0;z-index:6;background:#fff;border:1px solid #ead9b0;border-radius:14px;padding:.3rem;min-width:148px;box-shadow:0 10px 24px #0e3d2c18;display:flex;flex-direction:column}
+.scope-menu[hidden]{display:none}
+.scope-menu button{border:0;background:transparent;text-align:start;padding:.5rem .7rem;border-radius:10px;font:inherit;color:#0e3d2c;cursor:pointer}
+.scope-menu button.on,.scope-menu button:hover{background:#f6f1e4}
 html[dir=rtl] .dock form{padding:.35rem .95rem .35rem .35rem}
 #splash{position:fixed;inset:0;z-index:80;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.2rem;transition:opacity .4s ease}
 #splash.off{opacity:0;pointer-events:none}
@@ -67,11 +74,19 @@ html[dir=rtl] .dock form{padding:.35rem .95rem .35rem .35rem}
 <p class="lead" id="lead"></p>
 <div class="chips" id="chips"></div>
 <p class="note" id="note"></p>
+<div class="scope" id="scope">
+<button type="button" class="scope-btn" id="scopeBtn" aria-expanded="false">Hamısı</button>
+<div class="scope-menu" id="scopeMenu" hidden>
+<button type="button" data-s="all">Hamısı</button>
+<button type="button" data-s="q">Quran</button>
+<button type="button" data-s="tf">Təfsir</button>
+</div>
+</div>
 <div id="out"></div>
 </main>
-<div class="dock"><form id="form"><input id="q" type="search" autocomplete="off" enterkeyhint="search"><button id="go" type="submit">Axtar</button></form></div>
+<div class="dock"><form id="form"><input id="q" type="search" autocomplete="off" enterkeyhint="search"><button id="go" type="submit" aria-label="Göndər"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4z"/></svg></button></form></div>
 <script src="../site.js?v=8"></script>
-<script src="app.js?v=5"></script>
+<script src="app.js?v=6"></script>
 <script>
 setTimeout(function () {
   var s = document.getElementById("splash");
