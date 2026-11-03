@@ -1,10 +1,10 @@
 (function () {
   const UI = {
-    az: { title: "Axtarış", lead: "Quran, təfsir, tərcümə, erab və söz mənalarında axtarır. Nəticə sayı və ünvanı göstərilir.", ph: "", go: "Axtar", empty: "Heç nə tapılmadı. Başqa söz yoxlayın.", page: "Səhifə", surah: "Surə", loading: "Hazırlanır…", more: "Daha çox", n: "nəticə", chips: [["2:255", "Ayətül-Kürsi"], ["Fatihə", "Fatihə"], ["mərhəmət", "mərhəmət"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sədi və qısa təfsirlərdə axtarıram.", anTr: "Bu dildəki tərcümədə axtarıram.", anDeep: "Bütün saytda axtarıram." },
-    tr: { title: "Arama", lead: "Kur'an, tefsir, meal, irab ve kelime anlamlarında arar. Sonuç sayısı ve adres çıkar.", ph: "", go: "Ara", empty: "Bir şey bulunamadı. Başka bir söz deneyin.", page: "Sayfa", surah: "Sure", loading: "Hazırlanıyor…", more: "Daha fazla", n: "sonuç", chips: [["2:255", "Ayetel Kürsi"], ["Fatiha", "Fatiha"], ["rahmet", "rahmet"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sa'dî ve kısa tefsirlerde arıyorum.", anTr: "Bu dilin mealinde arıyorum.", anDeep: "Tüm sitede arıyorum." },
-    en: { title: "Search", lead: "Searches the Quran, tafsir, translations, i'rab and word meanings. Shows the count and the address.", ph: "", go: "Search", empty: "Nothing matched. Try another word.", page: "Page", surah: "Surah", loading: "Getting ready…", more: "More", n: "results", chips: [["2:255", "Ayat al-Kursi"], ["Al-Fatihah", "Al-Fatihah"], ["mercy", "mercy"], ["كرسي", "كرسي"]], an: "Reading", anTf: "Searching Saadi and the short tafsirs.", anTr: "Searching the translation in this language.", anDeep: "Searching the whole site." },
-    ar: { title: "بحث", lead: "يبحث في المصحف والتفسير والترجمة والإعراب وغريب القرآن. يظهر عدد النتائج والعنوان.", ph: "", go: "بحث", empty: "لا نتيجة. جرّب كلمة أخرى.", page: "صفحة", surah: "سورة", loading: "جارٍ التحضير…", more: "المزيد", n: "نتيجة", chips: [["2:255", "آية الكرسي"], ["الفاتحة", "الفاتحة"], ["رحمة", "رحمة"], ["كرسي", "كرسي"]], an: "تحليل", anTf: "أبحث في السعدي والتفاسير المختصرة.", anTr: "أبحث في ترجمة هذه اللغة.", anDeep: "أبحث في الموقع كله." },
-    ru: { title: "Поиск", lead: "Ищет в Коране, тафсире, переводах, иарабе и значениях слов. Показывает число и адрес.", ph: "", go: "Найти", empty: "Ничего не найдено. Попробуйте другое слово.", page: "Страница", surah: "Сура", loading: "Готовлю…", more: "Ещё", n: "результат", chips: [["2:255", "Аят аль-Курси"], ["Аль-Фатиха", "Аль-Фатиха"], ["милость", "милость"], ["كرسي", "كرسي"]], an: "Разбор", anTf: "Ищу у ас-Саади и в кратких тафсирах.", anTr: "Ищу в переводе этого языка.", anDeep: "Ищу по всему сайту." },
+    az: { title: "Axtarış", lead: "Quran, təfsir, tərcümə, erab və söz mənalarında axtarır. Cavab yalnız saytdakı mətndən götürülür.", ph: "", go: "Axtar", empty: "Heç nə tapılmadı. Başqa söz yoxlayın.", page: "Səhifə", surah: "Surə", loading: "Hazırlanır…", more: "Daha çox", n: "nəticə", chips: [["2:255", "Ayətül-Kürsi"], ["Fatihə", "Fatihə"], ["mərhəmət", "mərhəmət"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sədi və qısa təfsirlərdə axtarıram.", anTr: "Bu dildəki tərcümədə axtarıram.", anDeep: "Bütün saytda axtarıram.", only: "Yalnız", srcCap: "Mənbə", fTf: "Əvvəlki ayənin təfsiri", fTr: "Əvvəlki ayənin tərcüməsi", fNext: "Növbəti ayə", fPrev: "Əvvəlki ayə" },
+    tr: { title: "Arama", lead: "Kur'an, tefsir, meal, irab ve kelime anlamlarında arar. Cevap yalnız sitedeki metinden alınır.", ph: "", go: "Ara", empty: "Bir şey bulunamadı. Başka bir söz deneyin.", page: "Sayfa", surah: "Sure", loading: "Hazırlanıyor…", more: "Daha fazla", n: "sonuç", chips: [["2:255", "Ayetel Kürsi"], ["Fatiha", "Fatiha"], ["rahmet", "rahmet"], ["كرسي", "كرسي"]], an: "Analiz", anTf: "Sa'dî ve kısa tefsirlerde arıyorum.", anTr: "Bu dilin mealinde arıyorum.", anDeep: "Tüm sitede arıyorum.", only: "Yalnız", srcCap: "Kaynak", fTf: "Önceki ayetin tefsiri", fTr: "Önceki ayetin meali", fNext: "Sonraki ayet", fPrev: "Önceki ayet" },
+    en: { title: "Search", lead: "Searches the Quran, tafsir, translations, i'rab and word meanings. The answer is taken only from text on this site.", ph: "", go: "Search", empty: "Nothing matched. Try another word.", page: "Page", surah: "Surah", loading: "Getting ready…", more: "More", n: "results", chips: [["2:255", "Ayat al-Kursi"], ["Al-Fatihah", "Al-Fatihah"], ["mercy", "mercy"], ["كرسي", "كرسي"]], an: "Reading", anTf: "Searching Saadi and the short tafsirs.", anTr: "Searching the translation in this language.", anDeep: "Searching the whole site.", only: "Only", srcCap: "Source", fTf: "Tafsir of the previous verse", fTr: "Translation of the previous verse", fNext: "Next verse", fPrev: "Previous verse" },
+    ar: { title: "بحث", lead: "يبحث في المصحف والتفسير والترجمة والإعراب وغريب القرآن. الجواب مأخوذ من نص الموقع فقط.", ph: "", go: "بحث", empty: "لا نتيجة. جرّب كلمة أخرى.", page: "صفحة", surah: "سورة", loading: "جارٍ التحضير…", more: "المزيد", n: "نتيجة", chips: [["2:255", "آية الكرسي"], ["الفاتحة", "الفاتحة"], ["رحمة", "رحمة"], ["كرسي", "كرسي"]], an: "تحليل", anTf: "أبحث في السعدي والتفاسير المختصرة.", anTr: "أبحث في ترجمة هذه اللغة.", anDeep: "أبحث في الموقع كله.", only: "فقط", srcCap: "المصدر", fTf: "تفسير الآية السابقة", fTr: "ترجمة الآية السابقة", fNext: "الآية التالية", fPrev: "الآية السابقة" },
+    ru: { title: "Поиск", lead: "Ищет в Коране, тафсире, переводах, иарабе и значениях слов. Ответ берётся только из текста на сайте.", ph: "", go: "Найти", empty: "Ничего не найдено. Попробуйте другое слово.", page: "Страница", surah: "Сура", loading: "Готовлю…", more: "Ещё", n: "результат", chips: [["2:255", "Аят аль-Курси"], ["Аль-Фатиха", "Аль-Фатиха"], ["милость", "милость"], ["كرسي", "كرسي"]], an: "Разбор", anTf: "Ищу у ас-Саади и в кратких тафсирах.", anTr: "Ищу в переводе этого языка.", anDeep: "Ищу по всему сайту.", only: "Только", srcCap: "Источник", fTf: "Тафсир предыдущего аята", fTr: "Перевод предыдущего аята", fNext: "Следующий аят", fPrev: "Предыдущий аят" },
   };
   const KIND = {
     az: { q: "Quran", tr: "Tərcümə", tf: "Təfsir", ir: "Erab", wb: "Söz mənası" },
@@ -21,6 +21,30 @@
     ru: { fast: "Быстрый", deep: "Глубокий" },
   };
   const SHORT = new Set(["السعدي", "التفسير الميسر", "المختصر", "أيسر التفاسير"]);
+  const BOOKL = {
+    az: { all: "Hamısı", musayev: "Musayev", ozek: "Özek", saheeh: "Saheeh", kuliev: "Kuliyev", saadi: "Sədi", muyassar: "Müəssər", mukhtasar: "Muxtasar", aysar: "Əysar", ibnkathir: "İbn Kəsir", baghawi: "Bəğəvi", samani: "Səm'ani", tabari: "Təbəri" },
+    tr: { all: "Hepsi", musayev: "Musayev", ozek: "Özek", saheeh: "Saheeh", kuliev: "Kuliyev", saadi: "Sa'dî", muyassar: "Müyesser", mukhtasar: "Muhtasar", aysar: "Eyser", ibnkathir: "İbn Kesîr", baghawi: "Begavî", samani: "Sem'ânî", tabari: "Taberî" },
+    en: { all: "All", musayev: "Musayev", ozek: "Ozek", saheeh: "Saheeh", kuliev: "Kuliev", saadi: "Saadi", muyassar: "Muyassar", mukhtasar: "Mukhtasar", aysar: "Aysar", ibnkathir: "Ibn Kathir", baghawi: "Baghawi", samani: "Samani", tabari: "Tabari" },
+    ar: { all: "الكل", musayev: "موساييف", ozek: "أوزك", saheeh: "Saheeh", kuliev: "كولييف", saadi: "السعدي", muyassar: "الميسر", mukhtasar: "المختصر", aysar: "أيسر", ibnkathir: "ابن كثير", baghawi: "البغوي", samani: "السمعاني", tabari: "الطبري" },
+    ru: { all: "Все", musayev: "Мусаев", ozek: "Озек", saheeh: "Saheeh", kuliev: "Кулиев", saadi: "ас-Саади", muyassar: "аль-Муяссар", mukhtasar: "Мухтасар", aysar: "Айсар", ibnkathir: "Ибн Касир", baghawi: "аль-Багави", samani: "ас-Сам‘ани", tabari: "ат-Табари" },
+  };
+  const BOOK_OF = {
+    musayev: (s) => s.n === "Əlixan Musayev",
+    ozek: (s) => s.n === "Ali Özek",
+    saheeh: (s) => s.n === "Saheeh International",
+    kuliev: (s) => s.n === "Эльмир Кулиев",
+    saadi: (s) => s.n === "السعدي",
+    muyassar: (s) => s.n === "التفسير الميسر",
+    mukhtasar: (s) => s.n === "المختصر",
+    aysar: (s) => s.n === "أيسر التفاسير",
+    ibnkathir: (s) => s.n === "ابن كثير",
+    baghawi: (s) => s.n === "البغوي",
+    samani: (s) => s.n === "السمعاني",
+    tabari: (s) => s.n === "الطبري",
+  };
+  const TF_AR = { saadi: "السعدي", muyassar: "التفسير الميسر", mukhtasar: "المختصر", aysar: "أيسر التفاسير", ibnkathir: "ابن كثير", baghawi: "البغوي", samani: "السمعاني", tabari: "الطبري" };
+  const TR_IDS = new Set(["musayev", "ozek", "saheeh", "kuliev"]);
+  const MEAL = { az: "musayev", tr: "ozek", en: "saheeh", ru: "kuliev" };
   const ANS = {
     az: { ans: "Cavab", saadi: "Təfsir · əs-Sədi", ayahs: "ayədir", places: "Digər yerlər", gloss: "Söz mənası · İbn Quteybə" },
     tr: { ans: "Cevap", saadi: "Tefsir · es-Sa'dî", ayahs: "ayettir", places: "Diğer yerler", gloss: "Kelime anlamı · İbn Kuteybe" },
@@ -91,6 +115,11 @@
 
   let lang = "az";
   let scope = localStorage.getItem("qm.ai.scope") === "deep" ? "deep" : "fast";
+  let bookId = localStorage.getItem("qm.ai.book") || "all";
+  if (bookId !== "all" && !BOOK_OF[bookId]) bookId = "all";
+  let lastCtx = null;
+  try { lastCtx = JSON.parse(sessionStorage.getItem("qm.ai.ctx") || "null"); } catch (e) { lastCtx = null; }
+  if (!lastCtx || !Number.isInteger(lastCtx.i)) lastCtx = null;
   let meta = null;
   let sources = null;
   const buckets = {};
@@ -351,6 +380,48 @@
     if (/[a-z]/i.test(raw)) return ["az", "tr", "en", "ru"].includes(lang) ? lang : "en";
     return lang === "ar" ? "ar" : (["az", "tr", "en", "ru"].includes(lang) ? lang : "az");
   }
+  function remember(i, arabic, ql) {
+    if (!Number.isInteger(i) || i < 0) return;
+    lastCtx = { i, arabic: !!arabic, ql: ql || lang };
+    sessionStorage.setItem("qm.ai.ctx", JSON.stringify(lastCtx));
+  }
+  function followCmd(raw) {
+    if (!lastCtx) return null;
+    const f = fold(arNorm(raw)).replace(/[^a-z0-9]+/gi, " ").trim();
+    const plain = arNorm(raw).replace(/\s+/g, " ").trim();
+    const stop = new Set("bes bu bunun bunu da de ze goster ac aciqla please lutfen onun ona o aye ayet verse ayah in the of bir".split(" "));
+    const words = f.split(" ").filter((w) => w && !stop.has(w));
+    const total = meta.counts.reduce((a, b) => a + b, 0);
+    const read = lastCtx.arabic ? "tf" : "tr";
+    const one = words.join(" ");
+    if (one === "tefsir" || one === "tefsiri" || one === "tefsirini" || one === "tafsir" || one === "tafsiri" || /^(تفسير|تفسيره|تفسيرها)$/.test(plain)) return { i: lastCtx.i, mode: "tf", why: "fTf" };
+    if (one === "tercume" || one === "tercumesi" || one === "tercumesini" || one === "meal" || one === "meali" || one === "translation" || one === "perevod" || /^(الترجمة|ترجمته|ترجمتها)$/.test(plain)) return { i: lastCtx.i, mode: "tr", why: "fTr" };
+    if (one === "novbeti" || one === "sonraki" || one === "next" || plain === "التالي" || plain === "الآية التالية") return { i: Math.min(lastCtx.i + 1, total - 1), mode: read, why: "fNext" };
+    if (one === "evvelki" || one === "onceki" || one === "previous" || plain === "السابق" || plain === "الآية السابقة") return { i: Math.max(lastCtx.i - 1, 0), mode: read, why: "fPrev" };
+    return null;
+  }
+  function askedBook(raw) {
+    const blob = fold(raw) + " " + arNorm(raw);
+    const rules = [
+      [/ibn ?kathir|ibn ?kasir|كثير/, "ibnkathir"],
+      [/baghawi|begavi|بغوي/, "baghawi"],
+      [/samani|سمعاني/, "samani"],
+      [/tabari|taberi|طبري/, "tabari"],
+      [/muyassar|muyesser|mues+er|ميسر/, "muyassar"],
+      [/mukhtasar|muhtasar|muxtasar|مختصر/, "mukhtasar"],
+      [/aysar|eyser|أيسر/, "aysar"],
+      [/saheeh/, "saheeh"],
+      [/musayev|elixan/, "musayev"],
+      [/kuliev|quliyev/, "kuliev"],
+      [/ozek/, "ozek"],
+      [/(^|[^a-z])saadi([^a-z]|$)|(^|[^a-z])s[ae]di([^a-z]|$)|سعدي/, "saadi"],
+    ];
+    for (const [re, id] of rules) if (re.test(blob)) return id;
+    return "";
+  }
+  function stripBookWords(raw) {
+    return raw.replace(/ibn\s*kathir|ibn\s*kasir|əs-sədi|es-sadi|saadi|sədi|sadi\b|musayev|əlixan|elixan|müəssər|müyesser|muxtasar|muhtasar|əysar|eyser|kuliev|quliyev|özek|ozek|saheeh|təbəri|taberi|bəğəvi|baghawi|tabari|muyassar|mukhtasar|aysar/gi, " ");
+  }
   function fastOk(src, raw) {
     const s = sources[src];
     if (writtenLang(raw) === "ar") return SHORT.has(s.n);
@@ -390,17 +461,41 @@
 
   function paintScope() {
     const labels = SCOPE[lang];
-    scopeBtn.textContent = labels[scope];
+    const bl = BOOKL[lang];
+    scopeBtn.textContent = bookId === "all" ? labels[scope] : bl[bookId];
     scopeMenu.replaceChildren();
     for (const key of ["fast", "deep"]) {
       const b = document.createElement("button");
       b.type = "button";
       b.dataset.s = key;
       b.textContent = labels[key];
-      if (key === scope) b.className = "on";
+      if (key === scope && bookId === "all") b.className = "on";
       b.onclick = () => {
         scope = key;
+        bookId = "all";
         localStorage.setItem("qm.ai.scope", scope);
+        localStorage.setItem("qm.ai.book", bookId);
+        scopeMenu.hidden = true;
+        scopeBtn.setAttribute("aria-expanded", "false");
+        paintScope();
+        if (input.value.trim()) run();
+      };
+      scopeMenu.append(b);
+    }
+    const cap = document.createElement("div");
+    cap.className = "cap";
+    cap.textContent = t().srcCap;
+    scopeMenu.append(cap);
+    const meal = MEAL[lang];
+    const ids = ["all"].concat(meal ? [meal] : [], ["saadi", "muyassar", "mukhtasar", "aysar", "ibnkathir", "baghawi", "samani", "tabari"]);
+    for (const id of ids) {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = bl[id];
+      if (id === bookId) b.className = "on";
+      b.onclick = () => {
+        bookId = id;
+        localStorage.setItem("qm.ai.book", bookId);
         scopeMenu.hidden = true;
         scopeBtn.setAttribute("aria-expanded", "false");
         paintScope();
@@ -453,6 +548,7 @@
   const verse = {};
   let partsNow = [];
   let arabicQ = false;
+  let qlNow = "az";
   async function tafsirAyah(name, s, a) {
     const id = TFID[name];
     if (!id) return "";
@@ -590,39 +686,40 @@
     }
     const i = answerPlan.i;
     const ref = at(i);
-    if (lang !== "ar" && verse[lang] && verse[lang][i]) {
+    const link = (href, label) => {
+      const addr = document.createElement("a");
+      addr.className = "addr";
+      addr.href = href;
+      addr.textContent = label;
+      box.append(addr);
+    };
+    if (answerPlan.mode === "tr") {
+      const code = answerPlan.lang || qlNow;
       const said = document.createElement("p");
       said.className = "said";
-      said.textContent = verse[lang][i];
+      const text = (verse[code] && verse[code][i]) || "";
+      said.textContent = text.length > 700 ? text.slice(0, 680) + "…" : text;
       box.append(said);
+      const srcAt = sources.findIndex((s) => s.k === "tr" && s.l === code && (!answerPlan.book || BOOK_OF[answerPlan.book](s)));
+      const src = srcAt >= 0 ? srcAt : sources.findIndex((s) => s.k === "tr" && s.l === code);
+      const who = src >= 0 ? sources[src].n : "";
+      if (src >= 0) link(urlOf(src, ref), who + " · " + meta.names[lang][ref.s - 1] + " " + ref.s + ":" + ref.a);
+      return box;
     }
-    const ar = document.createElement("p");
-    ar.className = "ay";
-    ar.dir = "rtl";
-    ar.lang = "ar";
-    ar.textContent = (verse.ar && verse.ar[i]) || "";
-    box.append(ar);
-    if (meaningQ) {
-      const gloss = await gharibLine(ref.s, ref.a);
-      const bit = gloss ? clip(gloss) : "";
-      if (bit && partsNow.some((p) => arNorm(bit).includes(p) || (p.endsWith("ه") && arNorm(bit).includes(p.slice(0, -1) + "ت")))) {
-        const who = document.createElement("p");
-        who.className = "who";
-        who.textContent = a.gloss;
-        box.append(who);
-        const tx = document.createElement("p");
-        tx.className = "ay tf";
-        tx.dir = "rtl";
-        tx.lang = "ar";
-        paintMark(tx, bit);
-        box.append(tx);
-      }
+    if (answerPlan.showAyah && verse.ar && verse.ar[i]) {
+      const ar = document.createElement("p");
+      ar.className = "ay";
+      ar.dir = "rtl";
+      ar.lang = "ar";
+      ar.textContent = verse.ar[i];
+      box.append(ar);
     }
-    const saadi = await tafsirAyah("السعدي", ref.s, ref.a);
+    const tfName = answerPlan.tfName || "السعدي";
+    const saadi = await tafsirAyah(tfName, ref.s, ref.a);
     if (saadi) {
       const who = document.createElement("p");
       who.className = "who";
-      who.textContent = a.saadi;
+      who.textContent = BOOKL[lang][Object.keys(TF_AR).find((id) => TF_AR[id] === tfName) || "saadi"] || tfName;
       box.append(who);
       const tx = document.createElement("p");
       tx.className = "ay tf";
@@ -631,11 +728,8 @@
       paintMark(tx, clip(saadi));
       box.append(tx);
     }
-    const addr = document.createElement("a");
-    addr.className = "addr";
-    addr.href = "/tafsir/saadi/" + ref.s + "/" + ref.a + "/";
-    addr.textContent = meta.names[lang][ref.s - 1] + " " + ref.s + ":" + ref.a;
-    box.append(addr);
+    const tfId = TFID[tfName] || "saadi";
+    link("/tafsir/" + tfId + "/" + ref.s + "/" + ref.a + "/", meta.names[lang][ref.s - 1] + " " + ref.s + ":" + ref.a);
     return box;
   }
   async function paint(from) {
@@ -687,40 +781,84 @@
     const wait = document.createElement("p");
     wait.className = "wait"; wait.textContent = t().loading; out.append(wait);
     if (!sources) sources = await (await fetch("src.json")).json();
+    const fol = followCmd(raw);
+    const mealOf = { musayev: "az", ozek: "tr", saheeh: "en", kuliev: "ru" };
+    let book = askedBook(raw) || (bookId !== "all" ? bookId : "");
+    if (fol && fol.mode === "tf" && !TF_AR[book]) book = "";
+    if (fol && fol.mode === "tr" && !TR_IDS.has(book)) book = "";
+    const ql = writtenLang(fol ? "" : raw);
+    qlNow = fol && fol.mode === "tr"
+      ? (TR_IDS.has(book) ? mealOf[book] : (["az", "tr", "en", "ru"].includes(lastCtx.ql) ? lastCtx.ql : (MEAL[lang] ? lang : "az")))
+      : (TR_IDS.has(book) ? mealOf[book] : ql);
+    let readMode = fol ? fol.mode : (TF_AR[book] ? "tf" : (TR_IDS.has(book) || ql !== "ar" ? "tr" : "mix"));
+    if (!fol && TF_AR[book] && !isAr(raw) && !conceptOf(raw)) { book = ""; readMode = ql === "ar" ? "mix" : "tr"; qlNow = ql; }
+    if (!fol && TR_IDS.has(book) && isAr(raw) && !conceptOf(raw)) { book = ""; readMode = "mix"; qlNow = "ar"; }
     const thought = analyze(raw);
-    const q = thought.search;
-    analNote = thought.note;
-    const parts = (!pageQuery(q) && !ayahQuery(q)) ? tokens(q) : [];
+    const q = fol ? "" : thought.search;
+    const u = t();
+    if (fol) {
+      const ref = at(fol.i);
+      analNote = u[fol.why] + " · " + meta.names[lang][ref.s - 1] + " " + ref.s + ":" + ref.a;
+    } else {
+      const where = book && TF_AR[book] ? u.anTf : (readMode === "tr" ? u.anTr : (scope === "deep" ? u.anDeep : u.anTf));
+      analNote = u.an + ": «" + (thought.search || raw).trim() + "». " + where;
+    }
+    if (book) analNote += " · " + u.only + " " + BOOKL[lang][book];
+    arabicQ = readMode !== "tr";
+    let parts = [];
+    let found = new Set();
+    const ayRaw = ayahQuery(q) || ayahQuery(raw);
+    if (!fol && !pageQuery(q) && !ayRaw) {
+      if (readMode === "tr" && isAr(raw)) {
+        const c = conceptOf(raw);
+        const row = CONCEPTS.find((pair) => pair[1] === c);
+        const words = row ? row[0].split(" ").filter((w) => w.length > 2) : [];
+        for (const w of words) {
+          const hit = await wordHits(tokens(w));
+          for (const x of hit) found.add(x);
+        }
+        parts = words.map((w) => fold(w));
+      } else if (readMode !== "tr" && !isAr(raw)) {
+        const c = conceptOf(raw);
+        parts = c ? tokens(c) : tokens(stripBookWords(stripQ(raw)));
+        found = parts.length ? await wordHits(parts) : new Set();
+      } else {
+        const cleaned = stripBookWords(isAr(raw) ? stripArabic(raw) : stripQ(raw));
+        parts = tokens(cleaned || raw);
+        found = parts.length ? await wordHits(parts) : new Set();
+      }
+    }
     partsNow = parts;
-    const ql = writtenLang(raw);
-    arabicQ = ql === "ar";
-    const found = parts.length ? await wordHits(parts) : new Set();
     if (id !== job) return;
-    const direct = arabicQ ? directHits(q) : [];
+    const direct = readMode === "mix" ? directHits(q || raw) : [];
     const seen = new Set(direct.map((h) => (h.src || 0) + ":" + (h.i != null ? h.i : indexOf(h.s, h.a))));
     const rest = [];
-    const keep = (src, forAyah) => {
+    const keep = (src) => {
       const s = sources[src];
       if (!s) return false;
-      if (!arabicQ) return s.k === "tr" && s.l === ql;
+      if (book && BOOK_OF[book] && !BOOK_OF[book](s)) return false;
+      if (readMode === "tr") return s.k === "tr" && s.l === qlNow;
       if (s.k === "tr") return false;
-      if (forAyah) return s.k === "tf" && (scope === "deep" || SHORT.has(s.n));
+      if (book && TF_AR[book]) return true;
+      if (readMode === "tf") return s.k === "tf" && (scope === "deep" || SHORT.has(s.n));
       return scope === "deep" || SHORT.has(s.n);
     };
-    const ay = ayahQuery(q);
+    const ay = fol ? at(fol.i) : ayRaw;
     if (ay) {
-      const i = indexOf(ay.s, ay.a);
-      for (let s = 0; s < sources.length; s++) if (keep(s, true)) rest.push({ src: s, i });
+      const i = fol ? fol.i : indexOf(ay.s, ay.a);
+      for (let s = 0; s < sources.length; s++) if (keep(s)) rest.push({ src: s, i });
     }
-    for (const x of found) {
-      const src = Math.floor(x / 10000), i = x % 10000;
-      if (!keep(src, false)) continue;
-      const k = src + ":" + i;
-      if (seen.has(k)) continue;
-      seen.add(k);
-      rest.push({ src, i });
+    if (!fol) {
+      for (const x of found) {
+        const src = Math.floor(x / 10000), i = x % 10000;
+        if (!keep(src)) continue;
+        const k = src + ":" + i;
+        if (seen.has(k)) continue;
+        seen.add(k);
+        rest.push({ src, i });
+      }
     }
-    if (!arabicQ) {
+    if (readMode === "tr") {
       const one = new Map();
       for (const h of rest) if (!one.has(h.i)) one.set(h.i, h);
       rest.length = 0;
@@ -728,26 +866,42 @@
     }
     rest.sort((a, b) => {
       const ra = sources[a.src], rb = sources[b.src];
-      const score = (r) => arabicQ
-        ? (r.k === "tf" ? 0 : r.k === "q" ? 1 : r.k === "wb" ? 2 : r.k === "ir" ? 3 : 4)
-        : (r.k === "q" ? 0 : r.k === "tr" && r.l === lang ? 1 : r.k === "tr" ? 2 : r.k === "tf" ? 3 : 4);
+      const score = (r) => readMode === "tr"
+        ? 0
+        : (r.k === "tf" ? 0 : r.k === "q" ? 1 : r.k === "wb" ? 2 : r.k === "ir" ? 3 : 4);
       return score(ra) - score(rb) || a.src - b.src || a.i - b.i;
     });
-    const counted = countQuestion(raw);
-    const arConcept = ay ? "" : conceptOf(raw);
+    const counted = fol ? "" : countQuestion(raw);
+    const arConcept = ayRaw ? "" : conceptOf(raw);
     let topic = new Set();
-    if (arConcept && arabicQ) topic = await wordHits(tokens(arConcept));
+    if (!fol && arConcept && readMode !== "tr") topic = await wordHits(tokens(arConcept));
     if (id !== job) return;
     if (counted) answerPlan = { kind: "count", text: counted };
-    else if (!arabicQ) answerPlan = null;
-    else if (ay) answerPlan = { kind: "ayah", i: indexOf(ay.s, ay.a) };
-    else {
-      const idx = bestShort(topic.size ? topic : found);
-      answerPlan = idx >= 0 ? { kind: "topic", i: idx } : null;
+    else if (readMode === "tr") {
+      const i = fol ? fol.i : (ayRaw ? indexOf(ayRaw.s, ayRaw.a) : (rest[0] ? rest[0].i : null));
+      if (i != null) answerPlan = { kind: "topic", i, mode: "tr", lang: qlNow, book: TR_IDS.has(book) ? book : "" };
+    } else {
+      let i = null;
+      if (fol || ayRaw) i = fol ? fol.i : indexOf(ayRaw.s, ayRaw.a);
+      else i = bestShort(topic.size ? topic : found);
+      if (i == null || i < 0) i = rest[0] ? rest[0].i : null;
+      if (i != null) answerPlan = { kind: "topic", i, mode: "tf", tfName: TF_AR[book] || "السعدي", showAyah: readMode === "mix" };
+    }
+    if (answerPlan && answerPlan.mode === "tr") {
+      for (let n = rest.length - 1; n >= 0; n--) if (rest[n].i === answerPlan.i) rest.splice(n, 1);
+    } else if (answerPlan && answerPlan.mode === "tf") {
+      for (let n = rest.length - 1; n >= 0; n--) {
+        if (rest[n].i === answerPlan.i && sources[rest[n].src].n === answerPlan.tfName) rest.splice(n, 1);
+      }
     }
     shown = direct.concat(rest);
-    if (shown.length || (answerPlan && answerPlan.i != null)) await loadVerses(ql);
+    const needTr = (answerPlan && answerPlan.mode === "tr") || shown.some((h) => sources[h.src] && sources[h.src].k === "tr");
+    const needAr = (answerPlan && answerPlan.mode === "tf") || shown.some((h) => sources[h.src] && sources[h.src].k !== "tr");
+    if (needAr) await loadVerses("ar");
+    if (needTr) await loadVerses(qlNow);
     if (id !== job) return;
+    const remembered = answerPlan && Number.isInteger(answerPlan.i) ? answerPlan.i : (shown[0] && Number.isInteger(shown[0].i) ? shown[0].i : null);
+    if (remembered != null) remember(remembered, readMode !== "tr", qlNow);
     paint(0);
   }
 

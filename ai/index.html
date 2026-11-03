@@ -47,8 +47,9 @@ body{background:#fff!important}
 .dock #go svg{width:20px;height:20px}
 .scope{position:relative;flex:none}
 .scope-btn{border:0;background:#f6f1e4;color:#0e3d2c;border-radius:999px;padding:.55rem .7rem;font:inherit;font-size:.82rem;font-weight:700;cursor:pointer;white-space:nowrap}
-.scope-menu{position:absolute;bottom:calc(100% + 8px);top:auto;inset-inline-end:0;z-index:30;background:#fff;border:1px solid #ead9b0;border-radius:14px;padding:.3rem;min-width:148px;box-shadow:0 10px 24px #0e3d2c18;display:flex;flex-direction:column}
+.scope-menu{position:absolute;bottom:calc(100% + 8px);top:auto;inset-inline-end:0;z-index:30;background:#fff;border:1px solid #ead9b0;border-radius:14px;padding:.3rem;min-width:168px;max-height:min(62vh,440px);overflow:auto;box-shadow:0 10px 24px #0e3d2c18;display:flex;flex-direction:column}
 .scope-menu[hidden]{display:none}
+.scope-menu .cap{padding:.45rem .7rem .15rem;color:#8a6a2e;font-size:.72rem;font-weight:800;letter-spacing:.04em}
 .scope-menu button{border:0;background:transparent;text-align:start;padding:.5rem .7rem;border-radius:10px;font:inherit;color:#0e3d2c;cursor:pointer;width:auto;height:auto}
 .scope-menu button.on,.scope-menu button:hover{background:#f6f1e4}
 html[dir=rtl] .dock form{padding:.35rem .95rem .35rem .35rem}
@@ -84,7 +85,7 @@ html[dir=rtl] .dock form{padding:.35rem .95rem .35rem .35rem}
 </main>
 <div class="dock"><form id="form"><input id="q" type="search" autocomplete="off" enterkeyhint="search"><div class="scope" id="scope"><button type="button" class="scope-btn" id="scopeBtn" aria-expanded="false">Sürətli</button><div class="scope-menu" id="scopeMenu" hidden></div></div><button id="go" type="submit" aria-label="Göndər"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2L15 22l-4-9-9-4z"/></svg></button></form></div>
 <script src="../site.js?v=8"></script>
-<script src="app.js?v=15"></script>
+<script src="app.js?v=16"></script>
 <script>
 setTimeout(function () {
   var s = document.getElementById("splash");
