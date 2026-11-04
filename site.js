@@ -6,8 +6,9 @@ document.addEventListener('click',function(e){if(!e.target.closest('.langs'))clo
   var h=[]; try{h=JSON.parse(localStorage.getItem('qm-recent')||'[]')}catch(e){}
   if(!h.length||!h[0].p) return;
   var lang=document.documentElement.lang||'ar';
-  var words={ar:'تابع — الصفحة ',az:'Davam et — səhifə ',tr:'Devam et — sayfa ',en:'Continue — page ',ru:'Продолжить — стр. '};
-  a.textContent=(words[lang]||words.ar)+h[0].p;
-  a.href='page/'+h[0].p+'/';
+  var words={ar:'تابع — الصفحة ',az:'Davam et — səhifə ',tr:'Devam et — sayfa ',en:'Continue — page ',ru:'Продолжить — стр. ',id:'Lanjutkan — halaman ',ur:'جاری رکھیں — صفحہ ',fr:'Continuer — page ',bn:'চালিয়ে যান — পৃষ্ঠা ',ms:'Teruskan — muka surat '};
+  a.textContent=(words[lang]||words.en)+h[0].p;
+  var own={ar:1,az:1,tr:1,en:1,ru:1};
+  a.href=(own[lang]?'page/':'/en/page/')+h[0].p+'/';
   a.hidden=false;
 })();
