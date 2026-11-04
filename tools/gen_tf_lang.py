@@ -337,10 +337,12 @@ def publish_mukhtasar():
             pass
         land = "tafsir.html" if ui == "ar" else f"{ui}/tafsir.html"
         lt = open(land, encoding="utf8").read()
-        if old[ui] in lt:
+        if blurb[ui] in lt:
+            pass
+        elif old[ui] in lt:
             lt = lt.replace(old[ui], blurb[ui], 1)
             open(land, "w", encoding="utf8").write(lt)
-        elif blurb[ui] not in lt:
+        else:
             raise SystemExit("blurb missing " + land)
         open(hub, "w", encoding="utf8").write(t)
 
