@@ -10,6 +10,11 @@
 .ar,.item .n{font-family:var(--ar)}
 html[dir="rtl"] body{font-family:var(--ar)}
 
-.qm-ar,.qm-tx2[lang="ar"],.qm-body[lang="ar"],.qm-cmp-ar,.qm-wb,.qm-w-ar,.qm-nl-ar,.qm-hz-ay,.ahit p.s-ar,.qm-gh-q,.qrow p{
+.qm-ar,.qm-cmp-ar,.qm-wb,.qm-w-ar,.qm-nl-ar,.qm-hz-ay,.ahit p.s-ar,.qm-gh-q,.qrow p{
   font-family:QMHafs,UthmanTaha,"Scheherazade New","Noto Naskh Arabic","Amiri","Traditional Arabic",serif
+}
+/* Tafsir and i'rab are prose. The mushaf font draws the Arabic comma as a black ring
+   and throws fully-vocalised quotations out of the line. Naskh keeps both intact. */
+.qm-body[lang="ar"],.qm-tx2[lang="ar"],.qm-cmp-tx[lang="ar"],.qm-gh,.qm-gh-notes{
+  font-family:"Noto Naskh Arabic","Amiri","Scheherazade New","Traditional Arabic",serif
 }

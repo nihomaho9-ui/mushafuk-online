@@ -1,5 +1,5 @@
 const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.online$/.test(location.hostname) ? "/" : "https://nihomaho9-ui.github.io/quran-medine/";
-if (document.currentScript) { const fl = document.createElement("link"); fl.rel = "stylesheet"; fl.href = new URL("fonts.css?v=1", document.currentScript.src).href; document.head.appendChild(fl); }
+if (document.currentScript) { const fl = document.createElement("link"); fl.rel = "stylesheet"; fl.href = new URL("fonts.css?v=2", document.currentScript.src).href; document.head.appendChild(fl); }
 // Settings (tafsir / translation downloads, text size) and the ayah sheet. Data is stored on the device (IndexedDB) and works offline.
 (function () {
   const AYAHS = window.QM_AYAHS;
@@ -24,7 +24,7 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
   }
   applyLook();
   const lookCss = document.createElement("style");
-  lookCss.textContent = "html.qm-night,html.qm-night body{background:#141a17!important;color:#f3ead8!important}html.qm-night header,html.qm-night .num,html.qm-night .page,html.qm-night .qm-sheet,html.qm-night .qj-box{background:#141a17!important;color:#f3ead8!important}html.qm-night header h1,html.qm-night header a,html.qm-night a.home-brand{color:#f3ead8!important}html.qm-night .line,html.qm-night .ay{color:#f6edd9}html.qm-night .qlb{background:#1c2622!important;color:#f3ead8!important}html.qm-night .qlb-qari,html.qm-night .qlb-qaris{background:#24302b!important;color:#f3ead8!important}html.qm-night .set-card,html.qm-night .qm-scroll{color:#f3ead8}.set-look{display:flex;flex-direction:column;gap:.55rem}.set-sizes{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}.set-lab{font-size:.78rem;opacity:.75}.set-sz{border:1px solid #c4a56e;background:#fff;color:#1a3330;border-radius:999px;padding:.28rem .7rem;font:inherit;font-size:.78rem;cursor:pointer}.set-sz.on{background:#1a3330;color:#fbf6ec;border-color:#1a3330}html.qm-night .set-sz{background:#24302b;color:#f3ead8}html.qm-night .set-sz.on{background:#c4a56e;color:#1a3330}";
+  lookCss.textContent = "html.qm-night,html.qm-night body{background:#141a17!important;color:#f3ead8!important}html.qm-night header,html.qm-night .num,html.qm-night .page,html.qm-night .qm-sheet,html.qm-night .qj-box{background:#141a17!important;color:#f3ead8!important}html.qm-night header h1,html.qm-night header a,html.qm-night a.home-brand{color:#f3ead8!important}html.qm-night .line,html.qm-night .ay{color:#f6edd9}html.qm-night .qlb{background:#1c2622!important;color:#f3ead8!important}html.qm-night .qlb-qari,html.qm-night .qlb-qaris{background:#24302b!important;color:#f3ead8!important}html.qm-night .set-card,html.qm-night .qm-scroll{color:#f3ead8}.set-look{display:flex;flex-direction:column;gap:.55rem}.set-sizes{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}.set-lab{font-size:.78rem;opacity:.75}.set-sz{border:1px solid #c4a56e;background:#fff;color:#1a3330;border-radius:999px;padding:.28rem .7rem;font:inherit;font-size:.78rem;cursor:pointer}.set-sz.on{background:#1a3330;color:#fbf6ec;border-color:#1a3330}html.qm-night .set-sz{background:#24302b;color:#f3ead8}html.qm-night .set-sz.on{background:#c4a56e;color:#1a3330}#page{isolation:isolate;position:relative;z-index:0}.qm-back{isolation:isolate}.qm-body[lang=ar],.qm-tx2[lang=ar],.qm-cmp-tx[lang=ar]{font-family:'Noto Naskh Arabic',Amiri,'Scheherazade New',serif!important}.qm-ir-pick{display:flex;flex-direction:column;gap:.5rem;padding:.15rem 0 .4rem}.qm-ir-pick>p{margin:0 0 .15rem;text-align:center;font-weight:700;color:#8a6a2e}.qm-ir-card{display:flex;flex-direction:column;align-items:flex-start;gap:.12rem;width:100%;text-align:start;border:1px solid #c4a56e;background:#fffaf0;color:#12352c;border-radius:.9rem;padding:.72rem .9rem;font:inherit;cursor:pointer}.qm-ir-card b{font-size:1.05rem;line-height:1.45}.qm-ir-card small{color:#6d6456;font-size:.78rem}html.qm-night .qm-ir-card{background:#1c2622;color:#f3ead8;border-color:#3d4a44}html.qm-night .qm-ir-card small{color:#c4b89a}";
   document.head.appendChild(lookCss);
   const gearSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="7" r="2.1" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="12" r="2.1" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="17" r="2.1" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
   document.querySelectorAll("#menu-btn, button.gear").forEach((b) => { b.innerHTML = gearSvg; b.setAttribute("aria-label", T("Ayarlar")); });
@@ -895,6 +895,22 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
 
   /* ---------- Ayah sheet ---------- */
   let cur = null;
+  let irReady = false;
+  function irChooser(have, onPick) {
+    const titles = { az: "Ərəb kitabını seçin", tr: "Arapça kitabı seçin", en: "Choose an Arabic book", ar: "اختر كتاب الإعراب", ru: "Выберите книгу" };
+    const box = el("div", "qm-ir-pick");
+    box.append(el("p", "", titles[uiLang()] || titles.az));
+    for (const h of have) {
+      const b = el("button", "qm-ir-card");
+      b.type = "button";
+      b.dir = "rtl"; b.lang = "ar";
+      b.append(el("b", "", h.name));
+      if (h.by) b.append(el("small", "", h.by));
+      b.onclick = () => onPick(h.id);
+      box.append(b);
+    }
+    return box;
+  }
   async function openAyah(s, a) {
     if (!LIST.length) LIST = await (await fetch("./lib-list.json")).json();
     cur = { s, a }; window.QM_GOTO ? window.QM_GOTO(s + ":" + a) : window.QM_HL && window.QM_HL(s + ":" + a);
@@ -941,8 +957,15 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
     sheet.append(head);
     if (qa) sheet.append(qa);
     const tabs = el("div", "qm-tabs");
-    for (const k of ["tf", "tr", "wb", "ir"]) { const t = el("button", "qm-tab" + (k === kind ? " on" : ""), k === "tf" ? T("Təfsirlər") : k === "tr" ? T("Tərcümələr") : k === "ir" ? T("Erab") : T("Söz mənaları")); t.onclick = () => { setPrefs({ tab: k }); openAyah(s, a); }; tabs.append(t); }
+    for (const k of ["tf", "tr", "wb", "ir"]) { const t = el("button", "qm-tab" + (k === kind ? " on" : ""), k === "tf" ? T("Təfsirlər") : k === "tr" ? T("Tərcümələr") : k === "ir" ? T("Erab") : T("Söz mənaları")); t.onclick = () => { if (k === "ir" && kind !== "ir") irReady = false; setPrefs({ tab: k }); openAyah(s, a); }; tabs.append(t); }
     sheet.append(tabs);
+    if (kind === "ir" && !irReady && have.length > 1) {
+      const body = el("div", "qm-body");
+      body.append(irChooser(have, (id) => { irReady = true; setPrefs({ ir: id }); openAyah(s, a); }));
+      sheet.append(body);
+      back.hidden = false;
+      return;
+    }
     if (have.length > 1) {
       const sel = el("select", "qm-pick");
       for (const h of have) { const o = el("option", "", (h.k === "tr" ? h.by + " · " : "") + h.name); o.value = h.id; sel.append(o); }
@@ -1293,10 +1316,16 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
     const ttl = el("div", "qm-full-t"); ttl.append(el("b", "", NAMES[s0 - 1]), el("small", "", T("Səhifə") + " " + pg.n));
     const sw = el("div", "qm-switch");
     const LOCK = /\/page\/\d+\/?$/.test(location.pathname) && !mushafTurnHref(1); if (LOCK) sw.hidden = true;
-    for (const k of (LOCK ? [kind] : kind === "ir" || kind === "wb" ? [kind, "tf", "tr"] : ["tr", "tf"])) { const b = el("button", k === kind ? "on" : "", k === "tf" ? T("Təfsir") : k === "tr" ? T("Tərcümə") : k === "ir" ? T("Erab") : T("Söz mənaları")); b.onclick = () => { setPrefs({ tab: k }); openFull(k, null, pg.n); }; sw.append(b); }
+    for (const k of (LOCK ? [kind] : kind === "ir" || kind === "wb" ? [kind, "tf", "tr"] : ["tr", "tf"])) { const b = el("button", k === kind ? "on" : "", k === "tf" ? T("Təfsir") : k === "tr" ? T("Tərcümə") : k === "ir" ? T("Erab") : T("Söz mənaları")); b.onclick = () => { if (k === "ir" && kind !== "ir") irReady = false; setPrefs({ tab: k }); openFull(k, null, pg.n); }; sw.append(b); }
     const x = icon("close", T("Bağla")); x.onclick = () => { fsEl.hidden = true; fsState = null; };
     head.append(ttl, sw, x); fsEl.append(head);
     const body = el("div", "qm-full-b"); body.style.touchAction = "pan-y"; fsEl.append(body);
+    if (kind === "ir" && !irReady && have.length > 1) {
+      body.append(irChooser(have, (id) => { irReady = true; setPrefs({ ir: id }); openFull("ir", focusKey, pg.n); }));
+      fsEl.hidden = false;
+      if (document.documentElement.classList.contains("qm-turning") || sessionStorage.getItem("qm.turn")) settleTurn();
+      return;
+    }
     if (!r) {
       const box = el("div", "qm-empty"); box.append(el("p", "", T("Hələ endirilməyib.")));
       const b = el("button", "qm-rb main", T("Ayarlarda endir")); b.onclick = () => { fsEl.hidden = true; openSettings(kind); }; box.append(b); body.append(box);
