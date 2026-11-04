@@ -11,10 +11,15 @@ Mushafuk.online is a reading website. The Arabic text is the Madinah mushaf, pag
 - [Surah index](https://mushafuk.online/quran/)
 - [Tafsirs](https://mushafuk.online/tafsir.html)
 - [Translations](https://mushafuk.online/translations/)
-- [Search](https://mushafuk.online/ai/): finds a word in the mushaf, all translations, the eight tafsirs, i'rab and word meanings. The page shows how many places matched and the address of each. Example: https://mushafuk.online/ai/?lang=az&q=2:255
+- [Search](https://mushafuk.online/ai/): finds a word in the mushaf, all translations, the tafsirs, i'rab and word meanings. The page shows how many places matched and the address of each. Example: https://mushafuk.online/ai/?lang=az&q=2:255
 - [Azerbaijani](https://mushafuk.online/az/)
 - [Turkish](https://mushafuk.online/tr/)
 - [English](https://mushafuk.online/en/)
+- [Indonesian](https://mushafuk.online/id/)
+- [Urdu](https://mushafuk.online/ur/)
+- [French](https://mushafuk.online/fr/)
+- [Bengali](https://mushafuk.online/bn/)
+- [Malay](https://mushafuk.online/ms/)
 - [Russian](https://mushafuk.online/ru/)
 
 ## Addresses
@@ -23,7 +28,8 @@ Mushafuk.online is a reading website. The Arabic text is the Madinah mushaf, pag
 - Same page with an interface language: https://mushafuk.online/az/page/n/ and the same for tr, en, ru
 - One tafsir of one ayah: https://mushafuk.online/tafsir/{id}/{surah}/{ayah}/
 - All tafsirs of one ayah: https://mushafuk.online/tafsir/all/{surah}/{ayah}/
-- Tafsir ids: saadi, muyassar, mukhtasar, ibnkathir, baghawi, samani, aysar, tabari
+- Tafsir ids on this site: saadi, muyassar, mukhtasar, ibnkathir, baghawi, samani, aysar, tabari
+- Shawkani, Shinqiti and Ibn Uthaymeen, one page per ayah: https://nihomaho9-ui.github.io/mushafuk-tafsir/{id}/{surah}/{ayah}/ with ids shawkani, shinqiti, uthaymeen. Ayahs with no text are noindex. Sitemap: https://nihomaho9-ui.github.io/mushafuk-tafsir/sitemap.xml
 - Surah is 1–114. Ayah starts at 1. Samani has no text for surah 18.
 - A translation page: https://mushafuk.online/{language}/{translator}/page/n/ for example https://mushafuk.online/de/bubenheim/page/1/
 - Azerbaijani translation of the mushaf: https://mushafuk.online/az/tercume/page/1/
@@ -31,6 +37,7 @@ Mushafuk.online is a reading website. The Arabic text is the Madinah mushaf, pag
 
 ## For machines
 
-- [Sitemap index](https://mushafuk.online/sitemap.xml): every public HTML page
+- [Sitemap index](https://mushafuk.online/sitemap.xml): every public HTML page on this host
+- [Tafsir sitemap](https://nihomaho9-ui.github.io/mushafuk-tafsir/sitemap.xml): Shawkani, Shinqiti and Ibn Uthaymeen
 - [Longer guide](https://mushafuk.online/llms-full.txt)
 - [robots.txt](https://mushafuk.online/robots.txt): all listed AI crawlers are allowed
