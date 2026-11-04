@@ -813,8 +813,6 @@
       ? (TR_IDS.has(book) ? mealOf[book] : (["az", "tr", "en", "ru"].includes(lastCtx.ql) ? lastCtx.ql : (MEAL[lang] ? lang : "az")))
       : (TR_IDS.has(book) ? mealOf[book] : ql);
     let readMode = fol ? fol.mode : (TF_AR[book] ? "tf" : (TR_IDS.has(book) || ql !== "ar" ? "tr" : "mix"));
-    if (!fol && TF_AR[book] && !isAr(raw) && !conceptOf(raw)) { book = ""; readMode = ql === "ar" ? "mix" : "tr"; qlNow = ql; }
-    if (!fol && TR_IDS.has(book) && isAr(raw) && !conceptOf(raw)) { book = ""; readMode = "mix"; qlNow = "ar"; }
     const thought = analyze(raw);
     const q = fol ? "" : thought.search;
     const u = t();
