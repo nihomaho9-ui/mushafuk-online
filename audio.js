@@ -82,7 +82,7 @@
   A.forEach((x) => { x.preload = "auto"; });
   let curA = 0;
   const audio = () => A[curA];
-  let st = { s: 0, a: 0, cont: false, playing: false, paused: false, left: 0, gen: 0 }, ui = null;
+  let st = { s: 0, a: 0, cont: false, playing: false, paused: false, left: 0, gen: 0, bism: false }, ui = null;
   let nextReady = null, surahPull = null, hydrateJob = null;
   const listeners = new Set();
   const notify = () => { listeners.forEach((f) => f()); paintBar && paintBar(); };
@@ -160,6 +160,24 @@
     if (s > 1) return [s - 1, AYAHS[s - 2]];
     return null;
   }
+  function needsBism(s, a) {
+    return a === 1 && s !== 1 && s !== 9 && !(st.playing && st.s === s && !st.bism);
+  }
+  function prime(r, s, a) {
+    const stand = A[1 - curA];
+    const token = { r: r.id, s, a, el: stand };
+    nextReady = token;
+    const apply = (src) => {
+      if (nextReady !== token) return;
+      token.src = src;
+      if (stand.src !== src) {
+        try { stand.pause(); stand.src = src; stand.load(); } catch (e) {}
+      }
+    };
+    const k = mkey(r, s, a);
+    if (memo.has(k)) apply(memo.get(k));
+    else resolveSrc(r, s, a).then(apply).catch(() => {});
+  }
   function armStandby(r, s, a) {
     const nxt = st.cont ? nextPos(s, a) : null;
     if (!nxt) { nextReady = null; return; }
@@ -175,6 +193,7 @@
       }
     };
     const k = mkey(r, ns, n);
+    if (ns !== s && n === 1 && ns !== 9) warm(r, 1, 1);
     if (memo.has(k)) apply(memo.get(k));
     else resolveSrc(r, ns, n).then(apply).catch(() => {});
     // also keep the next three ayahs as blobs so the handoff does not wait on the network
@@ -200,6 +219,10 @@
     const nxt = st.cont ? nextPos(st.s, st.a) : null;
     if (!nxt) { st.playing = false; st.paused = false; notify(); return; }
     const s = nxt[0], a = nxt[1], r = rec();
+    if (needsBism(s, a)) {
+      play(s, a).then(() => setTimeout(() => { if (st.playing && st.s === s && st.a === a) window.QM_GOTO && window.QM_GOTO(s + ":" + a); }, 150));
+      return;
+    }
     if (s !== st.s) hydrateSurah(r, s);
     const ready = nextReady && nextReady.r === r.id && nextReady.s === s && nextReady.a === a && nextReady.src;
     if (ready) {
@@ -231,7 +254,30 @@
     }
     play(s, a).then(() => setTimeout(() => { if (st.playing && st.s === s && st.a === a) window.QM_GOTO && window.QM_GOTO(s + ":" + a); }, 150));
   }
+  async function playBism(s) {
+    const r = rec(); const gen = ++st.gen;
+    if (st.s !== s || st.a !== 1) st.left = reps() - 1;
+    st.s = s; st.a = 1; st.bism = true; st.playing = true; st.paused = false; notify();
+    if (hydrateJob !== r.id + ":" + s) hydrateSurah(r, s);
+    const src = memo.has(mkey(r, 1, 1)) ? memo.get(mkey(r, 1, 1)) : await resolveSrc(r, 1, 1);
+    if (gen !== st.gen) return;
+    A[1 - curA].pause();
+    try { audio().src = src; } catch (e) {}
+    if (!(nextReady && nextReady.r === r.id && nextReady.s === s && nextReady.a === 1)) prime(r, s, 1);
+    try { await audio().play(); } catch (e) {
+      if (gen !== st.gen) return;
+      st.bism = false;
+      play(s, 1, true);
+      return;
+    }
+    if (gen === st.gen) {
+      window.QM_HL && window.QM_HL(s + ":1");
+      setTimeout(() => { if (st.gen === gen && st.playing) window.QM_GOTO && window.QM_GOTO(s + ":1"); }, 150);
+    }
+  }
   async function play(s, a, rep) {
+    if (!rep && needsBism(s, a)) return playBism(s);
+    st.bism = false;
     const r = rec(); const gen = ++st.gen;
     if (st.s !== s || st.a !== a || !rep) st.left = reps() - 1;
     st.s = s; st.a = a; st.playing = true; st.paused = false; notify();
@@ -277,11 +323,15 @@
   function stop() {
     st.gen++; hydrateJob = null;
     A.forEach((x) => { x.pause(); try { x.removeAttribute("src"); x.load(); } catch (e) {} });
-    st.playing = false; st.paused = false; nextReady = null; notify();
+    st.playing = false; st.paused = false; st.bism = false; nextReady = null; notify();
   }
-  function onEnded() { advance(); }
+  function onEnded() {
+    if (st.bism) { st.bism = false; play(st.s, 1, true); return; }
+    advance();
+  }
   function onErr() {
     if (!st.playing) return;
+    if (st.bism) { st.bism = false; play(st.s, 1, true); return; }
     // if continuous and next exists, skip the broken ayah instead of dying
     if (st.cont && nextPos(st.s, st.a)) { advance(); return; }
     st.playing = false; st.paused = false; notify();
