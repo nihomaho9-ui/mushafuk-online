@@ -148,11 +148,24 @@
     if (localStorage.getItem(doneKey(r, s))) localStorage.removeItem(doneKey(r, s));
     return url(r, s, a);
   }
+  function nextPos(s, a) {
+    if (!s) return null;
+    if (a < AYAHS[s - 1]) return [s, a + 1];
+    if (s < 114) return [s + 1, 1];
+    return null;
+  }
+  function prevPos(s, a) {
+    if (!s) return null;
+    if (a > 1) return [s, a - 1];
+    if (s > 1) return [s - 1, AYAHS[s - 2]];
+    return null;
+  }
   function armStandby(r, s, a) {
-    const n = a + 1;
-    if (!st.cont || n > AYAHS[s - 1]) { nextReady = null; return; }
+    const nxt = st.cont ? nextPos(s, a) : null;
+    if (!nxt) { nextReady = null; return; }
+    const ns = nxt[0], n = nxt[1];
     const stand = A[1 - curA];
-    const token = { r: r.id, s, a: n, el: stand };
+    const token = { r: r.id, s: ns, a: n, el: stand };
     nextReady = token;
     const apply = (src) => {
       if (nextReady !== token) return;
@@ -161,26 +174,33 @@
         try { stand.pause(); stand.src = src; stand.load(); } catch (e) {}
       }
     };
-    const k = mkey(r, s, n);
+    const k = mkey(r, ns, n);
     if (memo.has(k)) apply(memo.get(k));
-    else resolveSrc(r, s, n).then(apply).catch(() => {});
+    else resolveSrc(r, ns, n).then(apply).catch(() => {});
     // also keep the next three ayahs as blobs so the handoff does not wait on the network
-    for (let i = 0; i < 3; i++) {
-      const x = n + i;
-      if (x > AYAHS[s - 1] || memo.has(mkey(r, s, x))) continue;
-      saveAyah(r, s, x).then(() => {
-        if (i === 0 && nextReady === token) {
-          const src = memo.get(mkey(r, s, x));
-          if (src) apply(src);
-        }
-      }).catch(() => {});
+    let cs = ns, ca = n;
+    for (let i = 0; i < 3 && cs; i++) {
+      if (!memo.has(mkey(r, cs, ca))) {
+        const xs = cs, xa = ca, ii = i;
+        saveAyah(r, xs, xa).then(() => {
+          if (ii === 0 && nextReady === token) {
+            const src = memo.get(mkey(r, xs, xa));
+            if (src) apply(src);
+          }
+        }).catch(() => {});
+      }
+      const step = nextPos(cs, ca);
+      if (!step) break;
+      cs = step[0]; ca = step[1];
     }
   }
   // Instant handoff when next blob is already on the standby element
   function advance() {
     if (st.left > 0) { st.left--; play(st.s, st.a, true); return; }
-    if (!(st.cont && st.a < AYAHS[st.s - 1])) { st.playing = false; st.paused = false; notify(); return; }
-    const s = st.s, a = st.a + 1, r = rec();
+    const nxt = st.cont ? nextPos(st.s, st.a) : null;
+    if (!nxt) { st.playing = false; st.paused = false; notify(); return; }
+    const s = nxt[0], a = nxt[1], r = rec();
+    if (s !== st.s) hydrateSurah(r, s);
     const ready = nextReady && nextReady.r === r.id && nextReady.s === s && nextReady.a === a && nextReady.src;
     if (ready) {
       const gen = ++st.gen;
@@ -263,7 +283,7 @@
   function onErr() {
     if (!st.playing) return;
     // if continuous and next exists, skip the broken ayah instead of dying
-    if (st.cont && st.a < AYAHS[st.s - 1]) { advance(); return; }
+    if (st.cont && nextPos(st.s, st.a)) { advance(); return; }
     st.playing = false; st.paused = false; notify();
     window.QM_TOAST && window.QM_TOAST(navigator.onLine ? "Səs açılmadı" : "İnternet yoxdur — surəni əvvəlcə endirin");
   }
@@ -339,7 +359,7 @@
     notify();
   };
   lbCont.onclick = () => setCont(!st.cont);
-  const go = (d) => { const a = st.a + d, s = st.s; if (!s || a < 1 || a > AYAHS[s - 1]) return; play(s, a); setTimeout(() => { if (st.playing && st.s === s && st.a === a) window.QM_GOTO && window.QM_GOTO(s + ":" + a); }, 150); };
+  const go = (d) => { const nxt = d > 0 ? nextPos(st.s, st.a) : prevPos(st.s, st.a); if (!nxt) return; play(nxt[0], nxt[1]); setTimeout(() => { if (st.playing && st.s === nxt[0] && st.a === nxt[1]) window.QM_GOTO && window.QM_GOTO(nxt[0] + ":" + nxt[1]); }, 150); };
   lbPrev.onclick = () => go(-1); lbNext.onclick = () => go(1); lbStop.onclick = stop;
   lbPause.onclick = () => { if (st.paused) resume(); else pause(); };
   const setRep = (d) => { const n = Math.min(9, Math.max(1, reps() + d)); localStorage.setItem("qm.audio.rep", n); st.left = Math.max(0, Math.min(st.left + d, n - 1)); paintBar(); };
@@ -357,7 +377,7 @@
     const d = el.duration, c = el.currentTime;
     lbT.textContent = fmt(isFinite(d) ? d - c : 0);
     lbFill.style.width = isFinite(d) && d ? (c / d * 100) + "%" : "0";
-    lbPrev.disabled = st.a <= 1; lbNext.disabled = !st.s || st.a >= AYAHS[st.s - 1];
+    lbPrev.disabled = !prevPos(st.s, st.a); lbNext.disabled = !nextPos(st.s, st.a);
     const cur = rec();
     lbQari.textContent = (SHORT[cur.id] || cur.name) + " ▾";
     qariMenu.querySelectorAll("button").forEach((b, i) => b.classList.toggle("on", RECITERS[i].id === cur.id));
