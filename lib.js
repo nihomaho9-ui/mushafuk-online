@@ -1297,8 +1297,9 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
       if (ps.length === 2 && +ps[0] >= 1 && +ps[1] >= 1) {
         let id = "saadi";
         try { id = (prefs().tf) || "saadi"; } catch (e) {}
-        if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari)$/.test(id)) id = "saadi";
-        location.assign("/tafsir/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
+        if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari|shinqiti|shawkani|uthaymeen)$/.test(id)) id = "saadi";
+        if (/^(shinqiti|shawkani|uthaymeen)$/.test(id)) location.assign("/tafsir/" + id + "/#" + (+ps[0]) + "/" + (+ps[1]));
+        else location.assign("/tafsir/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
         return;
       }
     }

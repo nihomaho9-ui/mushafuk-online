@@ -8,7 +8,10 @@
     ["baghawi", "معالم التنزيل", "البغوي"],
     ["samani", "تفسير السمعاني", "السمعاني"],
     ["aysar", "أيسر التفاسير", "أبو بكر الجزائري"],
-    ["tabari", "جامع البيان", "الطبري"]
+    ["tabari", "جامع البيان", "الطبري"],
+    ["shinqiti", "أضواء البيان", "الشنقيطي"],
+    ["shawkani", "فتح القدير", "الشوكاني"],
+    ["uthaymeen", "تفسير ابن عثيمين", "ابن عثيمين"]
   ];
   var box = document.getElementById("cards");
   BOOKS.forEach(function (b) {
@@ -32,7 +35,7 @@
   var DIG = "٠١٢٣٤٥٦٧٨٩";
   function ar(n) { return String(n).replace(/\d/g, function (c) { return DIG[c]; }); }
 
-  var HEAVY = { ibnkathir: 1, baghawi: 1, tabari: 1 };
+  var HEAVY = { ibnkathir: 1, baghawi: 1, tabari: 1, shawkani: 1, uthaymeen: 1 };
   function showBook(body, arr) {
     var p = passage(arr, info.a);
     body.textContent = "";
