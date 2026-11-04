@@ -10,6 +10,7 @@ main { max-width: 46rem; margin: 0 auto; padding: 0.85rem 1rem 2.5rem; min-heigh
 .src { margin: 0.2rem 0 0.8rem; text-align: center; color: #8a7d68; font-size: 0.78rem; }
 .ay { margin: 0.4rem 0 1rem; font-family: "Amiri", "Scheherazade New", "Traditional Arabic", serif; font-size: 1.65rem; line-height: 2.35; text-align: center; }
 .tx { font-size: 1.12rem; line-height: 2.05; text-align: right; white-space: pre-wrap; }
+html[dir="ltr"] .tx { text-align: start; }
 .rng { display: block; margin-bottom: 0.4rem; color: #8a6a2e; font-size: 0.82rem; }
 .pn { display: flex; justify-content: space-between; gap: 1rem; margin-top: 1.6rem; }
 .pn a { color: #0b6b4f; font-weight: 650; text-decoration: none; }
