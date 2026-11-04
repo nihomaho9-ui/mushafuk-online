@@ -29,7 +29,7 @@ Mushafuk.online is a reading website. The Arabic text is the Madinah mushaf, pag
 - One tafsir of one ayah: https://mushafuk.online/tafsir/{id}/{surah}/{ayah}/
 - All tafsirs of one ayah: https://mushafuk.online/tafsir/all/{surah}/{ayah}/
 - Tafsir ids on this site: saadi, muyassar, mukhtasar, ibnkathir, baghawi, samani, aysar, tabari
-- Shawkani, Shinqiti and Ibn Uthaymeen, one page per ayah: https://nihomaho9-ui.github.io/mushafuk-tafsir/{id}/{surah}/{ayah}/ with ids shawkani, shinqiti, uthaymeen. Ayahs with no text are noindex. Sitemap: https://nihomaho9-ui.github.io/mushafuk-tafsir/sitemap.xml
+- Shawkani, Shinqiti and Ibn Uthaymeen, one page per ayah: https://tafsir.mushafuk.online/{id}/{surah}/{ayah}/ with ids shawkani, shinqiti, uthaymeen. Ayahs with no text are noindex. Sitemap: https://tafsir.mushafuk.online/sitemap.xml
 - Surah is 1–114. Ayah starts at 1. Samani has no text for surah 18.
 - A translation page: https://mushafuk.online/{language}/{translator}/page/n/ for example https://mushafuk.online/de/bubenheim/page/1/
 - Azerbaijani translation of the mushaf: https://mushafuk.online/az/tercume/page/1/
@@ -38,6 +38,6 @@ Mushafuk.online is a reading website. The Arabic text is the Madinah mushaf, pag
 ## For machines
 
 - [Sitemap index](https://mushafuk.online/sitemap.xml): every public HTML page on this host
-- [Tafsir sitemap](https://nihomaho9-ui.github.io/mushafuk-tafsir/sitemap.xml): Shawkani, Shinqiti and Ibn Uthaymeen
+- [Tafsir sitemap](https://tafsir.mushafuk.online/sitemap.xml): Shawkani, Shinqiti and Ibn Uthaymeen
 - [Longer guide](https://mushafuk.online/llms-full.txt)
 - [robots.txt](https://mushafuk.online/robots.txt): all listed AI crawlers are allowed
