@@ -57,6 +57,14 @@ EDITIONS = {
                    ayah="Ayah", prev="Previous ayah", nxt="Next ayah", sub="Each ayah on its own page"),
         "ru": dict(slug="russian-mokhtasar", src="Тафсир аль-Мухтасар", dir="ltr", lang="ru",
                    ayah="Аят", prev="Предыдущий аят", nxt="Следующий аят", sub="Каждый аят — отдельная страница"),
+        "uz": dict(slug="uzbek-mokhtasar", src="Мухтасар тафсир", dir="ltr", lang="uz",
+                   ayah="Оят", prev="Олдинги оят", nxt="Кейинги оят", sub="Ҳар бир оят алоҳида саҳифа"),
+        "ug": dict(slug="uyghur-mokhtasar", src="مۇختەسەر تەفسىر", dir="rtl", lang="ug",
+                   ayah="ئايەت", prev="ئالدىنقى ئايەت", nxt="كېيىنكى ئايەت", sub="ھەر بىر ئايەت ئايرىم بەت"),
+        "ky": dict(slug="kyrgyz-mokhtasar", src="Мухтасар тафсир", dir="ltr", lang="ky",
+                   ayah="Аят", prev="Мурунку аят", nxt="Кийинки аят", sub="Ар бир аят өзүнчө барак"),
+        "ku": dict(slug="kurdish-mokhtasar", src="تەفسیری موختەسەر", dir="rtl", lang="ku",
+                   ayah="ئایەت", prev="ئایەتی پێشوو", nxt="ئایەتی داهاتوو", sub="هەر ئایەتێک لاپەڕەیەک"),
     },
 }
 
@@ -64,6 +72,10 @@ FONT = {
     "ur": '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic&display=swap" rel="stylesheet"><style>.tx{font-family:"Noto Naskh Arabic","Scheherazade New",serif}</style>',
     "fa": '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic&display=swap" rel="stylesheet"><style>.tx{font-family:"Noto Naskh Arabic","Scheherazade New",serif}</style>',
     "bn": '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali&display=swap" rel="stylesheet"><style>.tx{font-family:"Noto Sans Bengali",sans-serif}</style>',
+    "ug": '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic&display=swap" rel="stylesheet"><style>.tx{font-family:"Noto Naskh Arabic","Scheherazade New",serif}</style>',
+    "ku": '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic&display=swap" rel="stylesheet"><style>.tx{font-family:"Noto Naskh Arabic","Scheherazade New",serif}</style>',
+    "uz": '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet"><style>.tx{font-family:"Noto Sans",sans-serif}</style>',
+    "ky": '<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap" rel="stylesheet"><style>.tx{font-family:"Noto Sans",sans-serif}</style>',
 }
 
 NAV = {
@@ -90,6 +102,10 @@ LABEL = {
     "id": {"ar": "الإندونيسية", "az": "İndoneziya", "tr": "Endonezce", "en": "Indonesian", "ru": "Индонезийский"},
     "fa": {"ar": "الفارسية", "az": "Fars", "tr": "Farsça", "en": "Persian", "ru": "Персидский"},
     "sq": {"ar": "الألبانية", "az": "Alban", "tr": "Arnavutça", "en": "Albanian", "ru": "Албанский"},
+    "uz": {"ar": "الأوزبكية", "az": "Özbək", "tr": "Özbekçe", "en": "Uzbek", "ru": "Узбекский"},
+    "ug": {"ar": "الأويغورية", "az": "Uyğur", "tr": "Uygurca", "en": "Uyghur", "ru": "Уйгурский"},
+    "ky": {"ar": "القيرغيزية", "az": "Qırğız", "tr": "Kırgızca", "en": "Kyrgyz", "ru": "Кыргызский"},
+    "ku": {"ar": "الكردية", "az": "Kürd", "tr": "Kürtçe", "en": "Kurdish", "ru": "Курдский"},
 }
 LEAD = {
     "ar": "اختر اللغة. كل آية في صفحة: النص العربي، ثم التفسير.",
@@ -332,14 +348,15 @@ if __name__ == "__main__":
     only = sys.argv[1:]
     names = []
     for book, langs in EDITIONS.items():
-        if only and book not in only:
-            continue
         for lang, meta in langs.items():
+            key = f"{book}/{lang}"
+            if only and book not in only and key not in only:
+                continue
             names.append(build(book, lang, meta))
     if not only:
         patch_choosers()
         drop_empty_langs()
-    if (not only) or ("mukhtasar" in only):
+    if (not only) or any(x == "mukhtasar" or x.startswith("mukhtasar/") for x in only):
         publish_mukhtasar()
     sitemap_index(names)
     print("done", names)
