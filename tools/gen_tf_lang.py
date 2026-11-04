@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Ayah pages for tafsir translations that exist as open JSON (spa5k/QUL)."""
-import html, json, os, re, time, urllib.request
+import html, json, os, re, sys, time, urllib.request
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,6 +48,16 @@ EDITIONS = {
         "sq": dict(slug="sq-saadi", src="Tefsiri i Saadiut", dir="ltr", lang="sq",
                    ayah="Ajeti", prev="Ajeti i mëparshëm", nxt="Ajeti tjetër", sub="Çdo ajet një faqe"),
     },
+    "mukhtasar": {
+        "az": dict(slug="azeri-mokhtasar", src="Muxtəsər təfsir", dir="ltr", lang="az",
+                   ayah="Ayə", prev="Əvvəlki ayə", nxt="Növbəti ayə", sub="Hər ayə bir səhifə"),
+        "tr": dict(slug="turkish-mokhtasar", src="Muhtasar Tefsir", dir="ltr", lang="tr",
+                   ayah="Ayet", prev="Önceki ayet", nxt="Sonraki ayet", sub="Her ayet bir sayfa"),
+        "en": dict(slug="en-tafsir-al-mukhtasar", src="Al-Mukhtasar", dir="ltr", lang="en",
+                   ayah="Ayah", prev="Previous ayah", nxt="Next ayah", sub="Each ayah on its own page"),
+        "ru": dict(slug="russian-mokhtasar", src="Тафсир аль-Мухтасар", dir="ltr", lang="ru",
+                   ayah="Аят", prev="Предыдущий аят", nxt="Следующий аят", sub="Каждый аят — отдельная страница"),
+    },
 }
 
 FONT = {
@@ -57,6 +67,8 @@ FONT = {
 }
 
 NAV = {
+    "az": ("/az/", [("/az/quran/", "Quran"), ("/az/tafsir.html", "Təfsirlər"), ("/az/translations/", "Tərcümələr"), ("/az/about.html", "Haqqında")],
+           [("/az/faq.html", "Suallar"), ("/az/sources.html", "Mənbələr"), ("/az/privacy.html", "Məxfilik"), ("/az/terms.html", "Şərtlər")]),
     "tr": ("/tr/", [("/tr/quran/", "Kuran"), ("/tr/tafsir.html", "Tefsirler"), ("/tr/translations/", "Mealler"), ("/tr/about.html", "Hakkında")],
            [("/tr/faq.html", "Sorular"), ("/tr/sources.html", "Kaynaklar"), ("/tr/privacy.html", "Gizlilik"), ("/tr/terms.html", "Şartlar")]),
     "en": ("/en/", [("/en/quran/", "Quran"), ("/en/tafsir.html", "Tafsir"), ("/en/translations/", "Translations"), ("/en/about.html", "About")],
@@ -69,6 +81,7 @@ DEFAULT_NAV = ("/", [("/quran/", "القرآن"), ("/tafsir.html", "التفاس
 
 # language name shown on the chooser, per site UI
 LABEL = {
+    "az": {"ar": "الأذربيجانية", "az": "Azərbaycan", "tr": "Azerbaycan", "en": "Azerbaijani", "ru": "Азербайджанский"},
     "en": {"ar": "الإنجليزية", "az": "İngilis", "tr": "İngilizce", "en": "English", "ru": "Английский"},
     "tr": {"ar": "التركية", "az": "Türk", "tr": "Türkçe", "en": "Turkish", "ru": "Турецкий"},
     "ru": {"ar": "الروسية", "az": "Rus", "tr": "Rusça", "en": "Russian", "ru": "Русский"},
@@ -265,12 +278,68 @@ def sitemap_index(names):
     if add:
         open("sitemap.xml", "w", encoding="utf8").write(ix.replace("</sitemapindex>", add + "</sitemapindex>"))
 
+def publish_mukhtasar():
+    title = "المختصر في التفسير"
+    local = {"ar": "المختصر", "az": "Muxtəsər", "tr": "Muhtasar", "en": "Al-Mukhtasar", "ru": "Аль-Мухтасар"}
+    blurb = {
+        "ar": "المختصر، السعدي وابن كثير. الآية بالعربية، ثم التفسير المترجم.",
+        "az": "Muxtəsər, Sədi və İbn Kəsir. Əvvəl ayənin ərəbcəsi, sonra tərcümə təfsiri.",
+        "tr": "Muhtasar, Sa'dî ve İbn Kesîr. Önce ayetin Arapçası, sonra tercüme tefsir.",
+        "en": "Al-Mukhtasar, al-Sa'di and Ibn Kathir. The Arabic ayah first, then the translated tafsir.",
+        "ru": "Аль-Мухтасар, ас-Саади и Ибн Касир. Сначала арабский аят, затем перевод тафсира.",
+    }
+    old = {
+        "ar": "السعدي وابن كثير. الآية بالعربية، ثم التفسير المترجم.",
+        "az": "Sədi və İbn Kəsir. Əvvəl ayənin ərəbcəsi, sonra tərcümə təfsiri.",
+        "tr": "Sa'dî ve İbn Kesîr. Önce ayetin Arapçası, sonra tercüme tefsir.",
+        "en": "Al-Sa'di and Ibn Kathir. The Arabic ayah first, then the translated tafsir.",
+        "ru": "Ас-Саади и Ибн Касир. Сначала арабский аят, затем перевод тафсира.",
+    }
+    for ui, prefix in (("ar", ""), ("az", "az/"), ("tr", "tr/"), ("en", "en/"), ("ru", "ru/")):
+        home, links, foot = NAV.get(ui, DEFAULT_NAV)
+        here = "/tafsir/tercume/mukhtasar/" if ui == "ar" else f"/{ui}/tafsir/tercume/mukhtasar/"
+        menu = []
+        for code, lab in (("ar", "AR"), ("az", "AZ"), ("tr", "TR"), ("en", "EN"), ("ru", "RU")):
+            href = "/tafsir/tercume/mukhtasar/" if code == "ar" else f"/{code}/tafsir/tercume/mukhtasar/"
+            on = " class=on" if code == ui else ""
+            menu.append(f'<a href="{href}"{on}>{lab}</a>')
+        nav = "".join(f'<a href="{h}">{E(n)}</a>' for h, n in links)
+        nav += f'<span class="langs"><button type="button" class="lbtn" aria-haspopup="true" aria-expanded="false">🌐 {ui.upper()} ▾</button><span class="lmenu">{"".join(menu)}</span></span>'
+        fn = "".join(f'<a href="{h}">{E(n)}</a>' for h, n in foot)
+        direction = "rtl" if ui == "ar" else "ltr"
+        doc = f'''<!doctype html><html lang="{ui}" dir="{direction}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>{E(title)} — Mushafuk.online</title><meta property="og:title" content="{E(title)} — Mushafuk.online"><meta property="og:image" content="{B}/share.jpg"><link rel="canonical" href="{B}{here}"><link rel="icon" href="/icon.png"><link rel="stylesheet" href="/site.css?v=8"></head><body><header class="nav"><div class="in"><a class="logo" href="{home}" dir="ltr"><img src="/icon.png" alt="">Mushafuk<span>.online</span></a><nav>{nav}</nav></div></header><section class="ph"><h1>{E(title)}</h1><p>{E(LEAD[ui])}</p></section><div class="wrap">{chooser_cards("mukhtasar", ui)}</div><footer><nav>{fn}</nav><p>© 2026 Mushafuk.online</p></footer><script src="/site.js?v=7"></script></body></html>'''
+        path = f"{prefix}tafsir/tercume/mukhtasar/index.html"
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        open(path, "w", encoding="utf8").write(doc)
+        hub = f"{prefix}tafsir/tercume/index.html"
+        t = open(hub, encoding="utf8").read()
+        if 'href="mukhtasar/"' not in t:
+            go = "←" if ui == "ar" else "→"
+            card = f'<a class="card" href="mukhtasar/"><h3 dir="rtl">{title}</h3><p>{E(local[ui])}</p><span class="go">{go}</span></a>'
+            t = t.replace('<div class="cards">', '<div class="cards">' + card, 1)
+        if old[ui] in t:
+            pass
+        land = "tafsir.html" if ui == "ar" else f"{ui}/tafsir.html"
+        lt = open(land, encoding="utf8").read()
+        if old[ui] in lt:
+            lt = lt.replace(old[ui], blurb[ui], 1)
+            open(land, "w", encoding="utf8").write(lt)
+        elif blurb[ui] not in lt:
+            raise SystemExit("blurb missing " + land)
+        open(hub, "w", encoding="utf8").write(t)
+
 if __name__ == "__main__":
+    only = sys.argv[1:]
     names = []
     for book, langs in EDITIONS.items():
+        if only and book not in only:
+            continue
         for lang, meta in langs.items():
             names.append(build(book, lang, meta))
-    patch_choosers()
-    drop_empty_langs()
+    if not only:
+        patch_choosers()
+        drop_empty_langs()
+    if (not only) or ("mukhtasar" in only):
+        publish_mukhtasar()
     sitemap_index(names)
     print("done", names)
