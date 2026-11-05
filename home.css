@@ -1,5 +1,6 @@
 @import url("fonts.css?v=1");
 @font-face{font-family:QCF1;src:url(./yazi-fonts/qcf/p1.woff2) format("woff2");font-display:swap}
+@font-face{font-family:QCF283;src:url(./yazi-fonts/qcf/p283.woff2) format("woff2");font-display:swap}
 .h{--g:#0f3d2a;--g2:#1c5a3d;--gold:#b8913f;--cr:#f8f3e7;margin:0;background:var(--cr);color:#1d2a22;font-family:"Segoe UI",Tahoma,"Noto Naskh Arabic","Amiri",sans-serif}
 html[dir="rtl"] .h{font-family:"Noto Naskh Arabic","Amiri","Scheherazade New",UthmanTaha,"Traditional Arabic","Segoe UI",serif}
 .h a{color:inherit;text-decoration:none}
@@ -21,6 +22,8 @@ background:radial-gradient(ellipse at 50% 30%,#fffaf0 0,#f4ecdb 60%,#efe5d0 100%
 .h .bism{font-family:QCF1,serif;font-size:2.8rem;color:var(--gold);direction:rtl;position:relative;display:flex;align-items:center;justify-content:center;gap:14px}
 .h .bism:before,.h .bism:after{content:"";height:1px;width:90px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
 .h h1{font-size:3.3rem;color:var(--g);margin:6px 0 10px;position:relative}
+.h h1.ayah{font-family:QCF283,serif;font-weight:400;display:flex;flex-wrap:wrap;justify-content:center;gap:.14em;direction:rtl;font-size:clamp(1.85rem,4.6vw,2.85rem);line-height:1.7;max-width:16em;margin:8px auto 12px}
+.h h1.verse{font-size:clamp(1.35rem,3.1vw,2.05rem);line-height:1.45;max-width:16em;margin:8px auto 14px;font-weight:600}
 .h .hero p{max-width:520px;margin:0 auto 24px;font-size:1.12rem;line-height:1.8;color:#3c4a40;position:relative}
 .h .cta{display:inline-flex;gap:10px;align-items:center;background:linear-gradient(#1c5a3d,#0f3d2a);color:#fff!important;padding:14px 30px;border-radius:30px;font-weight:700;font-size:1.05rem;box-shadow:0 8px 22px #0f3d2a44;position:relative}
 .h .cta.resume{display:flex;width:fit-content;margin:12px auto 0;background:#fff;color:#0f3d2a!important;border:1px solid #c4a56e;box-shadow:none}
@@ -39,7 +42,7 @@ background:radial-gradient(ellipse at 50% 30%,#fffaf0 0,#f4ecdb 60%,#efe5d0 100%
 .h footer img{width:52px;height:52px;border-radius:50%;box-shadow:0 0 0 2px var(--gold)}
 .h footer .c{font-size:1.1rem;margin:12px 0}.h footer .l a{margin:0 10px;opacity:.85;font-size:.9rem}
 .h footer svg{position:absolute;bottom:0;left:0;width:100%;height:90px;opacity:.35}
-@media(max-width:640px){.h .cards{grid-template-columns:1fr}.h h1{font-size:2.5rem}.h nav a{padding:8px 10px;font-size:.85rem}.h .bism{font-size:2.1rem}.h .bism:before,.h .bism:after{width:40px}}
+@media(max-width:640px){.h .cards{grid-template-columns:1fr}.h h1{font-size:2.5rem}.h h1.ayah{font-size:1.7rem}.h h1.verse{font-size:1.25rem}.h nav a{padding:8px 10px;font-size:.85rem}.h .bism{font-size:2.1rem}.h .bism:before,.h .bism:after{width:40px}}
 .h nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.h nav a{white-space:nowrap}
 .h .rehal{width:min(380px,80%);border-radius:0 0 40px 40px;}
 .h .cards{margin-top:16px}
