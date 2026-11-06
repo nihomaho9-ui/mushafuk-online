@@ -2,6 +2,25 @@
   var s = document.currentScript;
   var next = s.getAttribute("data-next") || "";
   var prev = s.getAttribute("data-prev") || "";
+  (function () {
+    var css = document.createElement("link");
+    css.rel = "stylesheet";
+    var base = (s && s.src) ? s.src.replace(/turn\.js[^/]*$/, "") : "https://tafsir.mushafuk.online/";
+    css.href = base + "saadi.css?v=4";
+    document.head.appendChild(css);
+  })();
+  (function () {
+    var th = document.createElement("script");
+    var base = (s && s.src) ? s.src.replace(/turn\.js[^/]*$/, "") : "https://tafsir.mushafuk.online/";
+    th.src = base + "read-theme.js?v=1";
+    document.head.appendChild(th);
+  })();
+  (function () {
+    var base = (s && s.src) ? s.src.replace(/turn\.js[^/]*$/, "") : "https://tafsir.mushafuk.online/";
+    var c = document.createElement("link"); c.rel = "stylesheet"; c.href = base + "quote-color.css?v=1"; document.head.appendChild(c);
+    var q = document.createElement("script"); q.src = base + "quote-color.js?v=1"; document.head.appendChild(q);
+  })();
+
   try { sessionStorage.removeItem("qm.tfdir"); } catch (e) {}
   document.documentElement.classList.remove("qm-turning");
 
@@ -38,9 +57,9 @@
     document.head.appendChild(st);
     var brand = document.createElement("a");
     brand.className = "home-brand";
-    brand.href = "/";
+    brand.href = "https://mushafuk.online/";
     brand.setAttribute("aria-label", "Mushafuk");
-    brand.innerHTML = '<img src="/icon.png" alt="" width="18" height="18"><span>Mushafuk</span>';
+    brand.innerHTML = '<img src="https://mushafuk.online/icon.png" alt="" width="18" height="18"><span>Mushafuk</span>';
     var bar = document.querySelector(".bar");
     if (bar) bar.appendChild(brand);
   }
