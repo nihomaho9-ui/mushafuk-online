@@ -56,3 +56,10 @@ footer{border-top:1px solid #e8dfc9;text-align:center;padding:2rem;color:var(--m
 .nav nav a,[dir=rtl] .nav nav a{margin:0!important}
 .nav nav .langs{margin:0!important}
 @media(max-width:700px){.nav nav{gap:.3rem .9rem}.nav nav a{font-size:.85rem}}
+
+/* About: small Madinah IU mark before university name (owner-supplied) */
+.about-copy{text-align:start;line-height:1.75}
+.about-copy p{margin:0 0 1rem}
+.uni-name{display:inline-flex;align-items:center;gap:.35em;vertical-align:baseline;max-width:100%;flex-wrap:wrap}
+.uni-name .uni-icon{width:24px;height:24px;object-fit:contain;flex:none}
+html[dir=rtl] .about-copy{text-align:right}
