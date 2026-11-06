@@ -61,15 +61,15 @@
       "#qm-theme-menu button:focus-visible{outline:2px solid #b8923a;outline-offset:1px}",
       /* white */
       "html.qm-theme-white,html.qm-theme-white body{background:#fff!important;color:#111!important}",
-      "html.qm-theme-white .bar,html.qm-theme-white .ulum-book .body,html.qm-theme-white .ulum-card,html.qm-theme-white .qm-sheet{background:#fff!important;color:#111!important}",
-      "html.qm-theme-white .tx,html.qm-theme-white .ulum-book .body p,html.qm-theme-white .qm-body{color:#111!important}",
+      "html.qm-theme-white .bar,html.qm-theme-white .ulum-card,html.qm-theme-white .qm-sheet{background:#fff!important;color:#111!important}",
+      "html.qm-theme-white .ulum-book .body,html.qm-theme-black .ulum-book .body{background:transparent!important;color:inherit!important}html.qm-theme-white .tx,html.qm-theme-white .ulum-book .body p,html.qm-theme-white .qm-body{color:#111!important}",
       "html.qm-theme-white a,html.qm-theme-white .pn a,html.qm-theme-white .ulum-pn a{color:#0b4a38!important}",
       "html.qm-theme-white .ay{color:#111!important}",
       "html.qm-theme-white #qm-theme-btn{background:#fff;border-color:#bbb}",
       "html.qm-theme-white #qm-theme-menu{background:#fff;border-color:#ddd}",
       /* black */
       "html.qm-theme-black,html.qm-theme-black body{background:#0e0e0e!important;color:#f2ebe0!important}",
-      "html.qm-theme-black .bar,html.qm-theme-black .ulum-book .body,html.qm-theme-black .ulum-card,html.qm-theme-black .qm-sheet{background:#161616!important;color:#f2ebe0!important}",
+      "html.qm-theme-black .bar,html.qm-theme-black .ulum-card,html.qm-theme-black .qm-sheet{background:#161616!important;color:#f2ebe0!important}",
       "html.qm-theme-black .tx,html.qm-theme-black .ulum-book .body p,html.qm-theme-black .qm-body,html.qm-theme-black .ay{color:#f2ebe0!important}",
       "html.qm-theme-black a,html.qm-theme-black .pn a,html.qm-theme-black .ulum-pn a{color:#d7b56a!important}",
       "html.qm-theme-black .src,html.qm-theme-black .meta,html.qm-theme-black .ulum-credit{color:#b7aa95!important}",
@@ -136,4 +136,31 @@
   if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", mount);
   else mount();
   window.QMReadTheme = { get: get, set: set, apply: apply };
+})();
+
+/* QM-ULUM-SWIPE: horizontal swipe = prev/next chapter on Ulum book pages (same direction as tafsir turn.js) */
+(function () {
+  function init() {
+    if (!document.querySelector("main.ulum-book")) return;
+    var pn = document.querySelector(".ulum-pn"); if (!pn) return;
+    var next = null, prev = null, as = pn.querySelectorAll("a[href]");
+    for (var i = 0; i < as.length; i++) { var t = (as[i].textContent || "").trim(); if (/التالي/.test(t)) next = as[i].href; else if (/السابق/.test(t)) prev = as[i].href; }
+    if (!next && !prev) return;
+    var x = null, y = null, lock = null, dx = 0;
+    function selecting() { try { var s = window.getSelection(); return s && String(s).length > 0; } catch (e) { return false; } }
+    document.addEventListener("touchstart", function (e) {
+      var t = e.target; if (e.touches.length !== 1 || (t && t.closest && t.closest("a,button,input,textarea,select,#qm-theme-root"))) { x = null; return; }
+      x = e.touches[0].clientX; y = e.touches[0].clientY; lock = null; dx = 0;
+    }, { passive: true });
+    document.addEventListener("touchmove", function (e) {
+      if (x == null) return; var ddx = e.touches[0].clientX - x, ddy = e.touches[0].clientY - y; dx = ddx;
+      if (!lock && (Math.abs(ddx) > 8 || Math.abs(ddy) > 8)) lock = Math.abs(ddx) > Math.abs(ddy) * 1.3 ? "x" : "y";
+    }, { passive: true });
+    document.addEventListener("touchend", function () {
+      if (x == null) return; var was = lock, d = dx; x = null; lock = null;
+      if (was !== "x" || Math.abs(d) < 48 || selecting()) return;
+      var u = d > 0 ? next : prev; if (u) location.assign(u);
+    }, { passive: true });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init); else init();
 })();
