@@ -1,23 +1,13 @@
 [
   {
-    "id": "saadi",
+    "id": "aysar",
     "k": "tf",
-    "name": "تيسير الكريم الرحمن",
-    "by": "السعدي",
+    "name": "أيسر التفاسير",
+    "by": "أبو بكر الجزائري",
     "lang": "ar",
     "dir": "rtl",
     "per": true,
-    "mb": 6
-  },
-  {
-    "id": "muyassar",
-    "k": "tf",
-    "name": "التفسير الميسر",
-    "by": "مجمع الملك فهد",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 2
+    "mb": 6.8
   },
   {
     "id": "mukhtasar",
@@ -30,6 +20,66 @@
     "mb": 1.9
   },
   {
+    "id": "muyassar",
+    "k": "tf",
+    "name": "التفسير الميسر",
+    "by": "مجمع الملك فهد",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 2
+  },
+  {
+    "id": "uthaymeen",
+    "k": "tf",
+    "name": "تفسير ابن عثيمين",
+    "by": "ابن عثيمين",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 40
+  },
+  {
+    "id": "shinqiti",
+    "k": "tf",
+    "name": "أضواء البيان",
+    "by": "الشنقيطي",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 8
+  },
+  {
+    "id": "saadi",
+    "k": "tf",
+    "name": "تيسير الكريم الرحمن",
+    "by": "السعدي",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 6
+  },
+  {
+    "id": "qasimi",
+    "k": "tf",
+    "name": "محاسن التأويل",
+    "by": "جمال الدين القاسمي",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 18
+  },
+  {
+    "id": "shawkani",
+    "k": "tf",
+    "name": "فتح القدير",
+    "by": "الشوكاني",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 20
+  },
+  {
     "id": "ibnkathir",
     "k": "tf",
     "name": "تفسير ابن كثير",
@@ -38,6 +88,26 @@
     "dir": "rtl",
     "per": true,
     "mb": 15
+  },
+  {
+    "id": "qayyim",
+    "k": "tf",
+    "name": "تفسير ابن القيم",
+    "by": "ابن قيم الجوزية",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 2
+  },
+  {
+    "id": "jawzi",
+    "k": "tf",
+    "name": "زاد المسير",
+    "by": "ابن الجوزي",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 8
   },
   {
     "id": "baghawi",
@@ -60,54 +130,14 @@
     "mb": 7
   },
   {
-    "id": "aysar",
+    "id": "zamanin",
     "k": "tf",
-    "name": "أيسر التفاسير",
-    "by": "أبو بكر الجزائري",
+    "name": "تفسير ابن أبي زمنين",
+    "by": "ابن أبي زمنين",
     "lang": "ar",
     "dir": "rtl",
     "per": true,
-    "mb": 6.8
-  },
-  {
-    "id": "tabari",
-    "k": "tf",
-    "name": "جامع البيان (تفسير الطبري)",
-    "by": "الطبري",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 37
-  },
-  {
-    "id": "shinqiti",
-    "k": "tf",
-    "name": "أضواء البيان",
-    "by": "الشنقيطي",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 8
-  },
-  {
-    "id": "shawkani",
-    "k": "tf",
-    "name": "فتح القدير",
-    "by": "الشوكاني",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 20
-  },
-  {
-    "id": "uthaymeen",
-    "k": "tf",
-    "name": "تفسير ابن عثيمين",
-    "by": "ابن عثيمين",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 40
+    "mb": 3
   },
   {
     "id": "ibnhatim",
@@ -120,6 +150,16 @@
     "mb": 14
   },
   {
+    "id": "tabari",
+    "k": "tf",
+    "name": "جامع البيان (تفسير الطبري)",
+    "by": "الطبري",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 37
+  },
+  {
     "id": "thawri",
     "k": "tf",
     "name": "تفسير سفيان الثوري",
@@ -128,46 +168,6 @@
     "dir": "rtl",
     "per": true,
     "mb": 0.7
-  },
-  {
-    "id": "zamanin",
-    "k": "tf",
-    "name": "تفسير ابن أبي زمنين",
-    "by": "ابن أبي زمنين",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 3
-  },
-  {
-    "id": "jawzi",
-    "k": "tf",
-    "name": "زاد المسير",
-    "by": "ابن الجوزي",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 8
-  },
-  {
-    "id": "qayyim",
-    "k": "tf",
-    "name": "تفسير ابن القيم",
-    "by": "ابن قيم الجوزية",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 2
-  },
-  {
-    "id": "qasimi",
-    "k": "tf",
-    "name": "محاسن التأويل",
-    "by": "جمال الدين القاسمي",
-    "lang": "ar",
-    "dir": "rtl",
-    "per": true,
-    "mb": 18
   },
   {
     "id": "irab_muyassar",

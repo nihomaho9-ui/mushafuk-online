@@ -24,3 +24,4 @@ html[dir="rtl"] body{font-family:var(--ar)}
 .qm-body[lang="ar"],.qm-tx2[lang="ar"],.qm-cmp-tx[lang="ar"],.qm-gh,.qm-gh-notes,.tx[lang="ar"],.ulum-book .body p{
   font-family:var(--tf-body);font-feature-settings:"locl" 1;line-height:2.2
 }
+@import url("quote-color.css?v=1");
