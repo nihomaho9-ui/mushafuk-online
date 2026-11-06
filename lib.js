@@ -34,9 +34,11 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
   // website: every book is open — files stream from the server on demand, no download step (native app keeps offline downloads)
   const WEB = !(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
   const netP = {};
+  const extTf = (id) => id === "ibnhatim" || id === "thawri";
+  const bookUrl = (r, s) => extTf(r.id) ? ("https://tafsir.mushafuk.online/data/" + r.id + "/" + s + ".json") : (RB + (r.p || r.k) + "/" + r.id + "/" + s + ".json");
   const netSurah = (r, s) => (netP[r.id + ":" + s] ||= (async () => {
     if (r.k === "tr" && !r.per) { const j = await (netP[r.id + ":all"] ||= fetch(RB + "tr/" + r.id + ".json").then((x) => { if (!x.ok) throw new Error("http"); return x.json(); })); return { v: j.v[s - 1] }; }
-    const res = await fetch(RB + (r.p || r.k) + "/" + r.id + "/" + s + ".json"); if (!res.ok) throw new Error("http");
+    const res = await fetch(bookUrl(r, s)); if (!res.ok) throw new Error("http");
     const j = await res.json(); return r.k === "tr" ? { v: j.t, f: j.f } : { v: j };
   })().catch((e) => { delete netP[r.id + ":" + s]; throw e; }));
   const netWbw = (s) => (netP["wbw:" + s] ||= fetch(RB + "wb/seraj/w" + s + ".json").then((x) => { if (!x.ok) throw new Error("http"); return x.json(); }).catch(() => { delete netP["wbw:" + s]; return null; }));
@@ -70,7 +72,7 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
       }
       for (let s = (await status(r.id)) + 1; s <= 114; s++) {
         if (ctl.stop) throw new Error("stopped");
-        const res = await fetch(RB + (r.p || r.k) + "/" + r.id + "/" + s + ".json"); if (!res.ok) throw new Error("http");
+        const res = await fetch(bookUrl(r, s)); if (!res.ok) throw new Error("http");
         const j = await res.json();
         const out = r.k === "tr" ? j.t : j;
         if (!Array.isArray(out) || out.length !== AYAHS[s - 1]) throw new Error("bad file");
@@ -1297,8 +1299,8 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
       if (ps.length === 2 && +ps[0] >= 1 && +ps[1] >= 1) {
         let id = "saadi";
         try { id = (prefs().tf) || "saadi"; } catch (e) {}
-        if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari|shinqiti|shawkani|uthaymeen)$/.test(id)) id = "saadi";
-        if (/^(shinqiti|shawkani|uthaymeen)$/.test(id)) location.assign("https://tafsir.mushafuk.online/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
+        if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari|shinqiti|shawkani|uthaymeen|ibnhatim|thawri)$/.test(id)) id = "saadi";
+        if (/^(shinqiti|shawkani|uthaymeen|ibnhatim|thawri)$/.test(id)) location.assign("https://tafsir.mushafuk.online/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
         else location.assign("/tafsir/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
         return;
       }
