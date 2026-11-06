@@ -37,6 +37,21 @@
     bagislayan: "bagisla",
     merhemet: "merhemet",
     mukafat: "mukafat",
+    yesin: "yasin",
+    ihlas: "ixlas",
+    ikhlas: "ixlas",
+    destemaz: "abdest",
+    destamaz: "abdest",
+    hecce: "hecc",
+    bosanm: "bosan",
+    bosay: "bosan",
+    ortuns: "hicab",
+    ortun: "hicab",
+    orpek: "hicab",
+    serxosedic: "serxos",
+    zinakarliq: "zina",
+    haqqi: "haqq",
+    haqqin: "haqq",
   };
 
   // One topic per query: the longest matching rule wins (specific rules first).
@@ -52,6 +67,28 @@
     { match: ["oruc"], verses: [[2, 183], [2, 184], [2, 185], [2, 187]] },
     { match: ["tovbe"], verses: [[39, 53], [66, 8], [4, 17], [4, 18], [25, 70], [24, 31]] },
     { match: ["zekat"], verses: [[9, 60], [2, 43], [2, 110], [2, 177], [2, 277], [23, 4]] },
+    { match: ["dord", "arvad"], verses: [[4, 3]] },
+    { match: ["ata", "ana"], verses: [[17, 23], [17, 24], [31, 14], [46, 15], [2, 83]] },
+    { match: ["ana", "haqq"], verses: [[17, 23], [31, 14], [46, 15]] },
+    { match: ["ata", "haqq"], verses: [[17, 23], [31, 14], [46, 15]] },
+    { match: ["qible"], verses: [[2, 144], [2, 149], [2, 150], [2, 142]] },
+    { match: ["hicab"], verses: [[24, 31], [33, 59], [33, 53]] },
+    { match: ["carsab"], verses: [[33, 59], [24, 31]] },
+    { match: ["icki"], verses: [[5, 90], [5, 91], [2, 219], [4, 43]] },
+    { match: ["serab"], verses: [[5, 90], [5, 91], [2, 219]] },
+    { match: ["serxos"], verses: [[5, 90], [5, 91], [2, 219], [4, 43]] },
+    { match: ["abdest"], verses: [[5, 6], [4, 43]] },
+    { match: ["hecc"], verses: [[3, 97], [2, 196], [2, 197], [22, 27]] },
+    { match: ["bosan"], verses: [[2, 229], [65, 1], [2, 230], [2, 227]] },
+    { match: ["talaq"], verses: [[65, 1], [2, 229], [2, 230], [2, 227]] },
+    { match: ["coxarvadliliq"], verses: [[4, 3]] },
+    { match: ["ogurluq"], verses: [[5, 38]] },
+    { match: ["ogru"], verses: [[5, 38]] },
+    { match: ["zina"], verses: [[17, 32], [24, 2], [24, 3]] },
+    { match: ["sirk"], verses: [[4, 48], [4, 116], [31, 13]] },
+    { match: ["tovhid"], verses: [[112, 1], [2, 163]] },
+    { match: ["ixlas"], verses: [[112, 1], [112, 2], [112, 3], [112, 4]] },
+    { match: ["yasin"], verses: [[36, 1]] },
   ];
 
   // Deep-mode expansions. Keys and values are fold()'d, except Arabic.
@@ -204,10 +241,20 @@
     return i + a - 1;
   }
 
+  function covers(p, m) {
+    if (p === m) return true;
+    if (!p || !m || m.length < 4) return false;
+    if (p.startsWith(m) && p.length > m.length) {
+      const rest = p.slice(m.length);
+      return /^(lar|ler|lari|leri|larin|lerin|dan|den|da|de|in|un|i|u|e|a|si|su|lik|liq|luk|luq|liliq)$/.test(rest);
+    }
+    return m.startsWith(p) && p.length >= 4 && m.length - p.length <= 2;
+  }
+
   function topicFor(parts) {
     let best = null;
     for (const topic of TOPIC_VERSES) {
-      const ok = topic.match.every((m) => parts.some((p) => p === m || (p.length >= 3 && (p.startsWith(m) || m.startsWith(p)))));
+      const ok = topic.match.every((m) => parts.some((p) => covers(p, m)));
       if (!ok) continue;
       if (!best || topic.match.length > best.match.length) best = topic;
     }
@@ -220,7 +267,7 @@
     if (!key || !t) return 0;
     if (key === t) return 1;
     if (t.length >= 3 && key.startsWith(t)) return 0.75;
-    if (key.length >= 4 && t.startsWith(key)) return 0.65;
+    if (key.length >= 4 && t.startsWith(key) && t.length - key.length <= 1) return 0.65;
     return 0;
   }
 
@@ -368,6 +415,64 @@
     return idxs.map((i) => sentences[i]).join(" … ");
   }
 
+  // Bare surah names that people type as a request, not as a normal word
+  // (həcc, tövbə, nur stay with topic/lexical search).
+  const SURAH_ASK = {
+    fatih: 1,
+    fatihe: 1,
+    fatiha: 1,
+    beqer: 2,
+    beqere: 2,
+    baqara: 2,
+    bakara: 2,
+    yasin: 36,
+    yesin: 36,
+    yaseen: 36,
+    ixlas: 112,
+    ihlas: 112,
+    ikhlas: 112,
+  };
+
+  function cite(raw, meta) {
+    if (!raw || !meta || !meta.counts) return null;
+    const counts = meta.counts;
+    const text = String(raw).trim();
+    const pair = text.match(/(?:^|\s)(\d{1,3})\s*[:./-]\s*(\d{1,3})(?:\s|$)/);
+    if (pair) {
+      const s = +pair[1];
+      const a = +pair[2];
+      if (s >= 1 && s <= 114 && a >= 1 && a <= counts[s - 1]) return { s, a, kind: "ayah" };
+    }
+    const flat = fold(arNorm(text))
+      .replace(/[^a-z0-9]+/gi, " ")
+      .replace(/\b(el|al|suresi|suresin|sure|sura|ayesi|ayetin|ayet|aye)\b/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    if (!flat) return null;
+    if (flat === "kursi" || flat === "kursu" || /kurs[iu]$/.test(flat)) return { s: 2, a: 255, kind: "ayah" };
+    const bits = flat.split(" ").filter(Boolean);
+    const nums = bits.filter((w) => /^\d{1,3}$/.test(w)).map(Number);
+    const words = bits.filter((w) => !/^\d+$/.test(w)).map(peelWord);
+    if (words.length !== 1) return null;
+    const key = words[0];
+    let surah = SURAH_ASK[key] || 0;
+    if (!surah && nums.length && meta.names) {
+      for (const code of ["az", "tr", "en", "ru"]) {
+        const list = meta.names[code] || [];
+        for (let i = 0; i < list.length; i++) {
+          const n = peelWord(list[i]);
+          if (n === key) { surah = i + 1; break; }
+        }
+        if (surah) break;
+      }
+    }
+    if (!surah) return null;
+    if (!nums.length) return { s: surah, a: 1, kind: "surah" };
+    const a = nums.find((n) => n >= 1 && n <= counts[surah - 1]);
+    if (!a) return null;
+    return { s: surah, a, kind: "ayah" };
+  }
+
   return {
     TOTAL,
     STOP,
@@ -382,6 +487,7 @@
     tokens,
     arStems,
     rank,
+    cite,
     relevantSnippet,
     indexOfCounts,
   };

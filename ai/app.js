@@ -167,6 +167,12 @@
     if (/^\d{1,3}$/.test(raw.trim())) { const n = +raw.trim(); if (n >= 115 && n <= 604) return n; }
     return 0;
   }
+  function citedAyah(raw) {
+    const eng = window.MushafukEngine;
+    if (!eng || !eng.cite) return null;
+    const hit = eng.cite(raw, meta);
+    return hit ? { s: hit.s, a: hit.a } : null;
+  }
   function ayahQuery(raw) {
     const m = raw.trim().match(/^(\d{1,3})\s*[:./-]\s*(\d{1,3})$/);
     if (!m) return null;
@@ -808,7 +814,7 @@
     let parts = [];
     let found = new Set();
     rankInfo = new Map();
-    const ayRaw = ayahQuery(q) || ayahQuery(raw);
+    const ayRaw = ayahQuery(q) || ayahQuery(raw) || citedAyah(raw);
     if (!fol && !pageQuery(q) && !ayRaw) {
       if (readMode === "tr" && isAr(raw)) {
         const c = conceptOf(raw);
