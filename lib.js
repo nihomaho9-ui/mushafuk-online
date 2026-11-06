@@ -1321,7 +1321,7 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
         let id = "saadi";
         try { id = (prefs().tf) || "saadi"; } catch (e) {}
         if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari|shinqiti|shawkani|uthaymeen|ibnhatim|thawri|zamanin|jawzi|qayyim|qasimi)$/.test(id)) id = "saadi";
-        location.assign("https://tafsir.mushafuk.online/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
+        location.assign("https://tafsir.mushafuk.online/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/#qmfrom=" + encodeURIComponent(location.href));
         return;
       }
     }
