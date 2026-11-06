@@ -69,3 +69,7 @@ background:radial-gradient(ellipse at 50% 30%,#fffaf0 0,#f4ecdb 60%,#efe5d0 100%
   .h .ic .si{width:18px;height:18px}
   .h .go{width:30px;height:30px;font-size:.95rem}
 }
+
+/* .known chips sit inside the .cards grid: span full row and allow shrinking so they never widen the page */
+.h .cards>.known{grid-column:1/-1;min-width:0;max-width:none;width:auto;margin:6px 0 42px;padding:0}
+.h .known a{max-width:100%;overflow-wrap:anywhere}
