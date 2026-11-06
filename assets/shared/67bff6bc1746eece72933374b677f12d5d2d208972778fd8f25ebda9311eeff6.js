@@ -1,0 +1,1 @@
+try{localStorage.setItem("qm.lang","en");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");if(!p.tr)p.tr="english_saheeh";localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}

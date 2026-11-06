@@ -1,0 +1,16 @@
+
+.page-hero{background:linear-gradient(165deg,#0f4d3a 0%,#0b3a2c 58%,#16382c 100%);color:#fbf7ee;text-align:center;padding:3.1rem 1.2rem 2.3rem;border-bottom:4px solid #b8923a}
+.page-hero h1{color:#fff;margin:0 0 .55rem;font-size:clamp(2rem,4.4vw,3.05rem)}
+.page-hero p{max-width:40rem;margin:.35rem auto;color:#e6dcc4;font-size:1.05rem}
+.kicker{letter-spacing:.16em;text-transform:uppercase;font-size:.72rem;color:#e0c27a;font-weight:700;margin:0 0 .45rem}
+.sheet{max-width:860px;margin:0 auto;padding:1.4rem 1rem 4rem}
+.q{background:#fff;border:1px solid #ece3cd;border-inline-start:4px solid #b8923a;border-radius:16px;padding:1.05rem 1.2rem 1.1rem;margin:0 0 .85rem;box-shadow:0 10px 26px rgba(15,77,58,.05)}
+.q h2{margin:0 0 .55rem;font-size:1.22rem;color:#0b3a2c}
+.q p{margin:.32rem 0;color:#3e352b}
+.src h2{margin:1.6rem 0 .7rem;color:#0b3a2c}
+.src .note{background:#fff;border:1px solid #ece3cd;border-top:3px solid #0f4d3a;border-radius:14px;padding:1rem 1.15rem;margin:0 0 .8rem}
+.src .note h3{margin:.1rem 0 .35rem;font-size:1.15rem}
+.src .note p{margin:.28rem 0;color:#3e352b}
+.src .note a{color:#0f4d3a;font-weight:650;text-decoration:underline;text-underline-offset:.14em}
+.tag{display:inline-block;font-size:.72rem;background:#f3ecd9;color:#0f4d3a;padding:.08rem .55rem;border-radius:99px;margin-bottom:.35rem}
+footer nav{margin-bottom:.25rem}

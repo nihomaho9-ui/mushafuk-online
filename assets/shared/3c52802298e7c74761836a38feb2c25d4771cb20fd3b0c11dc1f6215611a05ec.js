@@ -1,0 +1,1 @@
+(function w(i){if(window.QM&&window.QM_PAGE&&window.QM_PAGE(261)){QM.openFull("ir",null,261);return}if(i<200)setTimeout(function(){w(i+1)},100)})(0)

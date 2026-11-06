@@ -1,0 +1,1 @@
+try{var q=JSON.parse(localStorage.getItem("qm.prefs")||"{}");q.tr="english_saheeh";q.tab="tr";localStorage.setItem("qm.prefs",JSON.stringify(q));}catch(e){}

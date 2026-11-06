@@ -1,0 +1,1 @@
+try{localStorage.setItem("qm.lang","ru");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");if(!p.tr)p.tr="ru.kuliev";localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}

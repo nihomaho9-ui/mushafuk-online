@@ -1,0 +1,1 @@
+try{var q=JSON.parse(localStorage.getItem("qm.prefs")||"{}");var w=new URLSearchParams(location.search).get("wb");if(w==="seraj"||w==="ibnqutaybah")q.wb=w;else if(!q.wb)q.wb="seraj";q.tab="wb";localStorage.setItem("qm.prefs",JSON.stringify(q));}catch(e){}

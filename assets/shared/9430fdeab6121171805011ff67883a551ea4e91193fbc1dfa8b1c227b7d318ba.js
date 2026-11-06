@@ -1,0 +1,1 @@
+try{var q=JSON.parse(localStorage.getItem("qm.prefs")||"{}");q.wb="seraj";q.tab="wb";localStorage.setItem("qm.prefs",JSON.stringify(q));}catch(e){}
