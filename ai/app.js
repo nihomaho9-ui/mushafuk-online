@@ -108,7 +108,7 @@
   };
   const AR_DIAC = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g;
   const fold = (s) => s.replace(/İ/g, "i").replace(/I/g, "ı").toLowerCase().replace(/ə/g, "e").replace(/ı/g, "i").replace(/[öó]/g, "o").replace(/[üú]/g, "u").replace(/ş/g, "s").replace(/ç/g, "c").replace(/ğ/g, "g").replace(/â/g, "a").replace(/î/g, "i").replace(/û/g, "u");
-  const arNorm = (s) => s.replace(AR_DIAC, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي").replace(/\u0621/g, "").replace(/\u0640/g, "");
+  const arNorm = (s) => (window.MushafukEngine ? window.MushafukEngine.arNorm(s) : (s || "").replace(AR_DIAC, "").replace(/[أإآٱ]/g, "ا").replace(/ى/g, "ي").replace(/ة/g, "ه").replace(/ؤ/g, "و").replace(/ئ/g, "ي").replace(/\u0621/g, "").replace(/\u0640/g, ""));
   const isAr = (s) => /[\u0600-\u06FF]/.test(s);
   const digits = (s) => s.replace(/[٠-٩۰-۹]/g, (ch) => "0123456789"["٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹".indexOf(ch) % 10]);
   const keyOf = (t) => (t.startsWith("ال") && t.length > 4 ? t.slice(2) : t);
@@ -139,6 +139,7 @@
     return i + a - 1;
   }
   function tokens(raw) {
+    if (window.MushafukEngine) return window.MushafukEngine.tokens(raw, lang);
     const arabic = isAr(raw);
     const src = arabic ? arNorm(raw) : fold(arNorm(raw));
     const stop = new Set((arabic ? STOP.ar : STOP[lang]).split(" ").map((w) => keyOf(arabic ? arNorm(w) : fold(w))));
@@ -174,6 +175,7 @@
     return { s, a };
   }
   function peelWord(w) {
+    if (window.MushafukEngine) return window.MushafukEngine.peelWord(w);
     return w.replace(/(nin|nın|nun|nün|dan|dən|den|də|da|si|sı|su|sü|in|ın|un|ün)$/i, "");
   }
   function surahInText(raw) {
@@ -329,47 +331,25 @@
     }
     return false;
   }
+  let rankInfo = new Map();
+  let captureRank = false;
   async function wordHits(parts) {
-    const sets = [];
-    for (const part of parts) {
-      const arabic = /[\u0600-\u06FF]/.test(part);
-      const stems = arabic ? arStems(part) : [part];
-      const bags = [];
-      const seen = new Set();
-      for (const s of stems) {
-        const b = s.slice(0, 2);
-        if (seen.has(b)) continue;
-        seen.add(b);
-        bags.push(await bucket(b));
-      }
-      if (arabic && part.length >= 3) {
-        for (const p of ["و", "ف", "ب", "ل"]) {
-          const b = (p + part).slice(0, 2);
-          if (b === "ال" || b === "وا" || seen.has(b)) continue;
-          seen.add(b);
-          bags.push(await bucket(b));
-        }
-      }
-      const u = new Set();
-      for (const bag of bags) {
-        for (const w in bag) {
-          const ok = arabic ? arHit(w, stems) || arHit(w.replace(/^[وفبلكس]/, ""), stems) : (w === part || w.startsWith(part));
-          if (!ok) continue;
-          for (const pair of bag[w]) u.add(pair[0] * 10000 + pair[1]);
-        }
-      }
-      if (!u.size) continue;
-      sets.push(u);
+    const eng = window.MushafukEngine;
+    if (!eng || !parts || !parts.length) {
+      if (captureRank) rankInfo = new Map();
+      return new Set();
     }
-    if (!sets.length) return new Set();
-    sets.sort((a, b) => a.size - b.size);
-    let acc = sets[0];
-    for (let i = 1; i < sets.length; i++) {
-      const next = new Set();
-      for (const x of acc) if (sets[i].has(x)) next.add(x);
-      acc = next;
+    const ranked = await eng.rank(parts, bucket, { scope, counts: meta.counts });
+    if (captureRank) rankInfo = new Map(ranked.ayahs.map((a) => [a.i, a]));
+    const set = new Set();
+    for (const [src, i] of ranked.pairs) set.add(src * 10000 + i);
+    if (captureRank) {
+      const meal = sources ? sources.findIndex((s) => s.k === "tr" && s.l === qlNow) : -1;
+      if (meal >= 0) {
+        for (const a of ranked.ayahs) if (a.topic) set.add(meal * 10000 + a.i);
+      }
     }
-    return acc.size ? acc : sets[0];
+    return set;
   }
   function writtenLang(raw) {
     if (isAr(raw)) return "ar";
@@ -827,26 +807,33 @@
     arabicQ = readMode !== "tr";
     let parts = [];
     let found = new Set();
+    rankInfo = new Map();
     const ayRaw = ayahQuery(q) || ayahQuery(raw);
     if (!fol && !pageQuery(q) && !ayRaw) {
       if (readMode === "tr" && isAr(raw)) {
         const c = conceptOf(raw);
         const row = CONCEPTS.find((pair) => pair[1] === c);
         const words = row ? row[0].split(" ").filter((w) => w.length > 2) : [];
+        captureRank = false;
         for (const w of words) {
           const hit = await wordHits(tokens(w));
           for (const x of hit) found.add(x);
         }
         parts = words.map((w) => fold(w));
+        captureRank = true;
+        if (parts.length) await wordHits(parts);
       } else if (readMode !== "tr" && !isAr(raw)) {
         const c = conceptOf(raw);
         parts = c ? tokens(c) : tokens(stripBookWords(stripQ(raw)));
+        captureRank = true;
         found = parts.length ? await wordHits(parts) : new Set();
       } else {
         const cleaned = stripBookWords(isAr(raw) ? stripArabic(raw) : stripQ(raw));
         parts = tokens(cleaned || raw);
+        captureRank = true;
         found = parts.length ? await wordHits(parts) : new Set();
       }
+      captureRank = false;
     }
     partsNow = parts;
     if (id !== job) return;
@@ -885,6 +872,13 @@
       for (const h of one.values()) rest.push(h);
     }
     rest.sort((a, b) => {
+      const ia = rankInfo.get(a.i);
+      const ib = rankInfo.get(b.i);
+      const ai = ia && ia.topicIdx != null ? ia.topicIdx : 1000;
+      const bi = ib && ib.topicIdx != null ? ib.topicIdx : 1000;
+      if (ai !== bi) return ai - bi;
+      const ds = (ib ? ib.score : 0) - (ia ? ia.score : 0);
+      if (Math.abs(ds) > 0.001) return ds;
       const ra = sources[a.src], rb = sources[b.src];
       const score = (r) => readMode === "tr"
         ? 0
@@ -896,16 +890,24 @@
     let topic = new Set();
     if (!fol && arConcept && readMode !== "tr") topic = await wordHits(tokens(arConcept));
     if (id !== job) return;
+    const rankedTops = [...rankInfo.values()].sort((a, b) => {
+      const ai = a.topicIdx == null ? 1000 : a.topicIdx;
+      const bi = b.topicIdx == null ? 1000 : b.topicIdx;
+      if (ai !== bi) return ai - bi;
+      return b.score - a.score;
+    });
+    const topHit = rankedTops[0];
     const nAyah = new Set(rest.filter((h) => Number.isInteger(h.i)).map((h) => h.i)).size;
-    const sure = !!(counted || fol || ayRaw || nAyah === 1);
+    const sure = !!(counted || fol || ayRaw || nAyah === 1 || (topHit && topHit.direct));
     if (counted) answerPlan = { kind: "count", text: counted };
     else if (!sure) answerPlan = null;
     else if (readMode === "tr") {
-      const i = fol ? fol.i : (ayRaw ? indexOf(ayRaw.s, ayRaw.a) : (rest[0] ? rest[0].i : null));
+      const i = fol ? fol.i : (ayRaw ? indexOf(ayRaw.s, ayRaw.a) : (topHit && topHit.direct ? topHit.i : (rest[0] ? rest[0].i : null)));
       if (i != null) answerPlan = { kind: "topic", i, mode: "tr", lang: qlNow, book: TR_IDS.has(book) ? book : "" };
     } else {
       let i = null;
       if (fol || ayRaw) i = fol ? fol.i : indexOf(ayRaw.s, ayRaw.a);
+      else if (topHit && topHit.direct) i = topHit.i;
       else i = bestShort(topic.size ? topic : found);
       if (i == null || i < 0) i = rest[0] ? rest[0].i : null;
       if (i != null) answerPlan = { kind: "topic", i, mode: "tf", tfName: TF_AR[book] || "السعدي", showAyah: readMode === "mix" };
