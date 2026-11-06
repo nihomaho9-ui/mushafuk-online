@@ -1,5 +1,5 @@
 const RB = location.hostname.endsWith("github.io") ? "./" : /(^|\.)mushafuk\.online$/.test(location.hostname) ? "/" : "https://nihomaho9-ui.github.io/quran-medine/";
-if (document.currentScript) { const fl = document.createElement("link"); fl.rel = "stylesheet"; fl.href = new URL("fonts.css?v=2", document.currentScript.src).href; document.head.appendChild(fl); }
+if (document.currentScript) { const fl = document.createElement("link"); fl.rel = "stylesheet"; fl.href = new URL("fonts.css?v=3", document.currentScript.src).href; document.head.appendChild(fl); }
 // Settings (tafsir / translation downloads, text size) and the ayah sheet. Data is stored on the device (IndexedDB) and works offline.
 (function () {
   const AYAHS = window.QM_AYAHS;
@@ -13,18 +13,25 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
 
   const prefs = () => { try { return Object.assign({ tf: "", tr: "", fs: 1, tab: "tf" }, JSON.parse(localStorage.getItem("qm.prefs") || "{}")); } catch (e) { return { tf: "", tr: "", fs: 1, tab: "tf" }; } };
   const setPrefs = (p) => localStorage.setItem("qm.prefs", JSON.stringify(Object.assign(prefs(), p)));
-  function applyLook() {
-    const night = localStorage.getItem("qm.night") === "1";
+    function applyLook() {
+    let theme = "current";
+    try {
+      theme = localStorage.getItem("qm.readTheme") || (localStorage.getItem("qm.night") === "1" ? "black" : "current");
+    } catch (e) { theme = "current"; }
+    if (theme !== "white" && theme !== "black") theme = "current";
+    const night = theme === "black";
     document.documentElement.classList.toggle("qm-night", night);
+    document.documentElement.classList.toggle("qm-theme-white", theme === "white");
+    document.documentElement.classList.toggle("qm-theme-black", theme === "black");
     const fs = +prefs().fs || 1;
     const page = document.getElementById("page");
     if (page) page.style.zoom = Math.abs(fs - 1) < 0.02 ? "" : String(fs);
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.content = night ? "#141a17" : "#fffaf0";
+    if (meta) meta.content = theme === "black" ? "#0e0e0e" : (theme === "white" ? "#ffffff" : "#fffaf0");
   }
   applyLook();
   const lookCss = document.createElement("style");
-  lookCss.textContent = "html.qm-night,html.qm-night body{background:#141a17!important;color:#f3ead8!important}html.qm-night header,html.qm-night .num,html.qm-night .page,html.qm-night .qm-sheet,html.qm-night .qj-box{background:#141a17!important;color:#f3ead8!important}html.qm-night header h1,html.qm-night header a,html.qm-night a.home-brand{color:#f3ead8!important}html.qm-night .line,html.qm-night .ay{color:#f6edd9}html.qm-night .qlb{background:#1c2622!important;color:#f3ead8!important}html.qm-night .qlb-qari,html.qm-night .qlb-qaris{background:#24302b!important;color:#f3ead8!important}html.qm-night .set-card,html.qm-night .qm-scroll{color:#f3ead8}.set-look{display:flex;flex-direction:column;gap:.55rem}.set-sizes{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}.set-lab{font-size:.78rem;opacity:.75}.set-sz{border:1px solid #c4a56e;background:#fff;color:#1a3330;border-radius:999px;padding:.28rem .7rem;font:inherit;font-size:.78rem;cursor:pointer}.set-sz.on{background:#1a3330;color:#fbf6ec;border-color:#1a3330}html.qm-night .set-sz{background:#24302b;color:#f3ead8}html.qm-night .set-sz.on{background:#c4a56e;color:#1a3330}#page{isolation:isolate;position:relative;z-index:0}.qm-back{isolation:isolate}.qm-body[lang=ar],.qm-tx2[lang=ar],.qm-cmp-tx[lang=ar]{font-family:'Noto Naskh Arabic',Amiri,'Scheherazade New',serif!important}.qm-ir-pick{display:flex;flex-direction:column;gap:.5rem;padding:.15rem 0 .4rem}.qm-ir-pick>p{margin:0 0 .15rem;text-align:center;font-weight:700;color:#8a6a2e}.qm-ir-card{display:flex;flex-direction:column;align-items:flex-start;gap:.12rem;width:100%;text-align:start;border:1px solid #c4a56e;background:#fffaf0;color:#12352c;border-radius:.9rem;padding:.72rem .9rem;font:inherit;cursor:pointer}.qm-ir-card b{font-size:1.05rem;line-height:1.45}.qm-ir-card small{color:#6d6456;font-size:.78rem}html.qm-night .qm-ir-card{background:#1c2622;color:#f3ead8;border-color:#3d4a44}html.qm-night .qm-ir-card small{color:#c4b89a}";
+  lookCss.textContent = "html.qm-night,html.qm-night body{background:#141a17!important;color:#f3ead8!important}html.qm-night header,html.qm-night .num,html.qm-night .page,html.qm-night .qm-sheet,html.qm-night .qj-box{background:#141a17!important;color:#f3ead8!important}html.qm-night header h1,html.qm-night header a,html.qm-night a.home-brand{color:#f3ead8!important}html.qm-night .line,html.qm-night .ay{color:#f6edd9}html.qm-night .qlb{background:#1c2622!important;color:#f3ead8!important}html.qm-night .qlb-qari,html.qm-night .qlb-qaris{background:#24302b!important;color:#f3ead8!important}html.qm-night .set-card,html.qm-night .qm-scroll{color:#f3ead8}.set-look{display:flex;flex-direction:column;gap:.55rem}.set-sizes{display:flex;gap:.4rem;align-items:center;flex-wrap:wrap}.set-lab{font-size:.78rem;opacity:.75}.set-sz{border:1px solid #c4a56e;background:#fff;color:#1a3330;border-radius:999px;padding:.28rem .7rem;font:inherit;font-size:.78rem;cursor:pointer}.set-sz.on{background:#1a3330;color:#fbf6ec;border-color:#1a3330}html.qm-night .set-sz{background:#24302b;color:#f3ead8}html.qm-night .set-sz.on{background:#c4a56e;color:#1a3330}#page{isolation:isolate;position:relative;z-index:0}.qm-back{isolation:isolate}.qm-body[lang=ar],.qm-tx2[lang=ar],.qm-cmp-tx[lang=ar]{font-family:Kitab,'Noto Naskh Arabic',Amiri,'Scheherazade New',serif!important;line-height:2.2}.qm-ir-pick{display:flex;flex-direction:column;gap:.5rem;padding:.15rem 0 .4rem}.qm-ir-pick>p{margin:0 0 .15rem;text-align:center;font-weight:700;color:#8a6a2e}.qm-ir-card{display:flex;flex-direction:column;align-items:flex-start;gap:.12rem;width:100%;text-align:start;border:1px solid #c4a56e;background:#fffaf0;color:#12352c;border-radius:.9rem;padding:.72rem .9rem;font:inherit;cursor:pointer}.qm-ir-card b{font-size:1.05rem;line-height:1.45}.qm-ir-card small{color:#6d6456;font-size:.78rem}html.qm-night .qm-ir-card{background:#1c2622;color:#f3ead8;border-color:#3d4a44}html.qm-night .qm-ir-card small{color:#c4b89a}html.qm-theme-white,html.qm-theme-white body{background:#fff!important;color:#111!important}html.qm-theme-white .qm-sheet,html.qm-theme-white .qm-full,html.qm-theme-white .qm-body{background:#fff!important;color:#111!important}html.qm-theme-black,html.qm-theme-black body{background:#0e0e0e!important;color:#f2ebe0!important}html.qm-theme-black .qm-sheet,html.qm-theme-black .qm-body,html.qm-theme-black .qm-full{background:#161616!important;color:#f2ebe0!important}";
   document.head.appendChild(lookCss);
   const gearSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="8" cy="7" r="2.1" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="15" cy="12" r="2.1" fill="none" stroke="currentColor" stroke-width="1.8"/><circle cx="10" cy="17" r="2.1" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>';
   document.querySelectorAll("#menu-btn, button.gear").forEach((b) => { b.innerHTML = gearSvg; b.setAttribute("aria-label", T("Ayarlar")); });
@@ -34,7 +41,7 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
   // website: every book is open — files stream from the server on demand, no download step (native app keeps offline downloads)
   const WEB = !(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
   const netP = {};
-  const extTf = (id) => id === "ibnhatim" || id === "thawri";
+  const extTf = (id) => /^(ibnhatim|thawri|zamanin|jawzi|qayyim|qasimi)$/.test(id);
   const bookUrl = (r, s) => extTf(r.id) ? ("https://tafsir.mushafuk.online/data/" + r.id + "/" + s + ".json") : (RB + (r.p || r.k) + "/" + r.id + "/" + s + ".json");
   const netSurah = (r, s) => (netP[r.id + ":" + s] ||= (async () => {
     if (r.k === "tr" && !r.per) { const j = await (netP[r.id + ":all"] ||= fetch(RB + "tr/" + r.id + ".json").then((x) => { if (!x.ok) throw new Error("http"); return x.json(); })); return { v: j.v[s - 1] }; }
@@ -349,13 +356,25 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
     if (setView === "plan") { paintPlan(body); return; }
     body.append(el("p", "set-sec", T("Görünüş")));
     const look = el("div", "set-look");
-    const nightOn = document.documentElement.classList.contains("qm-night");
-    const night = el("button", "set-card");
-    night.type = "button";
-    const ntx = el("span", "tx");
-    ntx.append(el("b", "", T("Gecə rejimi")));
-    night.append(icEl("info"), ntx, el("span", "v", nightOn ? T("Gecə") : T("Gündüz")), el("span", "chev", nightOn ? "●" : "○"));
-    night.onclick = () => { localStorage.setItem("qm.night", nightOn ? "" : "1"); applyLook(); paintSettings(); };
+    let curTheme = "current";
+    try { curTheme = localStorage.getItem("qm.readTheme") || (document.documentElement.classList.contains("qm-night") ? "black" : "current"); } catch (e) {}
+    if (curTheme !== "white" && curTheme !== "black") curTheme = "current";
+    const themeBox = el("div", "set-card");
+    const ttx = el("span", "tx");
+    ttx.append(el("b", "", T("Oxuma fonu") || "خلفية القراءة"));
+    themeBox.append(icEl("info"), ttx);
+    const themeRow = el("div", "set-sizes");
+    for (const [id, lab] of [["current", T("Cari") || "الحالي"], ["white", T("Ağ") || "أبيض"], ["black", T("Qara") || "أسود"]]) {
+      const b = el("button", "set-sz" + (curTheme === id ? " on" : ""), lab);
+      b.type = "button";
+      b.setAttribute("aria-pressed", curTheme === id ? "true" : "false");
+      b.onclick = () => {
+        try { localStorage.setItem("qm.readTheme", id); localStorage.setItem("qm.night", id === "black" ? "1" : ""); } catch (e) {}
+        applyLook(); paintSettings();
+      };
+      themeRow.append(b);
+    }
+    themeBox.append(themeRow);
     const sizes = el("div", "set-sizes");
     sizes.append(el("span", "set-lab", T("Mətn ölçüsü")));
     const curFs = +prefs().fs || 1;
@@ -365,7 +384,7 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
       b.onclick = () => { setPrefs({ fs: v }); applyLook(); paintSettings(); };
       sizes.append(b);
     }
-    look.append(night, sizes, card("lang", T("Dil"), langName(), () => { setView = "lang"; paintSettings(); }));
+    look.append(themeBox, sizes, card("lang", T("Dil"), langName(), () => { setView = "lang"; paintSettings(); }));
     body.append(look);
     body.append(el("p", "set-sec", T("Bölmələr")));
     const lang = uiLang();
@@ -1299,8 +1318,8 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
       if (ps.length === 2 && +ps[0] >= 1 && +ps[1] >= 1) {
         let id = "saadi";
         try { id = (prefs().tf) || "saadi"; } catch (e) {}
-        if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari|shinqiti|shawkani|uthaymeen|ibnhatim|thawri)$/.test(id)) id = "saadi";
-        if (/^(shinqiti|shawkani|uthaymeen|ibnhatim|thawri)$/.test(id)) location.assign("https://tafsir.mushafuk.online/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
+        if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari|shinqiti|shawkani|uthaymeen|ibnhatim|thawri|zamanin|jawzi|qayyim|qasimi)$/.test(id)) id = "saadi";
+        if (/^(shinqiti|shawkani|uthaymeen|ibnhatim|thawri|zamanin|jawzi|qayyim|qasimi)$/.test(id)) location.assign("https://tafsir.mushafuk.online/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
         else location.assign("/tafsir/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
         return;
       }
