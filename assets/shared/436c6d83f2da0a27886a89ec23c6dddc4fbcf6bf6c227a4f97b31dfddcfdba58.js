@@ -1,0 +1,1 @@
+try{localStorage.setItem("qm.lang","tr");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");if(!p.tr)p.tr="turkish_shahin";localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}

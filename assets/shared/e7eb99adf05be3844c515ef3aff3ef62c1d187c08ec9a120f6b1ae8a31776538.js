@@ -1,0 +1,1 @@
+document.querySelectorAll("[data-qari]").forEach(a=>a.addEventListener("click",()=>localStorage.setItem("qm.reciter",a.dataset.qari);sessionStorage.setItem("qm.autotilawa","1")));

@@ -1,0 +1,1 @@
+try{localStorage.setItem("qm.lang","az");var p=JSON.parse(localStorage.getItem("qm.prefs")||"{}");if(!p.tr)p.tr="az.musayev";localStorage.setItem("qm.prefs",JSON.stringify(p));}catch(e){}

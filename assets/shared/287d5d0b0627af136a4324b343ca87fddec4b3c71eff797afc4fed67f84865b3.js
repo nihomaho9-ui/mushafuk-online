@@ -1,0 +1,1 @@
+try{var d=sessionStorage.getItem("qm.turn");if(d){document.documentElement.classList.add("qm-turning");}}catch(e){}

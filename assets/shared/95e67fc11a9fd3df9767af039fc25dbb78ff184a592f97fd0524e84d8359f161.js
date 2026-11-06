@@ -1,0 +1,1 @@
+try{var q=JSON.parse(localStorage.getItem("qm.prefs")||"{}");if(!q.ir)q.ir="irab_muyassar";q.tab="ir";localStorage.setItem("qm.prefs",JSON.stringify(q));}catch(e){}
