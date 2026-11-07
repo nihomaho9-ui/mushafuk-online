@@ -698,7 +698,7 @@
     </div>
     <header>
       <a href="tr/" id="back" aria-label="Geri">‹</a><a class="home-brand" href="tr/" aria-label="Mushafuk"><img src="/icon.png" alt="" width="16" height="16"><span>Mushafuk</span></a>
-      <h1 id="sure">سورة الفاتحة</h1>
+      <h1 id="sure">Nuh Suresi — Türkçe meal</h1>
       <div class="hdr-acts">
         <button type="button" class="gear" aria-label="Ayarlar" onclick="QM.openSettings()"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M12 3.1v2.2M12 18.7v2.2M4.9 6.1l1.6 1.4M17.5 16.5l1.6 1.4M3.1 12h2.2M18.7 12h2.2M4.9 17.9l1.6-1.4M17.5 7.5l1.6-1.4" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button>
       </div>
@@ -970,7 +970,7 @@
           board.appendChild(row);
         });
         pos.textContent = String(pageNo);
-        sure.textContent = surahTitle(pageNo);
+        sure.textContent = sure.textContent;
         if (pageNo === 1 || pageNo === 2) {
           const n = board.querySelectorAll(".line:not(.surah)").length;
           const box = board.getBoundingClientRect();
