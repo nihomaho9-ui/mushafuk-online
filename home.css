@@ -74,12 +74,16 @@ background:radial-gradient(ellipse at 50% 30%,#fffaf0 0,#f4ecdb 60%,#efe5d0 100%
 /* .known chips sit inside the .cards grid: span full row and allow shrinking so they never widen the page */
 .h .cards>.known{grid-column:1/-1;min-width:0;max-width:none;width:auto;margin:6px 0 42px;padding:0}
 .h .known a{max-width:100%;overflow-wrap:anywhere}
-.h .cards>.readmode{grid-column:1/-1;text-align:start;background:linear-gradient(#fffdf8,#f7f0e1);border:1px solid #e3d3ac;border-radius:22px;padding:18px 16px 14px;box-shadow:0 8px 24px #0f3d2a12}
-.h .readmode h2{margin:0 0 6px;color:#0f3d2a;font-size:1.35rem}
-.h .readmode .rm-note{margin:0 0 10px;color:#4a564e;line-height:1.5}
+.h .card.readmode{padding:0}
+.h .rm-face{display:block;width:100%;margin:0;background:none;border:0;font:inherit;color:inherit;cursor:pointer;padding:26px 16px 20px;text-align:center}
+.h .readmode.open{grid-column:1/-1}
+.h .readmode.open .rm-face{padding-bottom:6px}
+.h .rm-body{padding:0 16px 16px;text-align:start}
+.h .rm-empty{margin:0;color:#4a564e}
 .h .rm-row{display:flex;align-items:center;gap:6px;margin:8px 0}
 .h .rm-item{flex:1;min-width:0;display:flex;justify-content:space-between;gap:10px;align-items:baseline;background:#fff;border:1px solid #ead9b0;border-radius:14px;padding:10px 12px;color:#0f3d2a}
 .h .rm-item b{font-weight:650;overflow-wrap:anywhere}
 .h .rm-item span{color:#6b5a3e;white-space:nowrap;font-size:.85rem}
 .h .rm-x{border:1px solid #ead9b0;background:#fff;border-radius:10px;width:36px;height:36px;font-size:1.3rem;line-height:1;cursor:pointer;color:#6b5a3e}
+@media(max-width:640px){.h .rm-face{padding:12px 5px 12px}.h .rm-body{padding:0 8px 12px}}
 

@@ -71,16 +71,41 @@
       id: "halaman ", fr: "page ", bn: "পৃষ্ঠা ", ms: "muka ", ur: "صفحہ "
     };
     var rm = { az: "Sil", tr: "Sil", en: "Remove", ru: "Удалить", ar: "حذف", id: "Hapus", fr: "Retirer", bn: "সরান", ms: "Buang", ur: "ہٹائیں" };
+    var empty = {
+      az: "Hələ kitab yoxdur. Bir kitabı açın, son səhifəsi burada qalacaq.",
+      tr: "Henüz kitap yok. Bir kitabı açın, son sayfası burada kalır.",
+      en: "No book yet. Open one and its last page stays here.",
+      ru: "Книг пока нет. Откройте книгу — последняя страница сохранится.",
+      ar: "لا كتب بعد. افتح كتابًا وتُحفظ آخر صفحة.",
+      id: "Belum ada buku. Buka satu buku, halaman terakhir tersimpan di sini.",
+      fr: "Pas encore de livre. Ouvrez-en un, la dernière page reste ici.",
+      bn: "এখনো কোনো বই নেই। একটি বই খুলুন, শেষ পাতা এখানে থাকবে।",
+      ms: "Belum ada kitab. Buka satu kitab, halaman terakhir kekal di sini.",
+      ur: "ابھی کوئی کتاب نہیں۔ ایک کتاب کھولیں، آخری صفحہ یہاں رہے گا۔"
+    };
     var hold = box.querySelector(".rm-list");
-    if (!list.length) { hold.innerHTML = ""; return; }
+    if (!list.length) { hold.innerHTML = '<p class="rm-empty">' + (empty[lang] || empty.en) + "</p>"; return; }
     hold.innerHTML = list.map(function (b, i) {
       return '<div class="rm-row"><a class="rm-item" href="' + esc(b.u) + '"><b>' + esc(b.t) + '</b><span>' + (words[lang] || "page ") + esc(b.p) + '</span></a><button type="button" class="rm-x" data-i="' + i + '" aria-label="' + (rm[lang] || "Remove") + '">×</button></div>';
     }).join("");
   }
   save();
-  if (document.getElementById("readmode")) {
+  var box = document.getElementById("readmode");
+  if (box) {
     render();
-    document.getElementById("readmode").addEventListener("click", function (e) {
+    var face = box.querySelector(".rm-face");
+    if (face) face.addEventListener("click", function () {
+      var open = box.classList.toggle("open");
+      var body = box.querySelector(".rm-body");
+      if (body) body.hidden = !open;
+      face.setAttribute("aria-expanded", open ? "true" : "false");
+      var go = face.querySelector(".go");
+      if (go) {
+        if (!go.getAttribute("data-shut")) go.setAttribute("data-shut", go.textContent);
+        go.textContent = open ? "▾" : go.getAttribute("data-shut");
+      }
+    });
+    box.addEventListener("click", function (e) {
       var btn = e.target.closest ? e.target.closest(".rm-x") : null;
       if (!btn) return;
       var list = read();
