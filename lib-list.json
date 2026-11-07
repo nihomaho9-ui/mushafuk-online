@@ -170,6 +170,46 @@
     "mb": 0.7
   },
   {
+    "id": "mujahid",
+    "k": "tf",
+    "name": "تفسير مجاهد",
+    "by": "مجاهد بن جبر",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 2.2
+  },
+  {
+    "id": "mundhir",
+    "k": "tf",
+    "name": "تفسير ابن المنذر",
+    "by": "أبو بكر بن المنذر",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 1.8
+  },
+  {
+    "id": "rajab",
+    "k": "tf",
+    "name": "روائع التفسير",
+    "by": "ابن رجب الحنبلي",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 4
+  },
+  {
+    "id": "taymiyyah",
+    "k": "tf",
+    "name": "دقائق التفسير",
+    "by": "ابن تيمية",
+    "lang": "ar",
+    "dir": "rtl",
+    "per": true,
+    "mb": 1.2
+  },
+  {
     "id": "irab_muyassar",
     "k": "ir",
     "name": "الإعراب الميسر",
