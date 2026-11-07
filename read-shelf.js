@@ -13,11 +13,11 @@
   function write(list) {
     var raw = JSON.stringify(list.slice(0, MAX));
     try { localStorage.setItem(KEY, raw); } catch (e) {}
-    document.cookie = "qm_shelf=" + encodeURIComponent(raw) + "; Domain=.mushafuk.online; Path=/; Max-Age=31536000; SameSite=Lax; Secure";
+    document.cookie = "qm_shelf=" + encodeURIComponent(raw) + "; Domain=mushafuk.online; Path=/; Max-Age=31536000; SameSite=Lax; Secure";
   }
   function bookOf() {
     var host = location.hostname.replace(/^www\./, "");
-    if (host.slice(-14) !== "mushafuk.online" && host !== "mushafuk.online") return null;
+    if (host !== "mushafuk.online" && host.slice(-16) !== ".mushafuk.online") return null;
     var parts = location.pathname.split("/").filter(Boolean);
     var n = parts.length, page = "", base;
     if (n >= 2 && parts[n - 2] === "page" && /^\d+$/.test(parts[n - 1])) {
@@ -48,8 +48,9 @@
       item.u = info.u; item.p = info.p; if (info.t) item.t = info.t;
       list.unshift(item);
       write(list);
-    } else if (list.length < MAX) {
+    } else {
       list.unshift(info);
+      if (list.length > MAX) list.length = MAX;
       write(list);
     }
   }
@@ -90,11 +91,13 @@
     }).join("");
   }
   save();
+  window.addEventListener("pageshow", render);
   var box = document.getElementById("readmode");
   if (box) {
     render();
     var face = box.querySelector(".rm-face");
     if (face) face.addEventListener("click", function () {
+      render();
       var open = box.classList.toggle("open");
       var body = box.querySelector(".rm-body");
       if (body) body.hidden = !open;
