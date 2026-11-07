@@ -47,6 +47,7 @@ background:radial-gradient(ellipse at 50% 30%,#fffaf0 0,#f4ecdb 60%,#efe5d0 100%
 .h nav{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.h nav a{white-space:nowrap}
 .h .rehal{width:min(380px,80%);border-radius:0 0 40px 40px;}
 .h .cards{margin-top:16px}
+.h .cards > a[href$="quran/"]{order:-1}
 @media(max-width:640px){.h .cards{grid-template-columns:repeat(3,1fr);gap:8px;padding:0 8px}.h .card{padding:16px 6px 14px}.h .card h3{font-size:1.05rem}.h .card p{font-size:.8rem}.h .ic{width:46px;height:46px;font-size:1.2rem}.h nav a{padding:7px 8px;font-size:.78rem}.h .lamp{font-size:2rem}}
 /* v3 premium */
 .h .si{width:1.15em;height:1.15em;flex:none}.h .ic .si{width:28px;height:28px}
