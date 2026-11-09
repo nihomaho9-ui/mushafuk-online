@@ -42,7 +42,7 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
   // website: every book is open — files stream from the server on demand, no download step (native app keeps offline downloads)
   const WEB = !(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
   const netP = {};
-  const extHost = (id) => /^(mujahid|razzaq|mundhir|rajab|taymiyyah)$/.test(id) ? "https://t2.mushafuk.online" : (/^(ibnhatim|thawri|zamanin|jawzi|qayyim|qasimi)$/.test(id) ? "https://tafsir.mushafuk.online" : "");
+  const extHost = (id) => /^(mujahid|razzaq|mundhir|rajab|taymiyyah)$/.test(id) ? "https://t2.mushafuk.online" : (/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari|shinqiti|shawkani|uthaymeen|ibnhatim|thawri|zamanin|jawzi|qayyim|qasimi)$/.test(id) ? "https://tafsir.mushafuk.online" : "");
   const bookUrl = (r, s) => { const h = extHost(r.id); return h ? (h + "/data/" + r.id + "/" + s + ".json") : (RB + (r.p || r.k) + "/" + r.id + "/" + s + ".json"); };
   const netSurah = (r, s) => (netP[r.id + ":" + s] ||= (async () => {
     if (r.k === "tr" && !r.per) { const j = await (netP[r.id + ":all"] ||= fetch(RB + "tr/" + r.id + ".json").then((x) => { if (!x.ok) throw new Error("http"); return x.json(); })); return { v: j.v[s - 1] }; }
@@ -1321,7 +1321,7 @@ if (document.currentScript) { const fl = document.createElement("link"); fl.rel 
         let id = "saadi";
         try { id = (prefs().tf) || "saadi"; } catch (e) {}
         if (!/^(saadi|muyassar|mukhtasar|ibnkathir|baghawi|samani|aysar|tabari|shinqiti|shawkani|uthaymeen|ibnhatim|thawri|zamanin|jawzi|qayyim|qasimi|mujahid|razzaq|mundhir|rajab|taymiyyah)$/.test(id)) id = "saadi";
-        const ext = /^(mujahid|razzaq|mundhir|rajab|taymiyyah)$/.test(id) ? "https://t2.mushafuk.online/" : (/^(ibnhatim|thawri|zamanin|jawzi|qayyim|qasimi|shinqiti|shawkani|uthaymeen)$/.test(id) ? "https://tafsir.mushafuk.online/" : "");
+        const ext = /^(mujahid|razzaq|mundhir|rajab|taymiyyah)$/.test(id) ? "https://t2.mushafuk.online/" : "https://tafsir.mushafuk.online/";
         if (ext) { location.assign(ext + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/#qmfrom=" + encodeURIComponent(location.href)); return; }
         location.assign("/tafsir/" + id + "/" + (+ps[0]) + "/" + (+ps[1]) + "/");
         return;
