@@ -1,6 +1,7 @@
 import json,html,os,re
+from datetime import date
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)));os.chdir(R)
-B="https://mushafuk.online";E=html.escape
+B="https://mushafuk.online";E=html.escape;LM=date.today().isoformat()
 src=open('tools/gen_pages.py').read()
 AR=re.search(r'const ARNAMES = "([^"]*)"',open('quran/index.html').read()).group(1).split(',')
 AZ=re.search(r'NAMES = "([^"]*)"',open('az/quran/index.html').read()).group(1).split(',')
@@ -51,6 +52,14 @@ for lg,c in L.items():
     h=h.replace('<base href="/">','<base href="/">'+pre_js,1)
     post_js=f'<script>(function w(i){{if(window.QM&&window.QM_PAGE&&window.QM_PAGE({p})){{QM.openFull("tr",null,{p});return}}if(i<200)setTimeout(function(){{w(i+1)}},100)}})(0)</script>'
     h=h.replace('</body>',post_js+'</body>',1)
+    hub=f"/{base}/"; hub_lbl=E(c['title'])
+    def _nav(pp, hub=hub, hub_lbl=hub_lbl, base=base, c=c):
+      parts=[]
+      if pp>1: parts.append(f'<a rel="prev" href="/{base}/page/{pp-1}/">{E(c["pv"])}</a>')
+      parts.append(f'<a class="hub" href="{hub}">{hub_lbl}</a>')
+      if pp<604: parts.append(f'<a rel="next" href="/{base}/page/{pp+1}/">{E(c["nx"])}</a>')
+      return '<nav class="seo-crawl" aria-label="%s">%s</nav>'%(hub_lbl,''.join(parts))
+    h=re.sub(r'<nav class="seo-crawl"[^>]*>.*?</nav>', _nav(p), h, count=1, flags=re.S)
     o=f"{base}/page/{p}";os.makedirs(o,exist_ok=True);open(o+'/index.html','w',encoding='utf8').write(h)
   # the language buttons stay off this page; the translator cards open the reader
   f=f'{lg}/translations/index.html';x=open(f,encoding='utf8').read()
@@ -62,7 +71,7 @@ for lg,c in L.items():
   for name,href in rel.items():
     x=re.sub(r'(<a class="item" href=")[^"]*("><div class="n" dir="ltr">'+re.escape(name)+r'</div>)', r'\1'+href+r'\2', x, count=1)
   open(f,'w',encoding='utf8').write(x)
-open('sitemap-tr.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc></url>\n' for u in urls)+'</urlset>\n')
+open('sitemap-tr.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>{LM}</lastmod></url>\n' for u in urls)+'</urlset>\n')
 sm=open('sitemap.xml').read()
 if 'sitemap-tr.xml' not in sm: open('sitemap.xml','w').write(sm.replace('</sitemapindex>',f'<sitemap><loc>{B}/sitemap-tr.xml</loc></sitemap>\n</sitemapindex>'))
 print(len(urls))

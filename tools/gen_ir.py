@@ -1,7 +1,8 @@
 # I'rab (ir) and Gharib (wb) sections: surah list + 604 reader pages opening the in-Mushaf panel
 import json,html,os,re
+from datetime import date
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)));os.chdir(R)
-B="https://mushafuk.online";E=html.escape
+B="https://mushafuk.online";E=html.escape;LM=date.today().isoformat()
 g=open('tools/gen_tr.py').read();ns={"__file__":os.path.abspath("tools/gen_tr.py")}
 exec(g.split('urls=[]')[0].replace("os.chdir(R)","os.chdir(R)"),ns)
 AR,AZ,EN,START,CNT,CSS,FS=[ns[x] for x in 'AR AZ EN START CNT CSS FS'.split()]
@@ -60,8 +61,17 @@ for kind,(bid,LL) in KIND.items():
       if kind=='wb': boot='var w=new URLSearchParams(location.search).get("wb");if(w==="seraj"||w==="ibnqutaybah")q.wb=w;else if(!q.wb)q.wb="seraj";q.tab="wb";'
       h=h.replace('<base href="/">','<base href="/">'+f'<script>try{{var q=JSON.parse(localStorage.getItem("qm.prefs")||"{{}}");{boot}localStorage.setItem("qm.prefs",JSON.stringify(q));}}catch(e){{}}</script>',1)
       h=h.replace('</body>',f'<script>(function w(i){{if(window.QM&&window.QM_PAGE&&window.QM_PAGE({p})){{QM.openFull("{kind}",null,{p});return}}if(i<200)setTimeout(function(){{w(i+1)}},100)}})(0)</script></body>',1)
+      # Point crawl nav at this section (not the mushaf pages it was copied from)
+      hub=f"/{base}/"; hub_lbl=E(title)
+      def _nav(pp):
+        parts=[]
+        if pp>1: parts.append(f'<a rel="prev" href="/{base}/page/{pp-1}/">‹</a>')
+        parts.append(f'<a class="hub" href="{hub}">{hub_lbl}</a>')
+        if pp<604: parts.append(f'<a rel="next" href="/{base}/page/{pp+1}/">›</a>')
+        return '<nav class="seo-crawl" aria-label="%s">%s</nav>'%(hub_lbl,''.join(parts))
+      h=re.sub(r'<nav class="seo-crawl"[^>]*>.*?</nav>', _nav(p), h, count=1, flags=re.S)
       o=f"{base}/page/{p}";os.makedirs(o,exist_ok=True);open(o+'/index.html','w',encoding='utf8').write(h)
-open('sitemap-ir.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc></url>\n' for u in urls)+'</urlset>\n')
+open('sitemap-ir.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>{LM}</lastmod></url>\n' for u in urls)+'</urlset>\n')
 sm=open('sitemap.xml').read()
 if 'sitemap-ir.xml' not in sm: open('sitemap.xml','w').write(sm.replace('</sitemapindex>',f'<sitemap><loc>{B}/sitemap-ir.xml</loc></sitemap>\n</sitemapindex>'))
 print(len(urls))

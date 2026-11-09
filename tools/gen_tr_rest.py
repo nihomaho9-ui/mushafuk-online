@@ -1,8 +1,10 @@
 import html, json, os, re
+from datetime import date
 R = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(R)
 E = html.escape
 B = "https://mushafuk.online"
+LM = date.today().isoformat()
 # already a full reader: do not generate again
 DONE = {"az.musayev", "ru.kuliev", "turkish_shahin", "english_saheeh"}
 SLUG = {
@@ -55,11 +57,18 @@ for r in books:
         for n in range(1, 605):
             url = f"{B}/{root}/page/{n}/"
             urls[lg].append(url)
+            prev = (f'<a rel="prev" href="/{root}/page/{n-1}/">‹</a>' if n > 1 else '')
+            nxt = (f'<a rel="next" href="/{root}/page/{n+1}/">›</a>' if n < 604 else '')
+            hub = f'<a class="hub" href="/{root}/">{E(name)}</a>'
+            nav = f'<nav class="seo-crawl" aria-label="{E(name)}">{prev}{hub}{nxt}</nav>'
             doc = (
                 '<!doctype html><html lang="%s" dir="%s"><head><meta charset="UTF-8">'
                 '<meta name="viewport" content="width=device-width,initial-scale=1">'
                 '<title>%s — %d | Mushafuk.online</title>'
-                '<link rel="canonical" href="%s"><link rel="icon" href="/icon.png"></head><body><script>'
+                '<link rel="canonical" href="%s"><link rel="icon" href="/icon.png">'
+                '<style>.seo-crawl{display:flex;flex-wrap:wrap;gap:.5rem 1rem;justify-content:center;'
+                'margin:1rem;font:600 .95rem/1.4 system-ui,sans-serif}.seo-crawl a{color:#0b6b4f;text-decoration:none}</style>'
+                '</head><body>%s<script>'
                 '(function(){var n=%d,id=%s;try{var q=JSON.parse(localStorage.getItem("qm.prefs")||"{}");'
                 'q.tr=id;q.tab="tr";localStorage.setItem("qm.prefs",JSON.stringify(q));}catch(e){}'
                 'window.__PAGE=n;fetch("%s"+n+"/index.html").then(function(r){return r.text()}).then(function(h){'
@@ -68,7 +77,7 @@ for r in books:
                 '{QM.openFull(\\"tr\\",null,"+n+");return}if(i<200)setTimeout(function(){w(i+1)},100)})(0)<\\/script></body>");'
                 'document.open();document.write(h);document.close();});})();'
                 '</script></body></html>'
-            ) % (E(lang), E(d), E(name), n, url, n, json.dumps(r["id"]), shell)
+            ) % (E(lang), E(d), E(name), n, url, nav, n, json.dumps(r["id"]), shell)
             o = f"{root}/page/{n}"
             os.makedirs(o, exist_ok=True)
             open(o + "/index.html", "w", encoding="utf8").write(doc)
@@ -82,7 +91,7 @@ for r in books:
         open(path, "w", encoding="utf8").write(t2)
 for lg, group in urls.items():
     fn = "sitemap-tr-more.xml" if not lg else f"sitemap-tr-{lg}.xml"
-    open(fn, "w", encoding="utf8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{u}</loc></url>\n" for u in group) + "</urlset>\n")
+    open(fn, "w", encoding="utf8").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + "".join(f"<url><loc>{u}</loc><lastmod>{LM}</lastmod></url>\n" for u in group) + "</urlset>\n")
 ix = open("sitemap.xml", encoding="utf8").read()
 for lg in LANGS:
     fn = "sitemap-tr-more.xml" if not lg else f"sitemap-tr-{lg}.xml"

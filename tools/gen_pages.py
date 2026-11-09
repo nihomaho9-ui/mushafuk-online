@@ -1,6 +1,7 @@
+from datetime import date
 import json,html,os,re
 R=os.path.dirname(os.path.dirname(os.path.abspath(__file__)));os.chdir(R)
-B="https://mushafuk.online"
+B="https://mushafuk.online";LM=date.today().isoformat()
 AR=re.search(r'const ARNAMES = "([^"]*)"',open('quran/index.html').read()).group(1).split(',')
 AZ=re.search(r'NAMES = "([^"]*)"',open('az/quran/index.html').read()).group(1).split(',')
 EN="Al-Fatihah,Al-Baqarah,Ali 'Imran,An-Nisa,Al-Ma'idah,Al-An'am,Al-A'raf,Al-Anfal,At-Tawbah,Yunus,Hud,Yusuf,Ar-Ra'd,Ibrahim,Al-Hijr,An-Nahl,Al-Isra,Al-Kahf,Maryam,Ta-Ha,Al-Anbiya,Al-Hajj,Al-Mu'minun,An-Nur,Al-Furqan,Ash-Shu'ara,An-Naml,Al-Qasas,Al-'Ankabut,Ar-Rum,Luqman,As-Sajdah,Al-Ahzab,Saba,Fatir,Ya-Sin,As-Saffat,Sad,Az-Zumar,Ghafir,Fussilat,Ash-Shura,Az-Zukhruf,Ad-Dukhan,Al-Jathiyah,Al-Ahqaf,Muhammad,Al-Fath,Al-Hujurat,Qaf,Adh-Dhariyat,At-Tur,An-Najm,Al-Qamar,Ar-Rahman,Al-Waqi'ah,Al-Hadid,Al-Mujadilah,Al-Hashr,Al-Mumtahanah,As-Saff,Al-Jumu'ah,Al-Munafiqun,At-Taghabun,At-Talaq,At-Tahrim,Al-Mulk,Al-Qalam,Al-Haqqah,Al-Ma'arij,Nuh,Al-Jinn,Al-Muzzammil,Al-Muddaththir,Al-Qiyamah,Al-Insan,Al-Mursalat,An-Naba,An-Nazi'at,'Abasa,At-Takwir,Al-Infitar,Al-Mutaffifin,Al-Inshiqaq,Al-Buruj,At-Tariq,Al-A'la,Al-Ghashiyah,Al-Fajr,Al-Balad,Ash-Shams,Al-Layl,Ad-Duha,Ash-Sharh,At-Tin,Al-'Alaq,Al-Qadr,Al-Bayyinah,Az-Zalzalah,Al-'Adiyat,Al-Qari'ah,At-Takathur,Al-'Asr,Al-Humazah,Al-Fil,Quraysh,Al-Ma'un,Al-Kawthar,Al-Kafirun,An-Nasr,Al-Masad,Al-Ikhlas,Al-Falaq,An-Nas".split(',')
@@ -39,7 +40,7 @@ for lg,c in L.items():
     o=f"{c['pre']}page/{p}";os.makedirs(o,exist_ok=True);open(o+'/index.html','w',encoding='utf8').write(h)
 land=[f"{B}/{L[l]['pre']}{x}" for l in L for x in ['','quran/','tafsir.html','translations.html','about.html']]
 def sm(name,us):
-  open(name,'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc></url>\n' for u in us)+'</urlset>\n')
+  open(name,'w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>{u}</loc><lastmod>{LM}</lastmod></url>\n' for u in us)+'</urlset>\n')
 sm('sitemap-main.xml',land)
 for l in L: sm(f'sitemap-pages-{l}.xml',[u for u in urls if u.startswith(f"{B}/{L[l]['pre']}page/")])
 open('sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<sitemap><loc>{B}/{n}</loc></sitemap>\n' for n in ['sitemap-main.xml']+[f'sitemap-pages-{l}.xml' for l in L])+'</sitemapindex>\n')
